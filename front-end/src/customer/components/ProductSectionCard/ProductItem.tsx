@@ -24,7 +24,7 @@ const ProductItem = ({
                             <h2 className="font-semibold opacity-60">
                                 {product.title}
                             </h2>
-                            <span className="font-bold">{product.price}</span>
+                            <span className="font-bold">${product.price}</span>
                         </div>
                     </div>
                 ) : (
@@ -40,7 +40,7 @@ const ProductItem = ({
                             <h2 className="font-semibold opacity-60">
                                 {product.title}
                             </h2>
-                            <span className="font-bold">{product.price}</span>
+                            <span className="font-bold">${product.price}</span>
                         </div>
                     </div>
                 )}

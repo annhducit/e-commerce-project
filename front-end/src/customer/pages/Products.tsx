@@ -301,7 +301,7 @@ export default function Example() {
                         </div>
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-5 ">
                             {/* Filters */}
-                            <form className="hidden lg:block border-slate-200 rounded border px-6">
+                            <form className="hidden lg:block border-slate-200 rounded-lg border px-6">
                                 {filter.map((section) => (
                                     <Disclosure
                                         as="div"
@@ -456,8 +456,8 @@ export default function Example() {
                             </form>
 
                             {/* Product grid */}
-                            <div className="lg:col-span-4 w-full">
-                                <div className="grid grid-cols-4 gap-x-3">
+                            <div className="lg:col-span-4 w-full border-slate-200 border p-3 rounded-lg">
+                                <div className="grid grid-cols-4 gap-x-1">
                                     {menShirt.map((item, index) => (
                                         <ProductCard
                                             key={index}

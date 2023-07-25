@@ -1,13 +1,16 @@
 import { MouseEvent, ReactElement } from "react";
 
-interface ButtonAttr {
+type ButtonAttr = {
     text?: string;
     className: string;
     iconLeft?: ReactElement;
     iconRight?: ReactElement;
     normalIcon?: ReactElement;
     onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-}
+} & React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+>;
 
 const Button = ({
     text,
