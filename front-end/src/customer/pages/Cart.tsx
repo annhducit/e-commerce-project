@@ -1,7 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import CartItem from "../components/CartItem";
 
-const Cart = () => {
+const Cart = ({ payment }: { payment?: boolean }) => {
+    const navigate = useNavigate();
+
+    const handleCheckout = () => {
+        navigate(`/checkout`);
+    };
     return (
         <div className="grid grid-cols-3 px-20 py-5 my-2 gap-x-12">
             <div className="grid col-span-2">
@@ -51,10 +57,18 @@ const Cart = () => {
                             $1961
                         </h1>
                     </div>
-                    <Button
-                        text="CHECK OUT"
-                        className="w-full p-4 mt-8 font-semibold text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
-                    ></Button>
+                    {payment ? (
+                        <Button
+                            text="PAYMENT"
+                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
+                        ></Button>
+                    ) : (
+                        <Button
+                            onClick={handleCheckout}
+                            text="CHECK OUT"
+                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
+                        ></Button>
+                    )}
                 </div>
             </div>
         </div>

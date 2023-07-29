@@ -7,6 +7,22 @@ import {
     XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { navigation } from "../../data/navigationData";
+import { useNavigate } from "react-router-dom";
+
+interface Category {
+    id: number;
+    // Other properties of the category object
+}
+
+interface Section {
+    id: number;
+    // Other properties of the section object
+}
+
+interface Item {
+    id: number;
+    // Other properties of the item object
+}
 
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
@@ -14,6 +30,17 @@ function classNames(...classes: string[]): string {
 
 export default function Navigation() {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCategoryClick = (
+        category: Category,
+        section: Section,
+        item: Item,
+        close: () => void
+    ): void => {
+        navigate(`/${category.id}/${section.id}/${item.id}/`);
+        close();
+    };
 
     return (
         <div className="bg-white">
@@ -410,16 +437,21 @@ export default function Navigation() {
                                                                                                         }
                                                                                                         className="flex"
                                                                                                     >
-                                                                                                        <a
-                                                                                                            href={
-                                                                                                                item.href
+                                                                                                        <p
+                                                                                                            onClick={() =>
+                                                                                                                handleCategoryClick(
+                                                                                                                    category,
+                                                                                                                    section,
+                                                                                                                    item,
+                                                                                                                    close
+                                                                                                                )
                                                                                                             }
-                                                                                                            className="hover:text-gray-800"
+                                                                                                            className="cursor-pointer hover:text-gray-800"
                                                                                                         >
                                                                                                             {
                                                                                                                 item.name
                                                                                                             }
-                                                                                                        </a>
+                                                                                                        </p>
                                                                                                     </li>
                                                                                                 )
                                                                                             )}

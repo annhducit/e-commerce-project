@@ -1,4 +1,5 @@
 export interface MenClothes {
+    id?: number;
     imageUrl: string;
     brand?: string;
     title: string;

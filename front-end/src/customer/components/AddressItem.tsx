@@ -1,4 +1,4 @@
-import Button from "../../components/Button";
+// import Button from "../../components/Button";
 
 const AddressItem = () => {
     return (
@@ -16,12 +16,12 @@ const AddressItem = () => {
                 <h2 className="font-semibold text-md">Điện thoại:</h2>
                 <span>0945372635</span>
             </div>
-            <div className="ml-auto">
+            {/* <div className="ml-auto">
                 <Button
                     text="Delivery Here"
                     className="p-2 text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
                 />
-            </div>
+            </div> */}
         </div>
     );
 };
