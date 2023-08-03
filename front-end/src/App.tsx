@@ -7,10 +7,15 @@ import Cart from "./customer/pages/Cart";
 import Checkout from "./customer/pages/Checkout";
 import Order from "./customer/pages/Order";
 import OrderDetails from "./customer/pages/OrderDetails";
+import Login from "./customer/pages/Login";
 
 function App() {
     return (
         <Routes>
+            <Route path="/">
+                <Route path="login" element={<Login />}></Route>
+                <Route></Route>
+            </Route>
             <Route path="/" element={<CustomerLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="products" element={<Products />} />

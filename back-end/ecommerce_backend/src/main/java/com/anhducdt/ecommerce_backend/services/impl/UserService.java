@@ -24,7 +24,7 @@ public class UserService implements IUserService {
     public User findUserById(Long id) throws UserException {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
-            optionalUser.get();
+            return optionalUser.get();
         }
         throw new UserException("User not found!");
     }

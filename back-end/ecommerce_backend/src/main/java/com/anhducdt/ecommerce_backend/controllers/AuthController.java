@@ -4,8 +4,10 @@ import com.anhducdt.ecommerce_backend.configs.JwtProvider;
 import com.anhducdt.ecommerce_backend.dtos.responses.AuthResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.AuthRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
+import com.anhducdt.ecommerce_backend.models.Cart;
 import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
+import com.anhducdt.ecommerce_backend.services.impl.CartService;
 import com.anhducdt.ecommerce_backend.services.impl.CustomerUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,12 +31,14 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final CustomerUserService customerUserService;
+    private final CartService cartService;
 
-    public AuthController(UserRepository userRepository, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomerUserService customerUserService) {
+    public AuthController(UserRepository userRepository, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomerUserService customerUserService, CartService cartService) {
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
         this.customerUserService = customerUserService;
+        this.cartService = cartService;
     }
 
     @PostMapping("/signup")
@@ -54,6 +58,7 @@ public class AuthController {
         createUser.setLastName(lastString);
 
         User newUser = userRepository.save(createUser);
+        Cart cart = cartService.createCart(newUser);
         Authentication  authentication = new UsernamePasswordAuthenticationToken(newUser.getEmail(), newUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

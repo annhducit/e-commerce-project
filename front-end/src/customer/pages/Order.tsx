@@ -22,18 +22,18 @@ const filterItem = [
 
 const Order = () => {
     return (
-        <div className="grid grid-cols-4 gap-x-10 px-20 py-10">
+        <div className="grid grid-cols-4 px-20 py-10 gap-x-10">
             <div className="col-span-1 w-full border h-[300px] border-slate-300 rounded p-4 shadow-lg">
                 <div className="flex flex-col gap-y-3">
-                    <h1 className="font-bold text-lg">Filters</h1>
+                    <h1 className="text-lg font-bold">Filters</h1>
                     <hr className="mt-1" />
-                    <h1 className="font-semibold opacity-80 text-lg">
+                    <h1 className="text-lg font-semibold opacity-80">
                         Order Status
                     </h1>
                 </div>
-                <div className="flex flex-col gap-y-3 pt-4">
+                <div className="flex flex-col pt-4 gap-y-3">
                     {filterItem.map((item, index) => (
-                        <div className="flex gap-x-3 items-center" key={index}>
+                        <div className="flex items-center gap-x-3" key={index}>
                             {" "}
                             <Input type="checkbox" defaultValue={item.value} />
                             <label className="opacity-80" htmlFor={item.value}>

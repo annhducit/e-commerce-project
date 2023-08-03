@@ -59,8 +59,8 @@ public class ProductService implements IProductService {
         if (thirdLevel==null) {
             Category thirdLevelCategory = new Category();
             thirdLevelCategory.setName(productRequest.getSecondLevelCategory());
-            thirdLevelCategory.setParentCategory(topLevel);
-            thirdLevelCategory.setLevel(2);
+            thirdLevelCategory.setParentCategory(secondLevel);
+            thirdLevelCategory.setLevel(3);
             thirdLevel = categoryRepository.save(thirdLevelCategory);
         }
 
@@ -75,6 +75,8 @@ public class ProductService implements IProductService {
         product.setSize(productRequest.getSize());
         product.setCategory(thirdLevel);
         product.setDateCreate(LocalDateTime.now());
+        product.setQuantity(productRequest.getQuantity());
+        product.setPrice(productRequest.getPrice());
 
         return productRepository.save(product);
     }
@@ -83,7 +85,7 @@ public class ProductService implements IProductService {
     public Product getProductById(Long id) throws ProductException {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
-            optionalProduct.get();
+            return optionalProduct.get();
         }
        throw new ProductException("Product not found");
     }
@@ -112,8 +114,11 @@ public class ProductService implements IProductService {
     public Page<Product> getProducts(String category, List<String> colors, List<String> sizes, Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize) {
         Pageable pageable  = PageRequest.of(pageNumber, pageSize);
         List<Product> productList = productRepository.filterProduct(category, minPrice, maxPrice, minDiscount, sort);
+
         if(!colors.isEmpty()) {
-            productList.stream().filter(p -> colors.stream().anyMatch(c -> c.equalsIgnoreCase(p.getColor()))).collect(Collectors.toList());
+            productList = productList.stream()
+              .filter(p -> colors.stream().anyMatch(c -> c.equalsIgnoreCase(p.getColor())))
+              .collect(Collectors.toList());
         }
         if (stock != null) {
             if(stock.equals("in_stock")) {
