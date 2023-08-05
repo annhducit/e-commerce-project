@@ -1,5 +1,6 @@
 import loginImages from "../assets/images/clothes2.jpg";
 import logo from "../assets/images/logo.png";
+import hand from "../assets/images/hand.png";
 
 interface AuthenticationNode {
     welcome: string;
@@ -22,8 +23,8 @@ export default function AuthenticateLayout({
                 <div className="absolute top-4 left-4">
                     <img src={logo} className="w-[100px] h-14" />
                 </div>
-                <div className="px-4 space-y-10 pt-28">
-                    <div className="h-[200px] mx-auto">
+                <div className="px-4 pt-20 space-y-10">
+                    <div className="h-[420px] mx-auto">
                         <img
                             src={loginImages}
                             className="w-full h-full rounded-lg"
@@ -31,9 +32,9 @@ export default function AuthenticateLayout({
                     </div>
                     <div className="p-4 space-y-6 rounded-lg bg-slate-700">
                         <p className="text-white">
-                            Cùng xây dựng một hồ sơ nổi bật và nhận được các cơ
-                            hội sự nghiệp lý tưởng. Hãy để chúng tôi giúp bạn
-                            làm điều đó!
+                            Online shopping provides convenience and
+                            accessibility, allowing customers to shop from the
+                            comfort of their homes at any time.
                         </p>
                         <div className="flex items-center gap-3">
                             <img
@@ -41,7 +42,7 @@ export default function AuthenticateLayout({
                                 className="w-10 h-10 rounded-full"
                             ></img>
                             <div className="flex flex-col text-white">
-                                <p className="font-bold">My Team</p>
+                                <p className="font-bold">Anh Duc</p>
                                 <p>Web Developer</p>
                             </div>
                         </div>
@@ -49,13 +50,16 @@ export default function AuthenticateLayout({
                 </div>
             </div>
 
-            <div className="col-span-3">
+            <div className="flex flex-col col-span-3">
                 <header>{header}</header>
                 <div className={`${padding}`}>
-                    <p className="text-2xl font-bold text-emerald-500">
-                        {welcome}
-                    </p>
-                    <p className="pt-2 font-semibold text-gray-700">
+                    <div className="flex items-center gap-3">
+                        <p className="text-3xl font-bold text-purple-500">
+                            {welcome}
+                        </p>
+                        <img src={hand} alt="" className="w-12 h-12" />
+                    </div>
+                    <p className="pt-2 font-semibold text-gray-700 opacity-70">
                         {introduction}
                     </p>
                     {children}

@@ -1,56 +1,117 @@
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yub from "yup";
+
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEnvelope, FaKey } from "react-icons/fa";
+import { login } from "../../services/authService";
+import LoginType from "../../types/LoginType";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Login = () => {
+    const schema = Yub.object({
+        email: Yub.string()
+            .email("Email is invalid")
+            .required("Please enter your email"),
+        password: Yub.string().required("Please enter your email"),
+    }).required();
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors, isValid },
+    } = useForm<LoginType>({
+        resolver: yupResolver(schema),
+        mode: "onChange",
+    });
+
+    const { auth } = useSelector((store) => store);
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        if (token) {
+            navigate(-1);
+        }
+    }, [token, auth.token]);
+    useEffect(() => {});
+    const dispatch = useDispatch();
+    const onSubmitLogin = async (data: LoginType) => {
+        if (!isValid) return;
+        dispatch(login(data));
+    };
     return (
         <div>
             <AuthenticateLayout
-                welcome="Chào mừng bạn quay trở lại"
-                introduction="Đăng nhập để tiếp tục sử dụng dịch vụ của chúng tôi"
-                padding="py-10 pl-20 pr-[300px]"
+                welcome="Welcome back!"
+                introduction="Enter the information you entered while registering"
+                padding="px-[200px] flex flex-col gap-2 my-auto"
                 header={
                     <div className="px-10 py-6">
                         <Button
                             className="float-right px-6 py-2 text-white bg-purple-500 rounded-lg"
-                            text="Đăng kí"
+                            text="Register"
                         />
                     </div>
                 }
             >
-                <form>
-                    <div className="flex flex-col gap-1 pt-8">
+                <form onSubmit={handleSubmit(onSubmitLogin)}>
+                    <div className="flex flex-col gap-6 pt-8">
                         <Input
-                            label="Nhập email"
-                            placeholder="Nhập email của bạn"
+                            label="Email"
+                            placeholder="Enter your email"
                             type="text"
                             color="emerald"
                             id="email"
                             name="email"
+                            lefticon={<FaEnvelope />}
+                            control={control}
+                            error={errors.email?.message}
                         />
                         <Input
-                            label="Nhập mật khẩu"
-                            placeholder="Nhập mật khẩu của bạn"
+                            label="Password"
+                            placeholder="Enter your password"
                             type="password"
                             color="emerald"
                             id="password"
                             name="password"
+                            lefticon={<FaKey />}
+                            control={control}
+                            error={errors.password?.message}
                         />
+                        <div className="flex justify-between">
+                            <div className="flex items-center gap-x-2">
+                                <input type="checkbox" name="remember" id="" />
+                                <span className="font-semibold">
+                                    Remember me!
+                                </span>
+                            </div>
+                            <p className="font-semibold text-indigo-500">
+                                Forgot password?
+                            </p>
+                        </div>
                         <Button
-                            className="mt-4"
+                            className="w-full py-3 font-semibold text-white bg-purple-500 rounded"
                             color="emerald"
                             type="submit"
-                        ></Button>
+                            text="Login"
+                        >
+                            Login
+                        </Button>
                         <div className="mt-4 text-center">
                             <span className="text-black">
-                                Bạn chưa có tài khoản?
+                                Don't have an account yet?{" "}
                             </span>{" "}
                             <Link
                                 to="/signup"
-                                className="font-semibold cursor-pointer text-emerald-500 hover:text-emerald-700"
+                                className="font-semibold text-purple-500 cursor-pointer hover:text-purple-700"
                             >
-                                Đăng kí ngay
+                                Sign up now{" "}
                             </Link>
                         </div>
                     </div>

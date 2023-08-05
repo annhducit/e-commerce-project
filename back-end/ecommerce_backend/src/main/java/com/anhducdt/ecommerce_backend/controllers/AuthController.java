@@ -9,18 +9,14 @@ import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
 import com.anhducdt.ecommerce_backend.services.impl.CartService;
 import com.anhducdt.ecommerce_backend.services.impl.CustomerUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CachingUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -45,7 +41,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
         String email = user.getEmail();
         String password = user.getPassword();
-        String firstString = user.getFistName();
+        String firstString = user.getFirstName();
         String lastString = user.getLastName();
         User isEmailExits = userRepository.findUserByEmail(email);
         if (isEmailExits != null) {
@@ -54,7 +50,7 @@ public class AuthController {
         User createUser = new User();
         createUser.setEmail(email);
         createUser.setPassword(passwordEncoder.encode(password));
-        createUser.setFistName(firstString);
+        createUser.setFirstName(firstString);
         createUser.setLastName(lastString);
 
         User newUser = userRepository.save(createUser);

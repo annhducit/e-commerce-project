@@ -8,12 +8,14 @@ import Checkout from "./customer/pages/Checkout";
 import Order from "./customer/pages/Order";
 import OrderDetails from "./customer/pages/OrderDetails";
 import Login from "./customer/pages/Login";
+import Register from "./customer/pages/Register";
 
 function App() {
     return (
         <Routes>
             <Route path="/">
-                <Route path="login" element={<Login />}></Route>
+                <Route path="signin" element={<Login />}></Route>
+                <Route path="signup" element={<Register />}></Route>
                 <Route></Route>
             </Route>
             <Route path="/" element={<CustomerLayout />}>

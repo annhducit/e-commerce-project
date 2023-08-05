@@ -7,8 +7,13 @@ import {
     XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { navigation } from "../../data/navigationData";
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/images/logo.png";
+import user from "../../assets/images/admin.png";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getUserProfile, logout } from "../../services/authService";
+import Button from "../../components/Button";
 interface Category {
     id: number;
     // Other properties of the category object
@@ -42,6 +47,20 @@ export default function Navigation() {
         close();
     };
 
+    const dispatch = useDispatch();
+    const token = localStorage.getItem("token");
+
+    const { auth } = useSelector((store) => store);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(getUserProfile(token));
+        }
+    }, [token, auth.token]);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
     return (
         <div className="bg-white">
             {/* Mobile menu */}
@@ -279,16 +298,12 @@ export default function Navigation() {
             </Transition.Root>
 
             <header className="relative bg-white z-50">
-                <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-                    Get free delivery on orders over $100
-                </p>
-
                 <nav
                     aria-label="Top"
                     className="mx-auto max-w-full px-4 sm:px-6 lg:px-20"
                 >
                     <div className="border-b border-gray-200">
-                        <div className="flex h-16 items-center">
+                        <div className="flex h-20 items-center">
                             <button
                                 type="button"
                                 className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
@@ -307,11 +322,13 @@ export default function Navigation() {
                                     <span className="sr-only">
                                         Your Company
                                     </span>
-                                    <img
-                                        className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                        alt=""
-                                    />
+                                    <div className="h-14 w-[120px]">
+                                        <img
+                                            className="h-full object-cover w-full"
+                                            src={logo}
+                                            alt=""
+                                        />
+                                    </div>
                                 </a>
                             </div>
 
@@ -483,44 +500,44 @@ export default function Navigation() {
                             </Popover.Group>
 
                             <div className="ml-auto flex items-center">
-                                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                                    <a
-                                        href="#"
-                                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                                    >
-                                        Sign in
-                                    </a>
-                                    <span
-                                        className="h-6 w-px bg-gray-200"
-                                        aria-hidden="true"
-                                    />
-                                    <a
-                                        href="#"
-                                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                                    >
-                                        Create account
-                                    </a>
-                                </div>
-
-                                <div className="hidden lg:ml-8 lg:flex">
-                                    <a
-                                        href="#"
-                                        className="flex items-center text-gray-700 hover:text-gray-800"
-                                    >
-                                        <img
-                                            src="https://tailwindui.com/img/flags/flag-canada.svg"
-                                            alt=""
-                                            className="block h-auto w-5 flex-shrink-0"
+                                {auth.user ? (
+                                    <div className="hidden lg:ml-8 lg:flex">
+                                        <a
+                                            href="#"
+                                            className="flex items-center text-gray-700 hover:text-gray-800"
+                                        >
+                                            <img
+                                                src={user}
+                                                alt=""
+                                                className="block w-10 h-10 rounded-full flex-shrink-0"
+                                            />
+                                            <span className="ml-3 block text-sm font-medium">
+                                                {auth.user.firstName}{" "}
+                                                {auth.user.lastName}
+                                            </span>
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                        <Link
+                                            to={"signin"}
+                                            className="bg-purple-500 text-white px-2 py-1 rounded hover:bg-purple-600 transition-all"
+                                        >
+                                            {" "}
+                                            Sign in
+                                        </Link>
+                                        <span
+                                            className="h-6 w-px bg-gray-200"
+                                            aria-hidden="true"
                                         />
-                                        <span className="ml-3 block text-sm font-medium">
-                                            CAD
-                                        </span>
-                                        <span className="sr-only">
-                                            , change currency
-                                        </span>
-                                    </a>
-                                </div>
-
+                                        <Link
+                                            to={"signup"}
+                                            className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                        >
+                                            Create account
+                                        </Link>
+                                    </div>
+                                )}
                                 {/* Search */}
                                 <div className="flex lg:ml-6">
                                     <a
@@ -536,9 +553,9 @@ export default function Navigation() {
                                 </div>
 
                                 {/* Cart */}
-                                <div className="ml-4 flow-root lg:ml-6">
-                                    <a
-                                        href="#"
+                                <div className="ml-4 flex gap-x-4 items-center  lg:ml-6">
+                                    <Link
+                                        to={""}
                                         className="group -m-2 flex items-center p-2"
                                     >
                                         <ShoppingBagIcon
@@ -551,7 +568,14 @@ export default function Navigation() {
                                         <span className="sr-only">
                                             items in cart, view bag
                                         </span>
-                                    </a>
+                                    </Link>
+                                    {auth.user && (
+                                        <Button
+                                            onClick={handleLogout}
+                                            text="Sign out"
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>

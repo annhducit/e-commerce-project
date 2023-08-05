@@ -1,6 +1,5 @@
 import { FaFacebook, FaGoogle, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Input from "./Input";
 import Button from "./Button";
 
 const Footer = () => {
@@ -64,20 +63,21 @@ const Footer = () => {
                             Subscribe to our newsletter and <br />
                             Get 10% off
                         </h2>
-                        <Input
+                        <input
+                            name="email"
                             type="text"
                             placeholder="Enter your content"
                             className="w-full px-6 py-3 text-white bg-transparent border rounded outline-none border-slate-200"
                         />
                         <Button
                             text="Subscribe"
-                            className="w-full bg-white text-black px-6 py-3 rounded font-semibold hover:bg-slate-100 transition-all"
+                            className="w-full px-6 py-3 font-semibold text-black transition-all bg-white rounded hover:bg-slate-100"
                         ></Button>
                     </div>
                 </div>
             </div>
             <div className="mx-auto w-[70%]">
-                <span className="inline-block mt-14 text-sm font-semibold text-center text-white">
+                <span className="inline-block text-sm font-semibold text-center text-white mt-14">
                     "Welcome to my website, your ultimate online shopping
                     destination for all things stylish, trendy, and top-notch.
                     Discover an extensive collection of premium quality
