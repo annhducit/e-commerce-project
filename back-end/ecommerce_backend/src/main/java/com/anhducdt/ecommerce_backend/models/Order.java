@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Order {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   @Column(name = "order_id")
   private String orderId;

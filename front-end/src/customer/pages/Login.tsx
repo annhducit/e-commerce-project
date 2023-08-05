@@ -1,23 +1,23 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
 import * as Yub from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEnvelope, FaKey } from "react-icons/fa";
 
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { FaEnvelope, FaKey } from "react-icons/fa";
 import { login } from "../../services/authService";
 import LoginType from "../../types/LoginType";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 
 const Login = () => {
     const schema = Yub.object({
         email: Yub.string()
             .email("Email is invalid")
             .required("Please enter your email"),
-        password: Yub.string().required("Please enter your email"),
+        password: Yub.string().required("Please enter your password"),
     }).required();
 
     const {
@@ -36,10 +36,10 @@ const Login = () => {
 
     useEffect(() => {
         if (token) {
-            navigate(-1);
+            navigate("/");
         }
     }, [token, auth.token]);
-    useEffect(() => {});
+
     const dispatch = useDispatch();
     const onSubmitLogin = async (data: LoginType) => {
         if (!isValid) return;

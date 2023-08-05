@@ -47,23 +47,9 @@ const Register = () => {
 
     useEffect(() => {
         if (token) {
-            dispatch(getUserProfile(token));
-        }
-    }, [token, auth.token]);
-
-    const location = useLocation();
-
-    useEffect(() => {
-        if (auth.user) {
             navigate("/signin");
         }
-        if (
-            location.pathname === "/signin" ||
-            location.pathname === "/signup"
-        ) {
-            navigate(-1);
-        }
-    }, []);
+    }, [token, auth.token]);
 
     const dispatch = useDispatch();
     const onSubmit = async (data: AuthType) => {
@@ -146,7 +132,7 @@ const Register = () => {
                                 Don't have an account yet?{" "}
                             </span>{" "}
                             <Link
-                                to="/login"
+                                to="/signin"
                                 className="font-semibold text-purple-500 cursor-pointer hover:text-purple-700"
                             >
                                 Sign in now{" "}

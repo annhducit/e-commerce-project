@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { AnyAction, Dispatch } from "redux";
+import toast from "react-hot-toast";
+
 import { API_BASE_URL } from "../configs/config";
 import {
     REGISTER_FAILURE,
@@ -26,7 +30,7 @@ const registerFailure = (error: string) => ({
     payload: error,
 });
 
-export const register = (userData: AuthType) => async (dispatch) => {
+export const register = (userData: AuthType) => async (dispatch: Dispatch) => {
     dispatch(registerRequest());
     try {
         const res = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
@@ -35,35 +39,71 @@ export const register = (userData: AuthType) => async (dispatch) => {
             localStorage.setItem("token", user.jwt);
         }
         dispatch(registerSuccess(user));
-    } catch (error) {
-        dispatch(registerFailure(error?.message));
+        await toast.success("Register successful!", {
+            position: "top-right",
+            duration: 3000,
+            icon: "👏",
+            className: "text-purple-500",
+        });
+    } catch (error: any) {
+        if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            toast.error("Register fail!");
+            dispatch(registerFailure(error.response.data.message));
+        } else {
+            dispatch(registerFailure("An error occurred while register in."));
+        }
     }
 };
 
 // Login
-const loginRequest = () => ({ type: LOGIN_REQUEST });
-const loginSuccess = (user: AuthType) => ({
+
+const loginRequest = (): AnyAction => ({ type: LOGIN_REQUEST });
+const loginSuccess = (user: AuthType): AnyAction => ({
     type: LOGIN_SUCCESS,
     payload: user,
 });
-const loginFailure = (error: string) => ({
+const loginFailure = (error: string): AnyAction => ({
     type: LOGIN_FAILURE,
     payload: error,
 });
 
-export const login = (userData: LoginType) => async (dispatch) => {
-    dispatch(loginRequest());
-    try {
-        const res = await axios.post(`${API_BASE_URL}/auth/signin`, userData);
-        const user = res.data;
-        if (user.jwt) {
-            localStorage.setItem("token", user.jwt);
+export const login =
+    (userData: LoginType) => async (dispatch: Dispatch<AnyAction>) => {
+        dispatch(loginRequest());
+        try {
+            const res = await axios.post(
+                `${API_BASE_URL}/auth/signin`,
+                userData
+            );
+            const user = res.data;
+            if (user.jwt) {
+                localStorage.setItem("token", user.jwt);
+            }
+            toast.success("Login successful!", {
+                position: "top-right",
+                duration: 3000,
+                icon: "👏",
+                className: "text-purple-500 z-[9999]",
+            });
+            dispatch(loginSuccess(user));
+        } catch (error: any) {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+            ) {
+                toast.error("Login fail!");
+
+                dispatch(loginFailure(error.response.data.message));
+            } else {
+                dispatch(loginFailure("An error occurred while logging in."));
+            }
         }
-        dispatch(loginSuccess(user));
-    } catch (error) {
-        dispatch(loginFailure(error?.message));
-    }
-};
+    };
 
 // Get user profile
 const getUserRequest = () => ({ type: GET_USER_REQUEST });
@@ -76,7 +116,7 @@ const getUserFailure = (error: string) => ({
     payload: error,
 });
 
-export const getUserProfile = (token: string) => async (dispatch) => {
+export const getUserProfile = (token: string) => async (dispatch: Dispatch) => {
     dispatch(getUserRequest());
     try {
         const res = await axios.get(`${API_BASE_URL}/api/users/profile`, {
@@ -86,12 +126,20 @@ export const getUserProfile = (token: string) => async (dispatch) => {
         });
         const user = res.data;
         dispatch(getUserSuccess(user));
-    } catch (error) {
-        dispatch(getUserFailure(error?.message));
+    } catch (error: any) {
+        if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+        ) {
+            dispatch(getUserFailure(error.response.data.message));
+        } else {
+            dispatch(getUserFailure("An error occurred while logging in."));
+        }
     }
 };
 
-export const logout = () => (dispatch) => {
+export const logout = () => (dispatch: Dispatch) => {
     dispatch({ type: "LOGOUT", payload: null });
     localStorage.clear();
 };
