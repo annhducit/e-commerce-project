@@ -16,5 +16,7 @@ public interface IOrderService {
    Order shippedOrder (Long id) throws OrderException;
    Order diliveredOrder(Long id) throws OrderException;
    Order canceledOrder(Long id) throws OrderException;
+   List<Order> getAllOrder() throws OrderException;
+   void deleteOrder(Long id) throws OrderException;
 
 }

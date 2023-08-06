@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 public class Address {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "first_name")
     private String fistName;
@@ -30,7 +31,6 @@ public class Address {
 
     @Column(name = "zip_code")
     private String zipCode;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
