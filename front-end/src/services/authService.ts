@@ -13,7 +13,7 @@ import {
     GET_USER_REQUEST,
     GET_USER_SUCCESS,
     GET_USER_FAILURE,
-} from "../redux/ActionType";
+} from "../redux/auth/ActionType";
 import LoginType from "../types/LoginType";
 import AuthType from "../types/RegisterType";
 import axios from "axios";

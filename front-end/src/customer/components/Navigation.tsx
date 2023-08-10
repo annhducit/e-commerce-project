@@ -14,21 +14,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getUserProfile, logout } from "../../services/authService";
 import Button from "../../components/Button";
-interface Category {
-    id: number;
-    // Other properties of the category object
-}
-
-interface Section {
-    id: number;
-    // Other properties of the section object
-}
-
-interface Item {
-    id: number;
-    // Other properties of the item object
-}
-
+import {
+    Category,
+    CategorySection,
+    SectionItem,
+} from "../../types/CategoryType";
+import { initials } from "../../redux/auth/authReducer";
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
 }
@@ -39,24 +30,24 @@ export default function Navigation() {
 
     const handleCategoryClick = (
         category: Category,
-        section: Section,
-        item: Item,
+        section: CategorySection,
+        item: SectionItem,
         close: () => void
     ): void => {
-        navigate(`/${category.id}/${section.id}/${item.id}/`);
+        navigate(`/${category.id}/${section.id}/${item.name}/`);
         close();
     };
 
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
 
-    const { auth } = useSelector((store) => store);
+    const { auth } = useSelector((store: initials) => store);
 
     useEffect(() => {
         if (token) {
             dispatch(getUserProfile(token));
         }
-    }, [token, auth.token]);
+    }, [token, auth.token, dispatch]);
 
     const handleLogout = () => {
         dispatch(logout());

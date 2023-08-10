@@ -58,7 +58,7 @@ public class ProductService implements IProductService {
 
         if (thirdLevel==null) {
             Category thirdLevelCategory = new Category();
-            thirdLevelCategory.setName(productRequest.getSecondLevelCategory());
+            thirdLevelCategory.setName(productRequest.getThirdLevelCategory());
             thirdLevelCategory.setParentCategory(secondLevel);
             thirdLevelCategory.setLevel(3);
             thirdLevel = categoryRepository.save(thirdLevelCategory);

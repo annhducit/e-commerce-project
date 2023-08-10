@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -12,7 +12,9 @@ import ProductCard from "../components/Product/ProductCard";
 import { menShirt } from "../../data/dataMenShirt";
 import { filter, singleFilter } from "../../data/filterData";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { findProducts } from "../../services/productService";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -22,6 +24,19 @@ const sortOptions = [
     { name: "Price: High to Low", href: "#", current: false },
 ];
 
+export type FilterType = {
+    category: string;
+    colors: string[];
+    sizes: string[];
+    minPrice: number;
+    maxPrice: number;
+    minDiscount: number;
+    sort: string;
+    pageNumber: number;
+    pageSize: number;
+    stock: string;
+};
+
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
 }
@@ -29,7 +44,49 @@ function classNames(...classes: string[]): string {
 export default function Example() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const navigate = useNavigate();
+    const param = useParams();
+    const dispatch = useDispatch();
 
+    const decodedQueryString = decodeURIComponent(location.search);
+    const searchParams = new URLSearchParams(decodedQueryString);
+
+    const colorValue = searchParams.get("color");
+    const sizeValue = searchParams.get("size");
+    const priceValue = searchParams.get("price");
+    const discountValue = searchParams.get("discount");
+    const stockValue = searchParams.get("stock");
+    const sortValue = searchParams.get("sort");
+    const pageNumber = searchParams.get("page") || 1;
+
+    useEffect(() => {
+        const [minPrice, maxPrice] =
+            priceValue === null ? [0, 0] : priceValue.split("-").map(Number);
+
+        const data = {
+            colors: colorValue || [],
+            sizes: sizeValue || [],
+            minPrice: minPrice || "",
+            maxPrice: maxPrice || "",
+            minDiscount: discountValue || "",
+            category: param.labelThree,
+            sort: sortValue || "price_low",
+            pageNumber: pageNumber - 1,
+            pageSize: 10,
+            stock: stockValue,
+        };
+
+        dispatch(findProducts(data));
+    }, [
+        param.labelThree,
+        colorValue,
+        sizeValue,
+        priceValue,
+        discountValue,
+        stockValue,
+        sortValue,
+        pageNumber,
+        dispatch,
+    ]);
     // For checkbox
     const handleFilter = (value: string, sectionId: string) => {
         const searchParam = new URLSearchParams(location.search);

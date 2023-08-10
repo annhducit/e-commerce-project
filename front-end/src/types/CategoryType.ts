@@ -7,13 +7,13 @@ interface FeaturedItem {
 }
 
 // Interface for an item in a category section
-interface SectionItem {
+export interface SectionItem {
     name: string;
     href: string;
 }
 
 // Interface for a section in a category
-interface CategorySection {
+export interface CategorySection {
     id: string;
     name: string;
     items: SectionItem[];

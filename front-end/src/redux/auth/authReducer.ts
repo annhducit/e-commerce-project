@@ -11,7 +11,7 @@ import {
     REGISTER_SUCCESS,
 } from "./ActionType";
 
-type AuthAction = {
+export type AuthAction = {
     type:
         | typeof REGISTER_REQUEST
         | typeof LOGIN_REQUEST
@@ -26,7 +26,7 @@ type AuthAction = {
     payload?: unknown;
 };
 
-const initials = Object.freeze({
+export const initials = Object.freeze({
     user: null,
     isLoading: false,
     error: null,
