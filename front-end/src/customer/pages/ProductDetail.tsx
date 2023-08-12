@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LinearProgress, Rating } from "@mui/material";
 import { RadioGroup } from "@headlessui/react";
 import Button from "../../components/Button";
 import ProductReviewCard from "../components/ProductReviewCard";
 import { menShirt } from "../../data/dataMenShirt";
 import ProductItem from "../components/ProductSectionCard/ProductItem";
+import { useDispatch, useSelector } from "react-redux";
+import { findProductById } from "../../services/productService";
+import { RootState } from "../../redux/globalStore";
+import { addItemToCart } from "../../services/cartService";
+import { useParams } from "react-router-dom";
 
 const product = {
     name: "Basic Tee 6-Pack",
@@ -61,6 +66,28 @@ function classNames(...classes: string[]): string {
 export default function ProductDetail() {
     const [selectedColor, setSelectedColor] = useState(product.colors[0]);
     const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+    const dispatch = useDispatch();
+    const { customerProduct } = useSelector((store: RootState) => store);
+    const productItem = customerProduct.product;
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        dispatch(findProductById(id));
+    }, [dispatch, id]);
+
+    type Data = {
+        productId: string | undefined;
+        selectedSize: {
+            name: string;
+            inStock: boolean;
+        };
+    };
+    const addItemToCartHandle = (e: SubmitEvent) => {
+        e.preventDefault();
+        const data: Data = { productId: id, selectedSize };
+        dispatch(addItemToCart(data));
+    };
 
     return (
         <div className="bg-white">
@@ -68,7 +95,7 @@ export default function ProductDetail() {
                 <nav aria-label="Breadcrumb">
                     <ol
                         role="list"
-                        className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
+                        className="flex items-center max-w-2xl px-4 mx-auto space-x-2 sm:px-6 lg:max-w-7xl lg:px-8"
                     >
                         {product.breadcrumbs.map((breadcrumb) => (
                             <li key={breadcrumb.id}>
@@ -85,7 +112,7 @@ export default function ProductDetail() {
                                         viewBox="0 0 16 20"
                                         fill="currentColor"
                                         aria-hidden="true"
-                                        className="h-5 w-4 text-gray-300"
+                                        className="w-4 h-5 text-gray-300"
                                     >
                                         <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                                     </svg>
@@ -103,46 +130,49 @@ export default function ProductDetail() {
                         </li>
                     </ol>
                 </nav>
-                <section className="grid grid-cols-2 gap-y-10 pt-6">
+                <section className="grid grid-cols-2 pt-6 gap-y-10">
                     {/* Image gallery */}
-                    <div className="flex items-center flex-col">
+                    <div className="flex flex-col items-center">
                         <div className="overflow-hidden rounded-lg max-w-full max-h-[36rem]">
                             <img
-                                src={product.images[0].src}
+                                src={productItem?.imageUrl}
                                 alt={product.images[0].alt}
-                                className="h-full w-full object-cover object-center"
+                                className="object-cover object-center w-full h-full"
                             />
                         </div>
-                        <div className="flex flex-wrap gap-x-6 justify-center pt-3">
-                            {product.images.map((image) => (
-                                <div className="max-w-[5rem] max-h-[5rem] overflow-hidden rounded-lg">
+                        <div className="flex flex-wrap justify-center pt-3 gap-x-6">
+                            {product.images.map((image, key) => (
+                                <div
+                                    key={key}
+                                    className="max-w-[5rem] max-h-[5rem] overflow-hidden rounded-lg"
+                                >
                                     <img
                                         src={image.src}
                                         alt={image.alt}
-                                        className="h-full w-full object-cover object-center"
+                                        className="object-cover object-center w-full h-full"
                                     />
                                 </div>
                             ))}
                         </div>
                     </div>
                     {/* Product info */}
-                    <div className="lg:col-span-1 mx-auto px-4 pb-16 sm:px-6 lg:lg:pr-20">
-                        <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8 flex flex-col gap-y-2">
+                    <div className="px-4 pb-16 mx-auto lg:col-span-1 sm:px-6 lg:lg:pr-20">
+                        <div className="flex flex-col lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8 gap-y-2">
                             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                                {product.name}
+                                {productItem?.brand}
                             </h1>
                             <h2 className="text-xl font-semibold text-slate-400">
-                                Casual Puff Sleeves Solid Women White Top
+                                {productItem?.title}
                             </h2>
                             <div className="flex items-center gap-x-4">
                                 <span className="text-lg font-semibold">
-                                    $199
+                                    {productItem?.discountedPrice}$
                                 </span>
                                 <span className="text-lg font-semibold line-through text-slate-400">
-                                    $211
+                                    {productItem?.price}$
                                 </span>
                                 <span className="text-lg font-semibold text-indigo-600 ">
-                                    5% Off
+                                    {productItem?.discountPersent}% Off
                                 </span>
                             </div>
                         </div>
@@ -152,17 +182,20 @@ export default function ProductDetail() {
                             <h2 className="sr-only">Product information</h2>
 
                             {/* Reviews */}
-                            <div className="mt-6 flex items-center gap-x-3">
+                            <div className="flex items-center mt-6 gap-x-3">
                                 <Rating name="read-only" value={5.5} readOnly />
-                                <p className="opacity-50 text-sm">
+                                <p className="text-sm opacity-50">
                                     50493 Ratings
                                 </p>
-                                <p className="text-indigo-600 font-medium hover:text-indigo-500">
+                                <p className="font-medium text-indigo-600 hover:text-indigo-500">
                                     3858 Reviews
                                 </p>
                             </div>
 
-                            <form className="mt-10">
+                            <form
+                                onSubmit={addItemToCartHandle}
+                                className="mt-10"
+                            >
                                 {/* Colors */}
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">
@@ -240,16 +273,12 @@ export default function ProductDetail() {
                                             Choose a size
                                         </RadioGroup.Label>
                                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                                            {product.sizes.map((size) => (
+                                            {productItem?.size.map((size) => (
                                                 <RadioGroup.Option
                                                     key={size.name}
-                                                    value={size}
-                                                    disabled={!size.inStock}
+                                                    value={size.name}
                                                     className={({ active }) =>
                                                         classNames(
-                                                            size.inStock
-                                                                ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                                                                : "cursor-not-allowed bg-gray-50 text-gray-200",
                                                             active
                                                                 ? "ring-2 ring-indigo-500"
                                                                 : "",
@@ -276,33 +305,7 @@ export default function ProductDetail() {
                                                                     aria-hidden="true"
                                                                 />
                                                             ) : (
-                                                                <span
-                                                                    aria-hidden="true"
-                                                                    className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                                                                >
-                                                                    <svg
-                                                                        className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                                                        viewBox="0 0 100 100"
-                                                                        preserveAspectRatio="none"
-                                                                        stroke="currentColor"
-                                                                    >
-                                                                        <line
-                                                                            x1={
-                                                                                0
-                                                                            }
-                                                                            y1={
-                                                                                100
-                                                                            }
-                                                                            x2={
-                                                                                100
-                                                                            }
-                                                                            y2={
-                                                                                0
-                                                                            }
-                                                                            vectorEffect="non-scaling-stroke"
-                                                                        />
-                                                                    </svg>
-                                                                </span>
+                                                                ""
                                                             )}
                                                         </>
                                                     )}
@@ -315,7 +318,7 @@ export default function ProductDetail() {
                                 <Button
                                     type="submit"
                                     text="Add to cart"
-                                    className="px-8 font-semibold py-4 mt-6 bg-indigo-600 text-white rounded-lg"
+                                    className="px-8 py-4 mt-6 font-semibold text-white bg-indigo-600 rounded-lg"
                                 ></Button>
                             </form>
                         </div>
@@ -340,7 +343,7 @@ export default function ProductDetail() {
                                 <div className="mt-4">
                                     <ul
                                         role="list"
-                                        className="list-disc space-y-2 pl-4 text-sm"
+                                        className="pl-4 space-y-2 text-sm list-disc"
                                     >
                                         {product.highlights.map((highlight) => (
                                             <li
@@ -372,19 +375,19 @@ export default function ProductDetail() {
                 </section>
 
                 {/* Rating and reviews */}
-                <section className="px-20 border border-slate-200 py-6">
+                <section className="px-20 py-6 border border-slate-200">
                     <h1 className="text-xl font-bold">
                         Recent Reviews and Rating
                     </h1>
                     <div className="grid grid-rows-1">
                         <div className="grid grid-cols-3">
-                            <div className="flex flex-col gap-y-3 col-span-2">
+                            <div className="flex flex-col col-span-2 gap-y-3">
                                 {[1, 2, 3].map((item) => (
                                     <ProductReviewCard key={item} />
                                 ))}
                             </div>
-                            <div className="px-6 flex flex-col gap-y-2">
-                                <h1 className="font-semibold text-xl">
+                            <div className="flex flex-col px-6 gap-y-2">
+                                <h1 className="text-xl font-semibold">
                                     Product Ratings
                                 </h1>
                                 <div className="flex flex-col gap-y-3">
@@ -399,7 +402,7 @@ export default function ProductDetail() {
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-x-3">
-                                        <p className="font-semibold opacity-70 text-sm w-20">
+                                        <p className="w-20 text-sm font-semibold opacity-70">
                                             Exellent
                                         </p>
                                         <LinearProgress
@@ -415,7 +418,7 @@ export default function ProductDetail() {
                                         />
                                     </div>
                                     <div className="flex items-center gap-x-3">
-                                        <p className="font-semibold opacity-70 text-sm w-20">
+                                        <p className="w-20 text-sm font-semibold opacity-70">
                                             Very good
                                         </p>
                                         <LinearProgress
@@ -431,7 +434,7 @@ export default function ProductDetail() {
                                         />
                                     </div>
                                     <div className="flex items-center gap-x-3">
-                                        <p className="font-semibold opacity-70 text-sm w-20">
+                                        <p className="w-20 text-sm font-semibold opacity-70">
                                             Good
                                         </p>
                                         <LinearProgress
@@ -447,7 +450,7 @@ export default function ProductDetail() {
                                         />
                                     </div>
                                     <div className="flex items-center gap-x-3">
-                                        <p className="font-semibold opacity-70 text-sm w-20">
+                                        <p className="w-20 text-sm font-semibold opacity-70">
                                             Average
                                         </p>
                                         <LinearProgress
@@ -463,7 +466,7 @@ export default function ProductDetail() {
                                         />
                                     </div>
                                     <div className="flex items-center gap-x-3">
-                                        <p className="font-semibold opacity-70 text-sm w-20">
+                                        <p className="w-20 text-sm font-semibold opacity-70">
                                             Poor
                                         </p>
                                         <LinearProgress
@@ -488,8 +491,8 @@ export default function ProductDetail() {
                 <section className="px-20 py-10">
                     <h1 className="text-xl font-bold">Similar Products</h1>
                     <div className="grid grid-cols-5 gap-6 pt-6">
-                        {menShirt.map((item) => (
-                            <ProductItem product={item} />
+                        {menShirt.map((item, index) => (
+                            <ProductItem key={index} product={item} />
                         ))}
                     </div>
                 </section>

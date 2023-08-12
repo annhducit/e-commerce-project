@@ -31,7 +31,6 @@ export const findProducts =
             const { data } = await api.get(
                 `/api/products?colors=${colors}&sizes=${sizes}&minPrice=${minPrice}&maxPrice=${maxPrice}&minDiscount=${minDiscount}&category=${category}&stock=${stock}&sort=${sort}&pageNumber=${pageNumber}&pageSize=${pageSize}`
             );
-            console.log(data);
             dispatch({ type: FIND_PRODUCTS_SUCCESS, payload: data });
         } catch (err) {
             dispatch({ type: FIND_PRODUCTS_FAILURE, payload: err });
@@ -39,9 +38,8 @@ export const findProducts =
     };
 
 export const findProductById =
-    (data: MenClothes) => async (dispatch: Dispatch<AnyAction>) => {
+    (id: string) => async (dispatch: Dispatch<AnyAction>) => {
         dispatch({ type: FIND_PRODUCT_BY_ID_REQUEST });
-        const { id } = data;
         try {
             const { data: productData } = await api.get(`/api/products/${id}`);
             dispatch({

@@ -1,3 +1,4 @@
+import { MenClothes } from "../../types/MenClothes";
 import {
     FIND_PRODUCTS_REQUEST,
     FIND_PRODUCTS_SUCCESS,
@@ -20,7 +21,7 @@ type ProductAction = {
 };
 
 const initials = Object.freeze({
-    products: [],
+    products: [] as MenClothes[],
     product: null,
     isLoading: false,
     error: null,

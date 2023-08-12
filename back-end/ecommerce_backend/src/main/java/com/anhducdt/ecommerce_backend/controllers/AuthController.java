@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
     private final CustomerUserService customerUserService;
     private final CartService cartService;
 

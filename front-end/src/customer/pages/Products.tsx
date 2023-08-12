@@ -9,12 +9,14 @@ import {
     Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import ProductCard from "../components/Product/ProductCard";
-import { menShirt } from "../../data/dataMenShirt";
 import { filter, singleFilter } from "../../data/filterData";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { findProducts } from "../../services/productService";
+import { MenClothes } from "../../types/MenClothes";
+import { RootState } from "../../redux/globalStore";
+import { Pagination } from "@mui/material";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -46,6 +48,7 @@ export default function Example() {
     const navigate = useNavigate();
     const param = useParams();
     const dispatch = useDispatch();
+    const { customerProduct } = useSelector((store: RootState) => store);
 
     const decodedQueryString = decodeURIComponent(location.search);
     const searchParams = new URLSearchParams(decodedQueryString);
@@ -123,6 +126,15 @@ export default function Example() {
         navigate({ search: `?${query}` });
     };
 
+    const handlePaginationChange = (
+        even: React.ChangeEvent<unknown>,
+        pageNumber: string
+    ) => {
+        const searchPanigation = new URLSearchParams(location.search);
+        searchPanigation.set("page", pageNumber);
+        const query = searchPanigation.toString();
+        navigate({ search: `?${query}` });
+    };
     return (
         <div className="bg-white">
             <div>
@@ -513,14 +525,27 @@ export default function Example() {
                             </form>
 
                             {/* Product grid */}
-                            <div className="lg:col-span-4 w-full border-slate-200 border p-3 rounded-lg">
+                            <div className="lg:col-span-4 w-full border-slate-200 border flex flex-col gap-y-6 p-3 rounded-lg">
                                 <div className="grid grid-cols-4 gap-x-1">
-                                    {menShirt.map((item, index) => (
-                                        <ProductCard
-                                            key={index}
-                                            product={item}
-                                        />
-                                    ))}
+                                    {customerProduct?.products?.content
+                                        ? customerProduct.products.content.map(
+                                              (item: MenClothes) => (
+                                                  <ProductCard
+                                                      key={item.id}
+                                                      product={item}
+                                                  />
+                                              )
+                                          )
+                                        : ""}
+                                </div>
+                                <div className="mx-auto">
+                                    <Pagination
+                                        count={
+                                            customerProduct.products?.totalPages
+                                        }
+                                        color="secondary"
+                                        onChange={handlePaginationChange}
+                                    ></Pagination>
                                 </div>
                             </div>
                         </div>

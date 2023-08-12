@@ -7,12 +7,15 @@ import { orderReducer } from "./order/orderReducer";
 
 const rootReducers = combineReducers({
     auth: authReducer,
-    pcustomerReducer: productCustomerReducer,
+    customerProduct: productCustomerReducer,
     cart: cartReducer,
     order: orderReducer,
 });
 
-export const authStore = legacy_createStore(
+export const globalStore = legacy_createStore(
     rootReducers,
     applyMiddleware(thunk)
 );
+
+export type RootState = ReturnType<typeof globalStore.getState>;
+export type AppDispatch = typeof globalStore.dispatch;

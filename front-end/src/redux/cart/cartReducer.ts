@@ -1,3 +1,5 @@
+import { CartItemType } from "../../types/CartItemType";
+import { CartsType } from "../../types/CartsType";
 import {
     ADD_ITEM_TO_CART_FAILURE,
     ADD_ITEM_TO_CART_REQUEST,
@@ -13,7 +15,13 @@ import {
     UPDATE_ITEM_CART_SUCCESS,
 } from "./ActionType";
 
-const initials = Object.freeze({
+type Initials = {
+    cart: null | CartsType;
+    isLoading: boolean;
+    error: null;
+    cartItems: CartItemType[];
+};
+const initials: Initials = Object.freeze({
     cart: null,
     isLoading: false,
     error: null,
@@ -48,6 +56,7 @@ export const cartReducer = (state = initials, action: CartAction) => {
                 ...state,
                 cartItems: [...state.cartItems, action.payload?.cartItems],
                 loading: false,
+                handleAddItemToCart: action.payload,
             };
 
         case ADD_ITEM_TO_CART_FAILURE:
@@ -72,17 +81,13 @@ export const cartReducer = (state = initials, action: CartAction) => {
         case REMOVE_ITEM_CART_SUCCESS:
             return {
                 ...state,
-                cartItems: state.cartItems.filter(
-                    (item) => item.id !== action.payload
-                ),
+                deleteCartItem: action.payload,
                 loading: false,
             };
         case UPDATE_ITEM_CART_SUCCESS:
             return {
                 ...state,
-                cartItems: state.cartItems.map((item) =>
-                    item.id === action.payload.id ? action.payload : item
-                ),
+                updateCartItem: action.payload,
                 loading: false,
             };
         case REMOVE_ITEM_CART_FAILURE:
