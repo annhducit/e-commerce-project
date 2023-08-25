@@ -22,4 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                        @Param("minDiscount") Integer minDiscount,
                                        @Param("sort") String sort);
 
+    @Query("SELECT p FROM Product p WHERE p.title LIKE %:keyword% OR p.brand LIKE %:keyword%")
+    List<Product> searchProductByKeyword(@Param("keyword") String keyword);
+
 }

@@ -35,7 +35,7 @@ public class CartService implements ICartService {
     Product product = productService.getProductById(addItemRequest.getProductId());
 
     CartItem isPresent = cartItemService.isCartItemExist(cart, product, addItemRequest.getSize(), userId);
-    if (isPresent== null) {
+    if (isPresent == null) {
       CartItem cartItem = new CartItem();
       cartItem.setProduct(product);
       cartItem.setCart(cart);
@@ -46,8 +46,9 @@ public class CartService implements ICartService {
       cartItem.setSize(addItemRequest.getSize());
       CartItem cartItemNew  = cartItemService.createCartItem(cartItem);
       cart.getCartItems().add(cartItemNew);
+      return "Item add to cart success!";
     }
-    return "Item add to cart success!";
+    return "Item already exist";
   }
 
   @Override
@@ -57,9 +58,9 @@ public class CartService implements ICartService {
     int totalDiscountPrice = 0;
     int totalItem = 0;
     for (CartItem cartItem : cart.getCartItems()) {
-      totalPrice +=  cartItem.getPrice();
-      totalDiscountPrice += cart.getTotalDiscountPrice();
-      totalItem += cartItem.getQuantity();
+      totalPrice = totalPrice +  cartItem.getPrice();
+      totalDiscountPrice  = totalDiscountPrice + cartItem.getDiscountedPrice();
+      totalItem = totalItem + cartItem.getQuantity();
     }
 
     cart.setTotalPrice(totalPrice);

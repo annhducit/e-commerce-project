@@ -36,11 +36,10 @@ export const addItemToCart =
         try {
             const data = await api.post("/api/carts/add", reqData);
             dispatch({ type: ADD_ITEM_TO_CART_SUCCESS, payload: data });
-            console.log("add cart success");
             toast.success("Add item to cart sucessfully");
         } catch (err) {
+            toast.error("Item is already existed!");
             dispatch({ type: ADD_ITEM_TO_CART_FAILURE, payload: err });
-            toast.error("Add item to cart fail!");
         }
     };
 
@@ -51,7 +50,6 @@ export const removeItemToCart =
         try {
             await api.delete(`/api/cart_items/${cartItemId}`);
             dispatch({ type: REMOVE_ITEM_CART_SUCCESS, payload: cartItemId });
-            console.log("remove successfull");
             toast.success("Remove item cart sucessfully!");
         } catch (err) {
             dispatch({ type: REMOVE_ITEM_CART_FAILURE, payload: err });

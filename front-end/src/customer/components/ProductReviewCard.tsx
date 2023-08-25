@@ -1,6 +1,7 @@
 import { Rating } from "@mui/material";
+import { ReviewType } from "../../types/ProductType";
 
-const ProductReviewCard = () => {
+const ProductReviewCard = ({ data }: { data: ReviewType }) => {
     return (
         <div className="flex items-center gap-x-6 w-full p-6 border-b border-slate-200 rounded-lg">
             <div className="w-10 h-10 rounded-full">
@@ -11,10 +12,12 @@ const ProductReviewCard = () => {
                 />
             </div>
             <div className="flex flex-col">
-                <h2 className="font-semibold">Anh Đức</h2>
-                <span className="font-sm text-slate-400">23/7/2023</span>
+                <h2 className="font-semibold">
+                    {data.user.firstName} {data.user.lastName}
+                </h2>
+                <span className="font-sm text-slate-400">{data.createAt}</span>
                 <Rating name="read-only" value={5.5} readOnly />
-                <p>This product is so good</p>
+                <p>{data.review}</p>
             </div>
         </div>
     );

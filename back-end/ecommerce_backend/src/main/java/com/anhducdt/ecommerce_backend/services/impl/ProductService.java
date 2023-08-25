@@ -8,7 +8,6 @@ import com.anhducdt.ecommerce_backend.repositories.CategoryRepository;
 import com.anhducdt.ecommerce_backend.repositories.ProductRepository;
 import com.anhducdt.ecommerce_backend.services.IProductService;
 import com.anhducdt.ecommerce_backend.services.IUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,6 +80,60 @@ public class ProductService implements IProductService {
 
         return productRepository.save(product);
     }
+    @Override
+    public List<Product> createProducts(List<ProductRequest> productRequests) {
+        List<Product> createdProducts = new ArrayList<>();
+
+        for (ProductRequest productRequest : productRequests) {
+            Category topLevel = categoryRepository.findByName(productRequest.getTopLevelCategory());
+
+            if (topLevel == null) {
+                Category topLevelCategory = new Category();
+                topLevelCategory.setName(productRequest.getTopLevelCategory());
+                topLevelCategory.setLevel(1);
+                topLevel = categoryRepository.save(topLevelCategory);
+            }
+
+            Category secondLevel = categoryRepository.findByNameAndParent(productRequest.getSecondLevelCategory(), topLevel.getName());
+
+            if (secondLevel == null) {
+                Category secondLevelCategory = new Category();
+                secondLevelCategory.setName(productRequest.getSecondLevelCategory());
+                secondLevelCategory.setParentCategory(topLevel);
+                secondLevelCategory.setLevel(2);
+                secondLevel = categoryRepository.save(secondLevelCategory);
+            }
+
+            Category thirdLevel = categoryRepository.findByNameAndParent(productRequest.getThirdLevelCategory(), secondLevel.getName());
+
+            if (thirdLevel == null) {
+                Category thirdLevelCategory = new Category();
+                thirdLevelCategory.setName(productRequest.getThirdLevelCategory());
+                thirdLevelCategory.setParentCategory(secondLevel);
+                thirdLevelCategory.setLevel(3);
+                thirdLevel = categoryRepository.save(thirdLevelCategory);
+            }
+
+            Product product = new Product();
+            product.setTitle(productRequest.getTitle());
+            product.setColor(productRequest.getColor());
+            product.setDescription(productRequest.getDescription());
+            product.setDiscountedPrice(productRequest.getDiscountedPrice());
+            product.setDiscountPersent(productRequest.getDiscountPersent());
+            product.setImageUrl(productRequest.getImageUrl());
+            product.setBrand(productRequest.getBrand());
+            product.setSize(productRequest.getSize());
+            product.setCategory(thirdLevel);
+            product.setDateCreate(LocalDateTime.now());
+            product.setQuantity(productRequest.getQuantity());
+            product.setPrice(productRequest.getPrice());
+
+            createdProducts.add(productRepository.save(product));
+        }
+
+        return createdProducts;
+    }
+
 
     @Override
     public Product getProductById(Long id) throws ProductException {
@@ -131,5 +185,10 @@ public class ProductService implements IProductService {
         int endIndex = Math.min(startIndex + pageable.getPageSize(), productList.size());
         List<Product> pageContent = productList.subList(startIndex, endIndex);
         return new PageImpl<>(pageContent, pageable, productList.size());
+    }
+
+    @Override
+    public List<Product> searchProductByKeyWord(String keyword) {
+        return productRepository.searchProductByKeyword(keyword);
     }
 }

@@ -13,7 +13,7 @@ const Cart = ({ payment }: { payment?: boolean }) => {
     const dispatch = useDispatch();
 
     const handleCheckout = () => {
-        navigate(`/checkout`);
+        navigate(`/checkout?step=2`);
     };
     const { cart } = useSelector((store: RootState) => store);
 

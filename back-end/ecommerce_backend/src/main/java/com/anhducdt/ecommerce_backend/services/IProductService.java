@@ -9,10 +9,13 @@ import java.util.List;
 
 public interface IProductService {
     Product createProduct(ProductRequest productRequest);
+    List<Product> createProducts(List<ProductRequest> productRequests);
     Product getProductById(Long id) throws ProductException;
     Product updateProduct(Long id, ProductRequest productRequest) throws ProductException;
     void deleteProductById(Long id) throws ProductException;
     List<Product> findProductByCategory(Long id) throws ProductException;
     Page<Product> getProducts(String category, List<String> colors, List<String> sizes, Integer minPrice, Integer maxPrice
     ,Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize);
+    List<Product> searchProductByKeyWord(String keyword);
+
 }

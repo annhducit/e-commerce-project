@@ -6,6 +6,7 @@ import com.anhducdt.ecommerce_backend.dtos.resquests.AuthRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.Cart;
 import com.anhducdt.ecommerce_backend.models.User;
+import com.anhducdt.ecommerce_backend.models.enums.Role;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
 import com.anhducdt.ecommerce_backend.services.impl.CartService;
 import com.anhducdt.ecommerce_backend.services.impl.CustomerUserService;
@@ -43,6 +44,7 @@ public class AuthController {
         String password = user.getPassword();
         String firstString = user.getFirstName();
         String lastString = user.getLastName();
+        String role = String.valueOf(user.getRole());
         User isEmailExits = userRepository.findUserByEmail(email);
         if (isEmailExits != null) {
             throw new UserException("This Email is already use with another account");
@@ -52,6 +54,7 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(password));
         createUser.setFirstName(firstString);
         createUser.setLastName(lastString);
+        createUser.setRole(Role.valueOf(role));
 
         User newUser = userRepository.save(createUser);
         Cart cart = cartService.createCart(newUser);

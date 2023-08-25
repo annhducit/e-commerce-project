@@ -1,5 +1,6 @@
 package com.anhducdt.ecommerce_backend.models;
 
+import com.anhducdt.ecommerce_backend.models.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class User {
     private String lastName;
     private String password;
     private String email;
-    private String role;
+    private Role role;
     private String phoneNumber;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> address = new ArrayList<>();

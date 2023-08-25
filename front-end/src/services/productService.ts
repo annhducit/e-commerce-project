@@ -10,7 +10,6 @@ import {
 } from "../redux/product/ActionType";
 import { AnyAction } from "redux";
 import { FilterType } from "../customer/pages/Products";
-import { MenClothes } from "../types/MenClothes";
 
 export const findProducts =
     (products: FilterType) => async (dispatch: Dispatch<AnyAction>) => {

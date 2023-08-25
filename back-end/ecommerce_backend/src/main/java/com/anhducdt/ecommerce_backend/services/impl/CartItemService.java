@@ -25,7 +25,7 @@ public class CartItemService implements ICartItemService {
   public CartItem createCartItem(CartItem cartItem) {
     cartItem.setQuantity(1);
     cartItem.setPrice(cartItem.getProduct().getPrice() * cartItem.getQuantity());
-    cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()*cartItem.getPrice());
+    cartItem.setDiscountedPrice(cartItem.getProduct().getDiscountedPrice()*cartItem.getQuantity());
 
     return cartItemRepository.save(cartItem);
   }

@@ -57,7 +57,7 @@ const CartItem = ({ data }: { data: CartItemType }) => {
                             {data.product.brand}
                         </h2>
                         <span>
-                            Size L {data.size}, {data.product.color}
+                            Size {data.size}, {data.product.color}
                         </span>
                         <span>Seller: Best seller of the year</span>
                     </div>

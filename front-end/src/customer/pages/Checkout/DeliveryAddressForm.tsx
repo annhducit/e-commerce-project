@@ -1,25 +1,30 @@
 import React from "react";
-import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import AddressItem from "../../components/AddressItem";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { createOrder } from "../../../services/orderService";
 
 const DeliveryAddressForm = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const data = new FormData(e.currentTarget);
 
-        const datas = {
+        const address = {
             firstName: data.get("firstName"),
             lastName: data.get("lastName"),
-            address: data.get("address"),
+            streetAddress: data.get("address"),
             city: data.get("city"),
             state: data.get("state"),
-            zipcode: data.get("zipcode"),
-            phone: data.get("phone"),
+            zipCode: data.get("zipcode"),
+            phoneNumber: data.get("phone"),
         };
 
-        console.log(datas);
+        const orderData = { address, navigate };
+        dispatch(createOrder(orderData));
     };
     return (
         <div className="container">
@@ -35,14 +40,14 @@ const DeliveryAddressForm = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="grid grid-rows-1">
                             <div className="grid grid-cols-2 gap-6">
-                                <Input
+                                <input
                                     placeholder="First name"
                                     name="firstName"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
                                     type="text"
                                     autoComplete="none"
                                 />
-                                <Input
+                                <input
                                     placeholder="Last name"
                                     name="lastName"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
@@ -61,14 +66,14 @@ const DeliveryAddressForm = () => {
                         </div>
                         <div className="grid grid-rows-1">
                             <div className="grid grid-cols-2 gap-6">
-                                <Input
+                                <input
                                     placeholder="City"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
                                     type="text"
                                     autoComplete="none"
                                     name="city"
                                 />
-                                <Input
+                                <input
                                     placeholder="State/Province/Region"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
                                     type="text"
@@ -79,14 +84,14 @@ const DeliveryAddressForm = () => {
                         </div>
                         <div className="grid grid-rows-1 my-6">
                             <div className="grid grid-cols-2 gap-6">
-                                <Input
+                                <input
                                     placeholder="Zipcode"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
                                     type="text"
                                     autoComplete="none"
                                     name="zipcode"
                                 />
-                                <Input
+                                <input
                                     placeholder="Phone number"
                                     className="w-full p-3 border rounded-md outline-none focus:bg-slate-100 border-slate-300"
                                     type="text"

@@ -26,6 +26,13 @@ public class ProductController {
     return new ResponseEntity<>(product, HttpStatus.CREATED);
   }
 
+  @PostMapping("/products")
+    public ResponseEntity<List<Product>> createProducts(@RequestBody List<ProductRequest> productRequest) {
+      List<Product> product = productService.createProducts(productRequest);
+      return new ResponseEntity<>(product, HttpStatus.CREATED);
+    }
+
+
   @GetMapping("/{id}")
   public ResponseEntity<Product> getProductById(@PathVariable Long id) {
     try {
@@ -70,4 +77,12 @@ public class ProductController {
     Page<Product> products = productService.getProducts(category, colors, sizes, minPrice, maxPrice, minDiscount, sort, stock, pageNumber, pageSize);
     return new ResponseEntity<>(products, HttpStatus.OK);
   }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<Product>> searchProductByKeyword(@RequestParam("keyword") String keyword) {
+      List<Product> productList = productService.searchProductByKeyWord(keyword);
+      return new ResponseEntity<>(productList, HttpStatus.OK);
+  }
+
+
 }

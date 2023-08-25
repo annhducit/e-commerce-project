@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useState } from "react";
+
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
     Bars3Icon,
-    MagnifyingGlassIcon,
     ShoppingBagIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -23,6 +23,8 @@ import {
 import { RootState } from "../../redux/globalStore";
 import { getCart } from "../../services/cartService";
 
+import Search from "./Search";
+
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
 }
@@ -37,7 +39,7 @@ export default function Navigation() {
         item: SectionItem,
         close: () => void
     ): void => {
-        navigate(`/${category.id}/${section.id}/${item.name}/`);
+        navigate(`/${category.id}/${section.id}/${item.href}`);
         close();
     };
 
@@ -498,8 +500,11 @@ export default function Navigation() {
                                     ))}
                                 </div>
                             </Popover.Group>
-
+                            {/* Search */}
                             <div className="flex items-center ml-auto">
+                                <div className="flex lg:mx-auto relative">
+                                    <Search />
+                                </div>
                                 {auth.user ? (
                                     <div className="hidden lg:ml-8 lg:flex">
                                         <a
@@ -538,19 +543,6 @@ export default function Navigation() {
                                         </Link>
                                     </div>
                                 )}
-                                {/* Search */}
-                                <div className="flex lg:ml-6">
-                                    <a
-                                        href="#"
-                                        className="p-2 text-indigo-500 hover:text-indigo-600"
-                                    >
-                                        <span className="sr-only">Search</span>
-                                        <MagnifyingGlassIcon
-                                            className="w-6 h-6"
-                                            aria-hidden="true"
-                                        />
-                                    </a>
-                                </div>
 
                                 {/* Cart */}
                                 <div className="flex items-center ml-4 gap-x-4 lg:ml-6">

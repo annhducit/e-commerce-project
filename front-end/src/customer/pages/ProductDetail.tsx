@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LinearProgress, Rating } from "@mui/material";
 import { RadioGroup } from "@headlessui/react";
 import Button from "../../components/Button";
@@ -10,6 +10,10 @@ import { findProductById } from "../../services/productService";
 import { RootState } from "../../redux/globalStore";
 import { addItemToCart } from "../../services/cartService";
 import { useParams } from "react-router-dom";
+import { createReview } from "../../services/reviewService";
+import { toast } from "react-toastify";
+import ReviewType from "../../types/ReviewType";
+import ProductType from "../../types/ProductType";
 
 const product = {
     name: "Basic Tee 6-Pack",
@@ -66,27 +70,47 @@ function classNames(...classes: string[]): string {
 export default function ProductDetail() {
     const [selectedColor, setSelectedColor] = useState(product.colors[0]);
     const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+    const [reload, setReload] = useState<number>(0);
+    const reviewRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
     const { customerProduct } = useSelector((store: RootState) => store);
-    const productItem = customerProduct.product;
-
+    const productItem: ProductType = customerProduct.product;
+    console.log(productItem);
     const { id } = useParams();
 
     useEffect(() => {
         dispatch(findProductById(id));
-    }, [dispatch, id]);
+    }, [dispatch, id, reload]);
 
+    type Size = {
+        name: string;
+        inStock: boolean;
+    };
     type Data = {
         productId: string | undefined;
-        selectedSize: {
-            name: string;
-            inStock: boolean;
-        };
+        size: Size;
     };
+    // Add item to cart handle
     const addItemToCartHandle = (e: SubmitEvent) => {
         e.preventDefault();
-        const data: Data = { productId: id, selectedSize };
+        const data: Data = { productId: id, size: selectedSize };
         dispatch(addItemToCart(data));
+    };
+
+    // Create review handle
+    const handleCreateReview = () => {
+        if (reviewRef.current) {
+            const data: ReviewType = {
+                productId: id,
+                review: reviewRef.current?.value,
+            };
+            createReview(data);
+            setReload((count) => count + 1);
+            toast.success("Review successfully!");
+            reviewRef.current.value = "";
+        } else {
+            toast.error("Review failure!");
+        }
     };
 
     return (
@@ -382,9 +406,27 @@ export default function ProductDetail() {
                     <div className="grid grid-rows-1">
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col col-span-2 gap-y-3">
-                                {[1, 2, 3].map((item) => (
-                                    <ProductReviewCard key={item} />
+                                {productItem?.reviews.map((item, index) => (
+                                    <ProductReviewCard
+                                        key={index}
+                                        data={item}
+                                    />
                                 ))}
+                                <div className="flex">
+                                    <input
+                                        ref={reviewRef}
+                                        type="text"
+                                        name="review"
+                                        id=""
+                                        placeholder="Hãy để lại nhận xét của bạn về sản phẩm"
+                                        className="border flex-1 px-6 py-3 outline-none border-slate-200 rounded-tl-md rounded-bl-md"
+                                    />
+                                    <Button
+                                        onClick={handleCreateReview}
+                                        text="Nhận xét"
+                                        className="px-4 bg-indigo-500 text-white rounded-tr-md rounded-br-md hover:bg-indigo-600 transition-all"
+                                    />
+                                </div>
                             </div>
                             <div className="flex flex-col px-6 gap-y-2">
                                 <h1 className="text-xl font-semibold">

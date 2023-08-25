@@ -29,12 +29,17 @@ public class ReviewService implements IReviewService {
     review.setUser(user);
     review.setProduct(product);
     review.setCreateAt(LocalDateTime.now());
-    review.setReview(review.getReview());
+    review.setReview(reviewRequest.getReview());
     return reviewRepository.save(review);
   }
 
   @Override
   public List<Review> getProductReview(Long productId) {
     return reviewRepository.getAllReviewProduct(productId);
+  }
+
+  @Override
+  public void deleteReview(Long id) {
+    reviewRepository.deleteById(id);
   }
 }

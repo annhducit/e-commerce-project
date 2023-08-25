@@ -1,20 +1,34 @@
 // import Button from "../../components/Button";
+type Shipping = {
+    city: string;
+    firstName: string | null;
+    id: number;
+    lastName: string;
+    phoneNumber: string;
+    state: string;
+    streetAddress: string;
+    zipCode: string;
+};
 
-const AddressItem = () => {
+const AddressItem = ({ data }: { data: Shipping }) => {
     return (
         <div className="flex flex-col w-full p-4 border-b gap-y-1 border-slate-200">
-            <h2 className="font-bold text-md">Nguyễn Trọng Đức</h2>
+            <h2 className="font-bold text-md">
+                {data.lastName} {data.firstName}
+            </h2>
             <div className="flex items-center gap-x-2">
                 <h2 className="font-semibold text-md">Địa chỉ:</h2>
-                <span>Phường Tân Phong, Quận 7, Tp Hồ Chí Minh</span>
+                <span>
+                    {data.streetAddress}, {data.city}
+                </span>
             </div>
             <div className="flex items-center gap-x-2">
                 <h2 className="font-semibold text-md">Zipcode:</h2>
-                <span>2222</span>
+                <span>{data.zipCode}</span>
             </div>
             <div className="flex items-center gap-x-2">
                 <h2 className="font-semibold text-md">Điện thoại:</h2>
-                <span>0945372635</span>
+                <span>{data.phoneNumber}</span>
             </div>
             {/* <div className="ml-auto">
                 <Button

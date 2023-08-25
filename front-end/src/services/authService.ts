@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AnyAction, Dispatch } from "redux";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import { API_BASE_URL } from "../configs/config";
 import {
@@ -39,11 +39,8 @@ export const register = (userData: AuthType) => async (dispatch: Dispatch) => {
             localStorage.setItem("token", user.jwt);
         }
         dispatch(registerSuccess(user));
-        await toast.success("Register successful!", {
-            position: "top-right",
-            duration: 3000,
+        toast.success("Register successful!", {
             icon: "👏",
-            className: "text-purple-500",
         });
     } catch (error: any) {
         if (
@@ -84,10 +81,7 @@ export const login =
                 localStorage.setItem("token", user.jwt);
             }
             toast.success("Login successful!", {
-                position: "top-right",
-                duration: 3000,
                 icon: "👏",
-                className: "text-purple-500 z-[9999]",
             });
             dispatch(loginSuccess(user));
         } catch (error: any) {
