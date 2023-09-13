@@ -27,6 +27,7 @@ public class User {
     private String email;
     private Role role;
     private String phoneNumber;
+    private String nation;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> address = new ArrayList<>();
     @Embedded

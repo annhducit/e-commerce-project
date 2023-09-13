@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useState } from "react";
 
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
@@ -502,7 +501,7 @@ export default function Navigation() {
                             </Popover.Group>
                             {/* Search */}
                             <div className="flex items-center ml-auto">
-                                <div className="flex lg:mx-auto relative">
+                                <div className="relative flex lg:mx-auto">
                                     <Search />
                                 </div>
                                 {auth.user ? (

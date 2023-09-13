@@ -75,7 +75,6 @@ export default function ProductDetail() {
     const dispatch = useDispatch();
     const { customerProduct } = useSelector((store: RootState) => store);
     const productItem: ProductType = customerProduct.product;
-    console.log(productItem);
     const { id } = useParams();
 
     useEffect(() => {
@@ -419,12 +418,12 @@ export default function ProductDetail() {
                                         name="review"
                                         id=""
                                         placeholder="Hãy để lại nhận xét của bạn về sản phẩm"
-                                        className="border flex-1 px-6 py-3 outline-none border-slate-200 rounded-tl-md rounded-bl-md"
+                                        className="flex-1 px-6 py-3 border outline-none border-slate-200 rounded-tl-md rounded-bl-md"
                                     />
                                     <Button
                                         onClick={handleCreateReview}
                                         text="Nhận xét"
-                                        className="px-4 bg-indigo-500 text-white rounded-tr-md rounded-br-md hover:bg-indigo-600 transition-all"
+                                        className="px-4 text-white transition-all bg-indigo-500 rounded-tr-md rounded-br-md hover:bg-indigo-600"
                                     />
                                 </div>
                             </div>

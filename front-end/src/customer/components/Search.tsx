@@ -1,34 +1,76 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import ProductType from "../../types/ProductType";
 import TippyHandless from "@tippyjs/react/headless";
 import Wrapper from "../../components/Wrapper";
 import ProductSearchItem from "./ProductSearchItem";
-import { FaExclamationCircle, FaSearch, FaSpinner } from "react-icons/fa";
+import { searchProductByKeyword } from "../../services/productService";
+
+import { FaRemoveFormat, FaSearch, FaSpinner } from "react-icons/fa";
 const Search = () => {
     // * For search
-    const [result, setResult] = useState<ProductType[]>([1, 2, 3]);
+    const [result, setResult] = useState<ProductType[]>([]);
     const [searchValue, setSearchValue] = useState("");
     const [hide, setHide] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const debounce = useDebounce(searchValue, 500);
     const inputRef = useRef<HTMLInputElement>(null);
+    const [visibleResults, setVisibleResults] = useState<number>(5);
+    const productsPerPage = 5;
+
+    const hasMoreResults = result?.length > visibleResults;
+
+    const loadMoreResults = () => {
+        setVisibleResults(
+            (prevVisibleResults) => prevVisibleResults + productsPerPage
+        );
+    };
 
     // Handle search
+    useEffect(() => {
+        void (async () => {
+            setLoading(true);
+            const productResult = await searchProductByKeyword(debounce);
+            setResult(productResult);
+            setLoading(false);
+        })();
+    }, [debounce]);
     return (
         <TippyHandless
             interactive
-            visible={hide && result.length > 0}
+            visible={result?.length >= 0 && hide}
             render={(attrs) => (
                 <div className="w-[500px] border" tabIndex={1} {...attrs}>
                     <Wrapper>
-                        <p className="text-slate-900 font-semibold leading-5 p-2">
+                        <p className="p-2 font-semibold leading-5 text-slate-900">
                             Results
                         </p>
-                        {result.map((item) => (
-                            <ProductSearchItem key={item.id} data={item} />
-                        ))}
+                        {result?.length > 0 ? (
+                            <>
+                                {result
+                                    ?.slice(0, visibleResults)
+                                    .map((item) => (
+                                        <ProductSearchItem
+                                            key={item.id}
+                                            data={item}
+                                        />
+                                    ))}
+                                {hasMoreResults && (
+                                    <button
+                                        className="w-full py-2 text-indigo-500 transition-all hover:underline"
+                                        onClick={loadMoreResults}
+                                    >
+                                        {`Xem thêm ${
+                                            result?.length - visibleResults
+                                        } sản phẩm`}
+                                    </button>
+                                )}
+                            </>
+                        ) : (
+                            <p className="pb-2 text-center">
+                                Không tìm thấy kết quả phù hợp
+                            </p>
+                        )}
                     </Wrapper>
                 </div>
             )}
@@ -36,9 +78,9 @@ const Search = () => {
                 setHide(false);
             }}
         >
-            <div className="relative w-[500px] h-12 flex items-center rounded-full pl-4 bg-opacity-6 bg-slate-100 border-1.5 border-transparent hover:border-opacity-20 hover:bg-opacity-6">
+            <div className="relative w-[500px] h-12 flex items-center rounded-full pl-4 bg-opacity-6  border border-slate-200 hover:border-opacity-90">
                 <input
-                    className="flex-1 outline-none h-full bg-transparent font-light text-md"
+                    className="flex-1 h-full font-light bg-transparent outline-none text-md"
                     placeholder="Enter your keyword"
                     value={searchValue}
                     onChange={(e) => {
@@ -57,7 +99,7 @@ const Search = () => {
                             inputRef.current?.focus();
                         }}
                     >
-                        <FaExclamationCircle />
+                        <FaRemoveFormat />
                     </button>
                 )}
 

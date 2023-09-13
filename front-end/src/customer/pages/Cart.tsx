@@ -25,8 +25,8 @@ const Cart = ({ payment }: { payment?: boolean }) => {
 
     return (
         <div className="grid grid-cols-3 px-20 py-5 my-2 gap-x-12">
-            <div className="grid col-span-2 overflow-y-scroll h-[800px]">
-                {cartByUser?.cartItems.map((item: CartItemType, index) => (
+            <div className="col-span-2 overflow-y-scroll h-[800px]">
+                {cartByUser?.cartItems.map((item, index) => (
                     <CartItem key={index} data={item} />
                 ))}
             </div>

@@ -49,3 +49,14 @@ export const findProductById =
             dispatch({ type: FIND_PRODUCT_BY_ID_FAILURE, payload: err });
         }
     };
+
+export const searchProductByKeyword = async (keyword: string) => {
+    try {
+        const params = new URLSearchParams();
+        keyword && params.append("keyword", keyword.toString());
+        const data = await api.get(`/api/products/search?${params.toString()}`);
+        return data.data;
+    } catch (err) {
+        console.log(err);
+    }
+};

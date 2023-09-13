@@ -1,5 +1,6 @@
 package com.anhducdt.ecommerce_backend.controllers;
 
+import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.services.IUserService;
@@ -33,6 +34,16 @@ public class UserController {
   public ResponseEntity<User> getUserByJwt(@RequestHeader("Authorization") String jwt) {
     try {
       User user = userService.findUserByJwt(jwt);
+      return new ResponseEntity<>(user, HttpStatus.OK);
+    } catch (UserException e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @PutMapping("/{id}/profile")
+  public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
+    try {
+      User user = userService.updateUserInfo(id, updateUserInfoRequest);
       return new ResponseEntity<>(user, HttpStatus.OK);
     } catch (UserException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

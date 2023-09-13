@@ -19,13 +19,13 @@ const CartItem = ({ data }: { data: CartItemType }) => {
     };
 
     return (
-        <div className="w-full p-5 mb-4 bg-white border rounded-lg shadow-md border-slate-200">
+        <div className="w-full p-4 mb-4 bg-white border rounded-lg shadow-md border-slate-200">
             <div className="flex items-start gap-5">
                 <div className="flex flex-col items-center gap-2">
                     <div className="w-20 h-20 rounded-md lg:w-36 lg:h-36">
                         <img
                             className="object-cover object-top w-full h-full rounded-md"
-                            src={data.product.imageUrl}
+                            src={data.product?.imageUrl}
                             alt=""
                         />
                     </div>
