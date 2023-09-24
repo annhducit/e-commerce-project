@@ -404,7 +404,7 @@ export default function ProductDetail() {
                     </h1>
                     <div className="grid grid-rows-1">
                         <div className="grid grid-cols-3">
-                            <div className="flex flex-col col-span-2 gap-y-3">
+                            <div className="flex flex-col col-span-2 pt-4 gap-y-3">
                                 {productItem?.reviews.map((item, index) => (
                                     <ProductReviewCard
                                         key={index}

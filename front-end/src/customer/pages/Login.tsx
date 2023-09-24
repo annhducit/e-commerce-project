@@ -50,12 +50,13 @@ const Login = () => {
             <AuthenticateLayout
                 welcome="Welcome back!"
                 introduction="Enter the information you entered while registering"
-                padding="px-[200px] flex flex-col gap-2 my-auto"
+                padding="px-[164px] flex flex-col gap-2 my-auto"
                 header={
                     <div className="px-10 py-6">
                         <Button
-                            className="float-right px-6 py-2 text-white bg-purple-500 rounded-lg"
+                            className="float-right px-6 py-2 text-white transition-all bg-purple-500 rounded-lg hover:bg-purple-600"
                             text="Register"
+                            onClick={() => navigate("/signup")}
                         />
                     </div>
                 }
@@ -96,7 +97,7 @@ const Login = () => {
                             </p>
                         </div>
                         <Button
-                            className="w-full py-3 font-semibold text-white bg-purple-500 rounded"
+                            className="w-full py-3 font-semibold text-white transition-all bg-purple-500 rounded hover:bg-purple-600"
                             color="emerald"
                             type="submit"
                             text="Login"

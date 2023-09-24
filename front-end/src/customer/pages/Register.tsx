@@ -1,5 +1,5 @@
 import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,7 +10,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
 import AuthType from "../../types/RegisterType";
-import { getUserProfile, register } from "../../services/authService";
+import { register } from "../../services/authService";
 
 const Register = () => {
     const schema = Yub.object({
@@ -33,7 +33,6 @@ const Register = () => {
     const {
         handleSubmit,
         control,
-        // reset,
         formState: { errors, isValid },
     } = useForm<AuthType>({
         resolver: yupResolver(schema),
@@ -61,12 +60,13 @@ const Register = () => {
             <AuthenticateLayout
                 welcome="Welcome to my website"
                 introduction="Enter the information you entered while registering"
-                padding="px-[200px] flex flex-col gap-2 my-auto"
+                padding="px-[164px] flex flex-col gap-2 my-auto"
                 header={
                     <div className="px-10 py-6">
                         <Button
-                            className="float-right px-6 py-2 text-white bg-purple-500 rounded-lg"
+                            className="float-right px-6 py-2 text-white transition-all bg-purple-500 rounded-lg hover:bg-purple-600"
                             text="Login"
+                            onClick={() => navigate("/signin")}
                         />
                     </div>
                 }
@@ -96,7 +96,7 @@ const Register = () => {
                                 control={control}
                                 error={errors.lastName?.message}
                             />
-                        </div>{" "}
+                        </div>
                         <Input
                             label="Email"
                             placeholder="Enter your email"
@@ -120,7 +120,7 @@ const Register = () => {
                             error={errors.password?.message}
                         />
                         <Button
-                            className="w-full py-3 font-semibold text-white bg-purple-500 rounded"
+                            className="w-full py-3 font-semibold text-white transition-all bg-purple-500 rounded hover:bg-purple-600"
                             color="emerald"
                             type="submit"
                             text="Register"

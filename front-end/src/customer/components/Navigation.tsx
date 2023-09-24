@@ -23,6 +23,7 @@ import { RootState } from "../../redux/globalStore";
 import { getCart } from "../../services/cartService";
 
 import Search from "./Search";
+import { FaBell } from "react-icons/fa";
 
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
@@ -561,11 +562,16 @@ export default function Navigation() {
                                         </span>
                                     </Link>
                                     {auth.user && (
-                                        <Button
-                                            onClick={handleLogout}
-                                            text="Sign out"
-                                            className="px-2 py-1 text-white bg-red-500 rounded"
-                                        />
+                                        <>
+                                            <span>
+                                                <FaBell className="flex-shrink-0 w-6 h-6 text-indigo-500 hover:text-indigo-600" />
+                                            </span>
+                                            <Button
+                                                onClick={handleLogout}
+                                                text="Sign out"
+                                                className="px-2 py-1 text-white bg-red-500 rounded"
+                                            />
+                                        </>
                                     )}
                                 </div>
                             </div>

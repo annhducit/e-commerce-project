@@ -18,8 +18,8 @@ export default function AuthenticateLayout({
     header,
 }: AuthenticationNode) {
     return (
-        <div className="grid w-full h-screen grid-cols-5 gap-8 bg-white rounded-xl">
-            <div className="col-span-2 py-4 bg-gray-100 rounded-md md:block">
+        <div className="grid w-full h-screen grid-cols-7 gap-8 bg-white rounded-xl">
+            <div className="col-span-3 py-4 bg-gray-100 rounded-md md:block">
                 <div className="absolute top-4 left-4">
                     <img src={logo} className="w-[100px] h-14" />
                 </div>
@@ -50,7 +50,7 @@ export default function AuthenticateLayout({
                 </div>
             </div>
 
-            <div className="flex flex-col col-span-3">
+            <div className="flex flex-col col-span-4">
                 <header>{header}</header>
                 <div className={`${padding}`}>
                     <div className="flex items-center gap-3">

@@ -45,7 +45,7 @@ const MainSectionCard = ({
 
     return (
         <div className="px-4 mb-4">
-            <h2 className="text-2xl font-bold">{heading}</h2>
+            <h2 className="pl-3 text-2xl font-bold">{heading}</h2>
             <div className="relative p-6 m-3 border border-slate-200">
                 <AliceCarousel
                     disableButtonsControls
