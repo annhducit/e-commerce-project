@@ -60,3 +60,14 @@ export const searchProductByKeyword = async (keyword: string) => {
         console.log(err);
     }
 };
+
+export const getProductsByCategory = async (type: string) => {
+    try {
+        const data = await api.get(
+            `/api/products/category?category=${type.toString()}`
+        );
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+};

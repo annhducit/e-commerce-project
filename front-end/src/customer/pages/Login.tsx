@@ -50,7 +50,7 @@ const Login = () => {
             <AuthenticateLayout
                 welcome="Welcome back!"
                 introduction="Enter the information you entered while registering"
-                padding="px-[164px] flex flex-col gap-2 my-auto"
+                padding="px-10 flex flex-col gap-2 my-auto"
                 header={
                     <div className="px-10 py-6">
                         <Button

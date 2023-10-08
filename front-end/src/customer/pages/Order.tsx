@@ -35,7 +35,7 @@ const Order = () => {
                     {filterItem.map((item, index) => (
                         <div className="flex items-center gap-x-3" key={index}>
                             {" "}
-                            <Input type="checkbox" defaultValue={item.value} />
+                            <input type="checkbox" defaultValue={item.value} />
                             <label className="opacity-80" htmlFor={item.value}>
                                 {item.label}
                             </label>

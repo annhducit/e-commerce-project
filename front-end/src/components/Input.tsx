@@ -1,8 +1,6 @@
 import { useController, Control } from "react-hook-form";
 import AuthType from "../types/RegisterType";
 
-// type TypeInput = "Authenticate" | "Normal";
-
 type InputType = {
     label?: string;
     lefticon?: React.ReactElement;
@@ -35,7 +33,7 @@ function Input(items: InputType) {
                     {...items}
                 />
             </div>
-            <p className="text-sm pt-1 text-red-600">{items.error}</p>
+            <p className="pt-1 text-sm text-red-600">{items.error}</p>
         </div>
     );
 }

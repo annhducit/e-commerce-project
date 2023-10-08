@@ -191,4 +191,9 @@ public class ProductService implements IProductService {
     public List<Product> searchProductByKeyWord(String keyword) {
         return productRepository.searchProductByKeyword(keyword);
     }
+
+    @Override
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.getProductByCategory(category);
+    }
 }

@@ -6,25 +6,39 @@ import { menShirt } from "../../data/dataMenShirt";
 import MainAdvertiment from "../components/MainAdvertiment";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { getProductsByCategory } from "../../services/productService";
+import { MenClothes } from "../../types/MenClothes";
 
 interface LinkItem {
     id: number;
     title: string;
+    category: string;
 }
 const LinkItems: LinkItem[] = [
-    { id: 1, title: "All" },
-    { id: 2, title: "Men" },
-    { id: 3, title: "Women" },
-    { id: 4, title: "T_Shirt" },
-    { id: 5, title: "Sweater" },
-    { id: 6, title: "Jacket" },
-    { id: 7, title: "Top" },
-    { id: 8, title: "Pants" },
-    { id: 9, title: "Activewear" },
+    { id: 1, title: "All", category: "men_jeans" },
+    { id: 2, title: "Men", category: "men" },
+    { id: 3, title: "Women", category: "women" },
+    { id: 4, title: "T_Shirt", category: "t_shirt" },
+    { id: 5, title: "Sweater", category: "sweater" },
+    { id: 6, title: "Jacket", category: "jacket" },
+    { id: 7, title: "Top", category: "top" },
+    { id: 8, title: "Pants", category: "pants" },
+    { id: 9, title: "Activewear", category: "activewear" },
 ];
 
 const HomePage = () => {
     const [active, setActive] = useState<number>(1);
+    const [productsByCategory, setProductsByCategory] = useState<MenClothes>();
+
+    const handleGetProducts = (id: number, category: string) => {
+        setActive(id);
+        void (async () => {
+            const data = await getProductsByCategory(category);
+            setProductsByCategory(data?.data);
+        })();
+    };
+
+    console.log(productsByCategory);
 
     return (
         <div>
@@ -45,7 +59,9 @@ const HomePage = () => {
                             "text-white bg-black transition-all"
                         }`}
                         to={""}
-                        onClick={() => setActive(item.id)}
+                        onClick={() =>
+                            handleGetProducts(item.id, item.category)
+                        }
                     >
                         {item.title}
                     </Link>

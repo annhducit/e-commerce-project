@@ -17,5 +17,6 @@ public interface IProductService {
     Page<Product> getProducts(String category, List<String> colors, List<String> sizes, Integer minPrice, Integer maxPrice
     ,Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize);
     List<Product> searchProductByKeyWord(String keyword);
+    List<Product> getProductsByCategory(String category);
 
 }

@@ -507,8 +507,8 @@ export default function Navigation() {
                                 </div>
                                 {auth.user ? (
                                     <div className="hidden lg:ml-8 lg:flex">
-                                        <a
-                                            href="#"
+                                        <Link
+                                            to="../../account"
                                             className="flex items-center text-gray-700 hover:text-gray-800"
                                         >
                                             <img
@@ -520,10 +520,10 @@ export default function Navigation() {
                                                 {auth.user?.firstName}{" "}
                                                 {auth.user?.lastName}
                                             </span>
-                                        </a>
+                                        </Link>
                                     </div>
                                 ) : (
-                                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                                    <div className="hidden ml-4 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                                         <Link
                                             to={"signin"}
                                             className="px-2 py-1 text-white transition-all bg-purple-500 rounded hover:bg-purple-600"

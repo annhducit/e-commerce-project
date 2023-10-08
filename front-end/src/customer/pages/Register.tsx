@@ -48,7 +48,7 @@ const Register = () => {
         if (token) {
             navigate("/signin");
         }
-    }, [token, auth.token]);
+    }, [token, auth.token, navigate]);
 
     const dispatch = useDispatch();
     const onSubmit = async (data: AuthType) => {
@@ -60,7 +60,7 @@ const Register = () => {
             <AuthenticateLayout
                 welcome="Welcome to my website"
                 introduction="Enter the information you entered while registering"
-                padding="px-[164px] flex flex-col gap-2 my-auto"
+                padding="px-10 flex flex-col gap-2 my-auto"
                 header={
                     <div className="px-10 py-6">
                         <Button

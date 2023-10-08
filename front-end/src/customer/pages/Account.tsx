@@ -1,12 +1,15 @@
 import background from "../../assets/images/background1.jpg";
 import user from "../../assets/images/admin.png";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/globalStore";
 import { getUserProfile } from "../../services/authService";
+import ModalAdvance from "../../components/portal/ModalAdvance";
 
 const Account = () => {
+    const [openModal, setOpenModal] = useState<boolean>();
+
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
 
@@ -61,7 +64,10 @@ const Account = () => {
                         </span>
                     </p>
 
-                    <div className="px-2 py-1 text-sm text-center text-white transition-all bg-purple-500 rounded cursor-pointer lg:ml-auto hover:bg-purple-600">
+                    <div
+                        className="px-2 py-1 text-sm text-center text-white transition-all bg-purple-500 rounded cursor-pointer lg:ml-auto hover:bg-purple-600"
+                        onClick={() => setOpenModal(true)}
+                    >
                         Cập nhật thông tin
                     </div>
                 </div>
@@ -100,6 +106,17 @@ const Account = () => {
                     </div>
                 </div>
             </div>
+            <ModalAdvance
+                header="Cập nhật thông tin"
+                props={{
+                    visible: openModal as boolean,
+                    onClose: () => setOpenModal(false),
+                    children: undefined,
+                    contentClassName: "bg-white w-96 h-96",
+                }}
+            >
+                <p>Body</p>
+            </ModalAdvance>
         </div>
     );
 };
