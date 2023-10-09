@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import * as Yub from "yup";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 
@@ -11,6 +10,8 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { login } from "../../services/authService";
 import LoginType from "../../types/LoginType";
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const Login = () => {
     const schema = Yub.object({
@@ -29,7 +30,8 @@ const Login = () => {
         mode: "onChange",
     });
 
-    const { auth } = useSelector((store) => store);
+    const { auth } = useAppSelector((store) => store);
+
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
@@ -38,12 +40,13 @@ const Login = () => {
         if (token) {
             navigate("/");
         }
-    }, [token, auth.token]);
+    }, [token, auth.jwt, navigate]);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+
     const onSubmitLogin = async (data: LoginType) => {
         if (!isValid) return;
-        dispatch(login(data));
+        dispatch(login(data) as unknown as AnyAction);
     };
     return (
         <div>

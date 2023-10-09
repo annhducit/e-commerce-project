@@ -1,8 +1,9 @@
 import thunk from "redux-thunk";
-import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
-import { authReducer } from "./auth/authReducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+
+import { reducer as authReducer } from "./auth/authSlice";
 import { productCustomerReducer } from "./product/productReducer";
-import { cartReducer } from "./cart/cartReducer";
+import { reducer as cartReducer } from "./cart/cartReducer";
 import { orderReducer } from "./order/orderReducer";
 
 const rootReducers = combineReducers({
@@ -12,10 +13,12 @@ const rootReducers = combineReducers({
     order: orderReducer,
 });
 
-export const globalStore = legacy_createStore(
-    rootReducers,
-    applyMiddleware(thunk)
-);
+export const globalStore = configureStore({
+    reducer: rootReducers,
+    middleware: [thunk],
+});
+
+export default globalStore;
 
 export type RootState = ReturnType<typeof globalStore.getState>;
 export type AppDispatch = typeof globalStore.dispatch;

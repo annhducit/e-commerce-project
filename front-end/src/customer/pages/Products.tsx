@@ -17,6 +17,7 @@ import { findProducts } from "../../services/productService";
 import { MenClothes } from "../../types/MenClothes";
 import { RootState } from "../../redux/globalStore";
 import { Pagination } from "@mui/material";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const sortOptions = [
     { name: "Most Popular", href: "#", current: true },
@@ -27,16 +28,16 @@ const sortOptions = [
 ];
 
 export type FilterType = {
-    category: string;
-    colors: string[];
-    sizes: string[];
-    minPrice: number;
-    maxPrice: number;
-    minDiscount: number;
+    colors: string | never[];
+    sizes: string | never[];
+    minPrice: string | number;
+    maxPrice: string | number;
+    minDiscount: string;
+    category: string | undefined;
     sort: string;
-    pageNumber: number;
+    pageNumber: number | string;
     pageSize: number;
-    stock: string;
+    stock: string | null;
 };
 
 function classNames(...classes: string[]): string {
@@ -65,7 +66,7 @@ export default function Example() {
         const [minPrice, maxPrice] =
             priceValue === null ? [0, 0] : priceValue.split("-").map(Number);
 
-        const data = {
+        const data: FilterType = {
             colors: colorValue || [],
             sizes: sizeValue || [],
             minPrice: minPrice || "",
@@ -78,7 +79,7 @@ export default function Example() {
             stock: stockValue,
         };
 
-        dispatch(findProducts(data));
+        dispatch(findProducts(data) as unknown as AnyAction);
     }, [
         param.labelThree,
         colorValue,
@@ -127,7 +128,7 @@ export default function Example() {
     };
 
     const handlePaginationChange = (
-        even: React.ChangeEvent<unknown>,
+        _even: React.ChangeEvent<unknown>,
         pageNumber: string
     ) => {
         const searchPanigation = new URLSearchParams(location.search);
@@ -167,14 +168,14 @@ export default function Example() {
                                 leaveFrom="translate-x-0"
                                 leaveTo="translate-x-full"
                             >
-                                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                                <Dialog.Panel className="relative flex flex-col w-full h-full max-w-xs py-4 pb-12 ml-auto overflow-y-auto bg-white shadow-xl">
                                     <div className="flex items-center justify-between px-4">
                                         <h2 className="text-lg font-medium text-gray-900">
                                             Filters
                                         </h2>
                                         <button
                                             type="button"
-                                            className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                                            className="flex items-center justify-center w-10 h-10 p-2 -mr-2 text-gray-400 bg-white rounded-md"
                                             onClick={() =>
                                                 setMobileFiltersOpen(false)
                                             }
@@ -183,7 +184,7 @@ export default function Example() {
                                                 Close menu
                                             </span>
                                             <XMarkIcon
-                                                className="h-6 w-6"
+                                                className="w-6 h-6"
                                                 aria-hidden="true"
                                             />
                                         </button>
@@ -195,26 +196,26 @@ export default function Example() {
                                             <Disclosure
                                                 as="div"
                                                 key={section.id}
-                                                className="border-t border-gray-200 px-4 py-6"
+                                                className="px-4 py-6 border-t border-gray-200"
                                             >
                                                 {({ open }) => (
                                                     <>
-                                                        <h3 className="-mx-2 -my-3 flow-root">
-                                                            <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
+                                                        <h3 className="flow-root -mx-2 -my-3">
+                                                            <Disclosure.Button className="flex items-center justify-between w-full px-2 py-3 text-gray-400 bg-white hover:text-gray-500">
                                                                 <span className="font-medium text-gray-900">
                                                                     {
                                                                         section.name
                                                                     }
                                                                 </span>
-                                                                <span className="ml-6 flex items-center">
+                                                                <span className="flex items-center ml-6">
                                                                     {open ? (
                                                                         <MinusIcon
-                                                                            className="h-5 w-5"
+                                                                            className="w-5 h-5"
                                                                             aria-hidden="true"
                                                                         />
                                                                     ) : (
                                                                         <PlusIcon
-                                                                            className="h-5 w-5"
+                                                                            className="w-5 h-5"
                                                                             aria-hidden="true"
                                                                         />
                                                                     )}
@@ -249,11 +250,11 @@ export default function Example() {
                                                                                         section.id
                                                                                     )
                                                                                 }
-                                                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                             />
                                                                             <label
                                                                                 htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                                                                className="ml-3 min-w-0 flex-1 text-gray-500"
+                                                                                className="flex-1 min-w-0 ml-3 text-gray-500"
                                                                             >
                                                                                 {
                                                                                     option.label
@@ -275,8 +276,8 @@ export default function Example() {
                     </Dialog>
                 </Transition.Root>
 
-                <main className="mx-auto max-w-full px-4 sm:px-6 lg:px-20">
-                    <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
+                <main className="max-w-full px-4 mx-auto sm:px-6 lg:px-20">
+                    <div className="flex items-baseline justify-between pt-10 pb-6 border-b border-gray-200">
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900">
                             Products
                         </h1>
@@ -287,10 +288,10 @@ export default function Example() {
                                 className="relative inline-block text-left"
                             >
                                 <div>
-                                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    <Menu.Button className="inline-flex justify-center text-sm font-medium text-gray-700 group hover:text-gray-900">
                                         Sort
                                         <ChevronDownIcon
-                                            className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                                            className="flex-shrink-0 w-5 h-5 ml-1 -mr-1 text-gray-400 group-hover:text-gray-500"
                                             aria-hidden="true"
                                         />
                                     </Menu.Button>
@@ -305,7 +306,7 @@ export default function Example() {
                                     leaveFrom="transform opacity-100 scale-100"
                                     leaveTo="transform opacity-0 scale-95"
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Menu.Items className="absolute right-0 z-10 w-40 mt-2 origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <div className="py-1">
                                             {sortOptions.map((option) => (
                                                 <Menu.Item key={option.name}>
@@ -334,22 +335,22 @@ export default function Example() {
 
                             <button
                                 type="button"
-                                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
+                                className="p-2 ml-5 -m-2 text-gray-400 hover:text-gray-500 sm:ml-7"
                             >
                                 <span className="sr-only">View grid</span>
                                 <Squares2X2Icon
-                                    className="h-5 w-5"
+                                    className="w-5 h-5"
                                     aria-hidden="true"
                                 />
                             </button>
                             <button
                                 type="button"
-                                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                                className="p-2 ml-4 -m-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
                                 onClick={() => setMobileFiltersOpen(true)}
                             >
                                 <span className="sr-only">Filters</span>
                                 <FunnelIcon
-                                    className="h-5 w-5"
+                                    className="w-5 h-5"
                                     aria-hidden="true"
                                 />
                             </button>
@@ -358,41 +359,41 @@ export default function Example() {
 
                     <section
                         aria-labelledby="products-heading"
-                        className="pb-24 pt-6"
+                        className="pt-6 pb-24"
                     >
                         <h2 id="products-heading" className="sr-only">
                             Products
                         </h2>
 
-                        <div className="items-center gap-x-48 pb-3 lg:flex hidden">
+                        <div className="items-center hidden pb-3 gap-x-48 lg:flex">
                             <h2 className="font-bold opacity-70">Filter</h2>
                             <FilterListIcon />
                         </div>
                         <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-5 ">
                             {/* Filters */}
-                            <form className="hidden lg:block border-slate-200 rounded-lg border px-6">
+                            <form className="hidden px-6 border rounded-lg lg:block border-slate-200">
                                 {filter.map((section) => (
                                     <Disclosure
                                         as="div"
                                         key={section.id}
-                                        className="border-b border-gray-200 py-6"
+                                        className="py-6 border-b border-gray-200"
                                     >
                                         {({ open }) => (
                                             <>
-                                                <h3 className="-my-3 flow-root">
-                                                    <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                <h3 className="flow-root -my-3">
+                                                    <Disclosure.Button className="flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500">
                                                         <span className="font-medium text-gray-900">
                                                             {section.name}
                                                         </span>
-                                                        <span className="ml-6 flex items-center">
+                                                        <span className="flex items-center ml-6">
                                                             {open ? (
                                                                 <MinusIcon
-                                                                    className="h-5 w-5"
+                                                                    className="w-5 h-5"
                                                                     aria-hidden="true"
                                                                 />
                                                             ) : (
                                                                 <PlusIcon
-                                                                    className="h-5 w-5"
+                                                                    className="w-5 h-5"
                                                                     aria-hidden="true"
                                                                 />
                                                             )}
@@ -425,7 +426,7 @@ export default function Example() {
                                                                             )
                                                                         }
                                                                         type="checkbox"
-                                                                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                     />
                                                                     <label
                                                                         htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -448,24 +449,24 @@ export default function Example() {
                                     <Disclosure
                                         as="div"
                                         key={section.id}
-                                        className="border-b border-gray-200 py-6"
+                                        className="py-6 border-b border-gray-200"
                                     >
                                         {({ open }) => (
                                             <>
-                                                <h3 className="-my-3 flow-root">
-                                                    <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                <h3 className="flow-root -my-3">
+                                                    <Disclosure.Button className="flex items-center justify-between w-full py-3 text-sm text-gray-400 bg-white hover:text-gray-500">
                                                         <span className="font-medium text-gray-900">
                                                             {section.name}
                                                         </span>
-                                                        <span className="ml-6 flex items-center">
+                                                        <span className="flex items-center ml-6">
                                                             {open ? (
                                                                 <MinusIcon
-                                                                    className="h-5 w-5"
+                                                                    className="w-5 h-5"
                                                                     aria-hidden="true"
                                                                 />
                                                             ) : (
                                                                 <PlusIcon
-                                                                    className="h-5 w-5"
+                                                                    className="w-5 h-5"
                                                                     aria-hidden="true"
                                                                 />
                                                             )}
@@ -503,7 +504,7 @@ export default function Example() {
                                                                                 section.id
                                                                             )
                                                                         }
-                                                                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                                                                     />
                                                                     <label
                                                                         htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -525,7 +526,7 @@ export default function Example() {
                             </form>
 
                             {/* Product grid */}
-                            <div className="lg:col-span-4 w-full border-slate-200 border flex flex-col gap-y-6 p-3 rounded-lg">
+                            <div className="flex flex-col w-full p-3 border rounded-lg lg:col-span-4 border-slate-200 gap-y-6">
                                 <div className="grid grid-cols-4 gap-x-1">
                                     {customerProduct?.products?.content
                                         ? customerProduct.products.content.map(

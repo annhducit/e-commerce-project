@@ -5,15 +5,16 @@ import Button from "../../components/Button";
 import ProductReviewCard from "../components/ProductReviewCard";
 import { menShirt } from "../../data/dataMenShirt";
 import ProductItem from "../components/ProductSectionCard/ProductItem";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { findProductById } from "../../services/productService";
-import { RootState } from "../../redux/globalStore";
 import { addItemToCart } from "../../services/cartService";
 import { useParams } from "react-router-dom";
 import { createReview } from "../../services/reviewService";
 import { toast } from "react-toastify";
 import ReviewType from "../../types/ReviewType";
 import ProductType from "../../types/ProductType";
+import { useAppSelector } from "../../hooks/dispatchHook";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const product = {
     name: "Basic Tee 6-Pack",
@@ -73,18 +74,20 @@ export default function ProductDetail() {
     const [reload, setReload] = useState<number>(0);
     const reviewRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
-    const { customerProduct } = useSelector((store: RootState) => store);
+    const { customerProduct } = useAppSelector((store) => store);
+
     const productItem: ProductType = customerProduct.product;
     const { id } = useParams();
 
     useEffect(() => {
-        dispatch(findProductById(id));
+        dispatch(findProductById(id) as unknown as AnyAction);
     }, [dispatch, id, reload]);
 
     type Size = {
         name: string;
         inStock: boolean;
     };
+
     type Data = {
         productId: string | undefined;
         size: Size;
@@ -93,7 +96,7 @@ export default function ProductDetail() {
     const addItemToCartHandle = (e: SubmitEvent) => {
         e.preventDefault();
         const data: Data = { productId: id, size: selectedSize };
-        dispatch(addItemToCart(data));
+        dispatch(addItemToCart(data) as unknown as AnyAction);
     };
 
     // Create review handle

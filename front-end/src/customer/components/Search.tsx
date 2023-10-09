@@ -35,6 +35,7 @@ const Search = () => {
             setLoading(false);
         })();
     }, [debounce]);
+    
     return (
         <TippyHandless
             interactive

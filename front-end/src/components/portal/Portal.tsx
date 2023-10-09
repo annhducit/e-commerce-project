@@ -40,7 +40,7 @@ function Portal({
                 onClick={onClose}
             ></div>
             <div
-                className={`content relative z-10 ${contentClassName}`}
+                className={`content relative z-10 ${contentClassName} px-4 rounded`}
                 style={contentStyle}
             >
                 {children}

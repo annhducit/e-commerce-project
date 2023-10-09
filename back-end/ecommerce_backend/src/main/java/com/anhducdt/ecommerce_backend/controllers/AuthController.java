@@ -44,7 +44,7 @@ public class AuthController {
         String password = user.getPassword();
         String firstString = user.getFirstName();
         String lastString = user.getLastName();
-        String role = String.valueOf(user.getRole());
+//        String role = String.valueOf(user.getRole());
         User isEmailExits = userRepository.findUserByEmail(email);
         if (isEmailExits != null) {
             throw new UserException("This Email is already use with another account");
@@ -54,7 +54,8 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(password));
         createUser.setFirstName(firstString);
         createUser.setLastName(lastString);
-        createUser.setRole(Role.valueOf(role));
+//        createUser.setRole(Role.valueOf(role));
+        createUser.setRole(Role.Customer);
 
         User newUser = userRepository.save(createUser);
         Cart cart = cartService.createCart(newUser);
@@ -76,8 +77,20 @@ public class AuthController {
         String token =jwtProvider.generatorToken(authentication);
     AuthResponse authResponse = new AuthResponse();
     authResponse.setJwt(token);
-    authResponse.setMessage("Signin Success");
+    authResponse.setMessage("Sign in successfully");
     return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);    }
+
+    @PostMapping("/admin/signin")
+    public ResponseEntity<AuthResponse> loginAdminHandle(@RequestBody AuthRequest authRequest) {
+        String username = authRequest.getEmail();
+        String password = authRequest.getPassword();
+        Authentication authentication = authenticate(username, password);
+
+        String token =jwtProvider.generatorToken(authentication);
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setJwt(token);
+        authResponse.setMessage("Sign in successfully");
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);    }
 
     private Authentication authenticate(String username, String password) {
         UserDetails userDetails = customerUserService.loadUserByUsername(username);

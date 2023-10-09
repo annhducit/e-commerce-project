@@ -1,16 +1,17 @@
 import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yub from "yup";
-import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
 import AuthType from "../../types/RegisterType";
 import { register } from "../../services/authService";
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const Register = () => {
     const schema = Yub.object({
@@ -35,11 +36,12 @@ const Register = () => {
         control,
         formState: { errors, isValid },
     } = useForm<AuthType>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema) as Resolver<AuthType> | undefined,
         mode: "onChange",
     });
 
-    const { auth } = useSelector((store) => store);
+    const { auth } = useAppSelector((store) => store);
+
     const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
@@ -48,12 +50,12 @@ const Register = () => {
         if (token) {
             navigate("/signin");
         }
-    }, [token, auth.token, navigate]);
+    }, [token, auth.jwt, navigate]);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const onSubmit = async (data: AuthType) => {
         if (!isValid) return;
-        dispatch(register(data));
+        dispatch(register(data) as unknown as AnyAction);
     };
     return (
         <div>

@@ -12,7 +12,7 @@ import logo from "../../assets/images/logo.png";
 import user from "../../assets/images/admin.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getUserProfile, logout } from "../../services/authService";
+import { getUserProfile, logoutAccount } from "../../services/authService";
 import Button from "../../components/Button";
 import {
     Category,
@@ -24,6 +24,8 @@ import { getCart } from "../../services/cartService";
 
 import Search from "./Search";
 import { FaBell } from "react-icons/fa";
+import { useAppSelector } from "../../hooks/dispatchHook";
+import { AnyAction } from "@reduxjs/toolkit";
 
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
@@ -46,22 +48,22 @@ export default function Navigation() {
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
 
-    const { auth } = useSelector((store: RootState) => store);
+    const { auth } = useAppSelector((store) => store);
 
     useEffect(() => {
         if (token) {
-            dispatch(getUserProfile(token));
+            dispatch(getUserProfile(token) as unknown as AnyAction);
         }
-    }, [token, auth.token, dispatch]);
+    }, [token, auth.jwt, dispatch]);
 
     const handleLogout = () => {
-        dispatch(logout());
+        dispatch(logoutAccount() as unknown as AnyAction);
     };
     const { cart } = useSelector((store: RootState) => store);
 
     useEffect(() => {
-        dispatch(getCart());
-    }, [cart.handleAddItemToCart]);
+        dispatch(getCart() as unknown as AnyAction);
+    }, [cart.handleAddItemToCart, dispatch]);
 
     return (
         <div className="bg-white">

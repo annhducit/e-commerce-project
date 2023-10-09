@@ -37,7 +37,7 @@ export const findProducts =
     };
 
 export const findProductById =
-    (id: string) => async (dispatch: Dispatch<AnyAction>) => {
+    (id: string | undefined) => async (dispatch: Dispatch<AnyAction>) => {
         dispatch({ type: FIND_PRODUCT_BY_ID_REQUEST });
         try {
             const { data: productData } = await api.get(`/api/products/${id}`);

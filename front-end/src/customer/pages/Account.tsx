@@ -2,25 +2,25 @@ import background from "../../assets/images/background1.jpg";
 import user from "../../assets/images/admin.png";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/globalStore";
 import { getUserProfile } from "../../services/authService";
 import ModalAdvance from "../../components/portal/ModalAdvance";
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
+import Input from "../../components/Input";
 
 const Account = () => {
     const [openModal, setOpenModal] = useState<boolean>();
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const token = localStorage.getItem("token");
 
-    const { auth } = useSelector((store: RootState) => store);
-    console.log(auth);
+    const { auth } = useAppSelector((store) => store);
 
     useEffect(() => {
         if (token) {
             dispatch(getUserProfile(token));
         }
-    }, [token, auth.token, dispatch]);
+    }, [token, auth.jwt, dispatch]);
+
     return (
         <div className="">
             {" "}
@@ -112,10 +112,39 @@ const Account = () => {
                     visible: openModal as boolean,
                     onClose: () => setOpenModal(false),
                     children: undefined,
-                    contentClassName: "bg-white w-96 h-96",
+                    contentClassName: "bg-white",
                 }}
+                footer={
+                    <div className="float-right">
+                        <button className="px-2 py-1 text-white rounded bg-emerald-500 ">
+                            Cancel
+                        </button>
+                    </div>
+                }
             >
-                <p>Body</p>
+                <div className="flex flex-col">
+                    <input
+                        name="username"
+                        type="text"
+                        placeholder="Enter your content"
+                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your content"
+                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your content"
+                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Enter your content"
+                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                    />
+                </div>
             </ModalAdvance>
         </div>
     );
