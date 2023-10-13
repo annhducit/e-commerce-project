@@ -23,12 +23,14 @@ import java.util.List;
 
 public class JwtValidation extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtValidation.class);
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
 
         if (jwt != null && jwt.startsWith("Bearer ")) {
             jwt = jwt.substring(7);
+
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
@@ -50,3 +52,4 @@ public class JwtValidation extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+

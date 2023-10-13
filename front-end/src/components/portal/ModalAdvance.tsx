@@ -9,14 +9,39 @@ type ModalAdvance = {
     children?: ReactNode;
     props: modalBaseProps;
     footer?: ReactNode;
+    size?: SizeModal;
 };
-function ModalAdvance({ header, children, footer, props }: ModalAdvance) {
+
+type SizeModal = "sm" | "md" | "lg";
+
+const distanceModal = (size: SizeModal) => {
+    const distance = `${
+        size === "sm"
+            ? "w-[200px] h-[150px]"
+            : size === "md"
+            ? "w-[500px] h-[400px]"
+            : size === "lg"
+            ? "w-[700px] h-[500px]"
+            : ""
+    }`;
+    return distance;
+};
+function ModalAdvance({
+    header,
+    children,
+    footer,
+    size = "md",
+    props,
+}: ModalAdvance) {
     return (
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
             <ModalBase {...props}>
                 <HeaderModal header={header} props={props} />
 
-                <div className="w-[450px] h-[400px] py-4"> {children}</div>
+                <div className={distanceModal(size)}>
+                    <div className="w-full bg-slate-200 h-[1px]"></div>
+                    <div className="w-full p-6"> {children}</div>
+                </div>
 
                 {footer && <FooterModal footer={footer} />}
             </ModalBase>
@@ -26,17 +51,17 @@ function ModalAdvance({ header, children, footer, props }: ModalAdvance) {
 
 function HeaderModal({ header, props }: ModalAdvance) {
     return (
-        <div className="py-2 border-b-2 header">
+        <div className="py-2 header">
             <span
                 onClick={props.onClose}
-                className="absolute top-0 right-0 w-10 h-10 p-1 bg-white rounded-full cursor-pointer -translate-y-2/4 translate-x-2/4"
+                className="absolute w-10 h-10 p-1 text-black transition-all bg-transparent rounded cursor-pointer right-7 top-7 hover:bg-slate-200 -translate-y-2/4 translate-x-2/4"
             >
                 <FontAwesomeIcon
                     className="absolute w-6 h-6 opacity-40 right-2 top-2"
                     icon={faXmark}
                 />
             </span>
-            <h2 className="mb-2 text-2xl font-medium text-left text-black">
+            <h2 className="px-6 mb-2 text-2xl font-medium text-left text-black">
                 {header}
             </h2>
         </div>
@@ -45,9 +70,9 @@ function HeaderModal({ header, props }: ModalAdvance) {
 
 function FooterModal({ footer }: { footer: ReactNode }): JSX.Element {
     return (
-        <div className="flex flex-col py-4 gap-y-4">
-            <div className="w-full bg-slate-300 h-[1px]"></div>
-            <div className="flex items-center ml-auto modal-footer gap-x-2">
+        <div className="flex flex-col gap-y-3">
+            <div className="w-full bg-slate-200 h-[1px]"></div>
+            <div className="items-center px-4 py-1 pb-3 ml-auto modal-footer">
                 {footer}
             </div>
         </div>

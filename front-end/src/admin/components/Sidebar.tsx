@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { FaBriefcase } from "react-icons/fa";
+import logo from "../../assets/images/logo.png";
 
 interface ItemSideBar {
     icon: React.ReactElement;
@@ -23,8 +24,8 @@ function MenuItem({ icon, title, to }: ItemSideBar): JSX.Element {
         <NavLink
             to={to}
             className={(nav) =>
-                `flex items-center hover:bg-slate-100 px-5 py-3 gap-3 rounded-lg mt-3 ${
-                    nav.isActive ? "bg-slate-100" : ""
+                `flex items-center transition-all   px-5 py-3 gap-3 rounded-lg mt-3 ${
+                    nav.isActive ? "bg-[#ff7506] text-white" : ""
                 }`
             }
         >
@@ -36,7 +37,14 @@ function MenuItem({ icon, title, to }: ItemSideBar): JSX.Element {
 
 function Sidebar() {
     return (
-        <aside className="w-[350px] min-h-screen py-7 px-5 bg-slate-300 border-r-4 border-gray-400">
+        <aside className="w-[320px] h-screen pt-4  px-4 bg-white transition-all">
+            <div className="w-full h-24 rounded">
+                <img
+                    src={logo}
+                    alt=""
+                    className="object-cover w-full h-full rounded"
+                />
+            </div>
             <MenuSidebar>
                 <MenuItem
                     to="/"
@@ -46,6 +54,11 @@ function Sidebar() {
                 <MenuItem
                     to="/admin/products"
                     title="Products"
+                    icon={<FaBriefcase />}
+                ></MenuItem>
+                <MenuItem
+                    to="/admin/orders"
+                    title="Orders"
                     icon={<FaBriefcase />}
                 ></MenuItem>
                 <MenuItem

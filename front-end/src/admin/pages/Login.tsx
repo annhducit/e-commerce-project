@@ -12,6 +12,7 @@ import Button from "../../components/Button";
 import { login } from "../../services/authService";
 import LoginType from "../../types/LoginType";
 import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
+import { AnyAction } from "@reduxjs/toolkit";
 const Signin = () => {
     const schema = Yub.object({
         email: Yub.string()
@@ -45,7 +46,7 @@ const Signin = () => {
 
     const onSubmitLogin = async (data: LoginType) => {
         if (!isValid) return;
-        dispatch(login(data));
+        dispatch(login(data) as unknown as AnyAction);
     };
     return (
         <AuthenticateLayout

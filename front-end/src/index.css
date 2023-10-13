@@ -16,3 +16,9 @@
 }
 
 /* Skeleton */
+
+/* Primary color */
+.ant-table-thead .ant-table-cell {
+    background-color: #ff7506 !important;
+    color: white !important;
+}

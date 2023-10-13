@@ -74,7 +74,7 @@ public class AuthController {
         String password = authRequest.getPassword();
         Authentication authentication = authenticate(username, password);
 
-        String token =jwtProvider.generatorToken(authentication);
+        String token = jwtProvider.generatorToken(authentication);
     AuthResponse authResponse = new AuthResponse();
     authResponse.setJwt(token);
     authResponse.setMessage("Sign in successfully");

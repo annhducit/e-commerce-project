@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import { getUserProfile } from "../../services/authService";
 import ModalAdvance from "../../components/portal/ModalAdvance";
 import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
-import Input from "../../components/Input";
+import { AnyAction } from "@reduxjs/toolkit";
+import Button from "../../components/Button";
+import InputNormal from "../../components/InputNormal";
+import { FaEnvelope, FaGlobeAsia, FaPhone, FaUser } from "react-icons/fa";
 
 const Account = () => {
     const [openModal, setOpenModal] = useState<boolean>();
@@ -17,7 +20,7 @@ const Account = () => {
 
     useEffect(() => {
         if (token) {
-            dispatch(getUserProfile(token));
+            dispatch(getUserProfile(token) as unknown as AnyAction);
         }
     }, [token, auth.jwt, dispatch]);
 
@@ -94,12 +97,14 @@ const Account = () => {
                                 <tr>
                                     <th className="py-2">Số điện thoại: </th>
                                     <td className="py-2 lg:pl-44">
-                                        {auth.user?.phoneNumber || "Không có"}
+                                        {auth.user?.phone || "Không có"}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th className="py-2">Quốc gia: </th>
-                                    <td className="py-2 lg:pl-44">Việt Nam</td>
+                                    <td className="py-2 lg:pl-44">
+                                        {auth.user?.nation}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -115,34 +120,55 @@ const Account = () => {
                     contentClassName: "bg-white",
                 }}
                 footer={
-                    <div className="float-right">
-                        <button className="px-2 py-1 text-white rounded bg-emerald-500 ">
-                            Cancel
-                        </button>
+                    <div className="flex items-center float-right gap-x-2">
+                        <Button
+                            text="Hủy"
+                            className="px-2 py-1 text-white bg-red-500 rounded"
+                        />
+
+                        <Button
+                            text="Cập nhật"
+                            className="px-2 py-1 text-white bg-purple-500 rounded"
+                        />
                     </div>
                 }
             >
-                <div className="flex flex-col">
-                    <input
-                        name="username"
+                <div className="flex flex-col w-full gap-y-2">
+                    <InputNormal
+                        label="Email"
+                        name="fullname"
+                        leftIcon={<FaEnvelope />}
                         type="text"
                         placeholder="Enter your content"
-                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                        className="flex-1 py-3 bg-transparent outline-none"
+                        defaultValue={auth.user?.email}
                     />
-                    <input
+                    <InputNormal
+                        label="Họ và tên"
+                        name="fullname"
+                        leftIcon={<FaUser />}
                         type="text"
                         placeholder="Enter your content"
-                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                        className="flex-1 py-3 bg-transparent outline-none"
+                        defaultValue={`${auth.user?.firstName} ${auth.user?.lastName}`}
                     />
-                    <input
+                    <InputNormal
+                        label="Số điện thoại"
+                        name="fullname"
+                        leftIcon={<FaPhone />}
                         type="text"
                         placeholder="Enter your content"
-                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                        className="flex-1 py-3 bg-transparent outline-none"
+                        defaultValue={auth.user?.phone}
                     />
-                    <input
+                    <InputNormal
+                        label="Quốc gia"
+                        name="fullname"
+                        leftIcon={<FaGlobeAsia />}
                         type="text"
                         placeholder="Enter your content"
-                        className="w-[300px] border border-slate-200 rounded-lg py-3 px-5 outline-none  bg-transparent"
+                        className="flex-1 py-3 bg-transparent outline-none"
+                        defaultValue={auth.user?.nation}
                     />
                 </div>
             </ModalAdvance>
