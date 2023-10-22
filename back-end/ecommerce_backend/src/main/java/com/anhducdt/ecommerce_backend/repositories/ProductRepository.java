@@ -1,11 +1,13 @@
 package com.anhducdt.ecommerce_backend.repositories;
 
+import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -26,5 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> searchProductByKeyword(@Param("keyword") String keyword);
     @Query("SELECT p FROM Product p WHERE p.category.name = :category")
     List<Product> getProductByCategory(@Param("category") String category);
+
+    List<Product> findProductByDateCreateBetween(Date dateStart, Date endDate);
 
 }

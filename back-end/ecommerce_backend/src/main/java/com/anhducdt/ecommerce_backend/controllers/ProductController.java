@@ -1,17 +1,16 @@
 package com.anhducdt.ecommerce_backend.controllers;
 
+import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.ProductRequest;
 import com.anhducdt.ecommerce_backend.exceptions.ProductException;
 import com.anhducdt.ecommerce_backend.models.Product;
 import com.anhducdt.ecommerce_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -85,11 +84,20 @@ public class ProductController {
     return new ResponseEntity<>(products, HttpStatus.OK);
   }
 
+  @GetMapping("/all")
+  public PaginationResponse getAllUsers(
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(defaultValue = "10") Integer pageSize) {
+    return productService.findAllProducts(page, pageSize);
+  }
+
   @GetMapping("/search")
   public ResponseEntity<List<Product>> searchProductByKeyword(@RequestParam("keyword") String keyword) {
       List<Product> productList = productService.searchProductByKeyWord(keyword);
       return new ResponseEntity<>(productList, HttpStatus.OK);
   }
+
+
 
 
 }

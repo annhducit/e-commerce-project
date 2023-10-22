@@ -71,3 +71,12 @@ export const getProductsByCategory = async (type: string) => {
         console.log(err);
     }
 };
+
+export const getAllProducts = async () => {
+    try {
+        const data = await api.get(`/api/products/all`);
+        return data.data;
+    } catch (err) {
+        console.log(err);
+    }
+};

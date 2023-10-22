@@ -1,5 +1,6 @@
 package com.anhducdt.ecommerce_backend.services;
 
+import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.ProductRequest;
 import com.anhducdt.ecommerce_backend.exceptions.ProductException;
 import com.anhducdt.ecommerce_backend.models.Product;
@@ -18,5 +19,7 @@ public interface IProductService {
     ,Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize);
     List<Product> searchProductByKeyWord(String keyword);
     List<Product> getProductsByCategory(String category);
+
+    PaginationResponse findAllProducts(Integer page, Integer pageSize);
 
 }

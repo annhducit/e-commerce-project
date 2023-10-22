@@ -1,24 +1,29 @@
 package com.anhducdt.ecommerce_backend.services.impl;
 
-import com.anhducdt.ecommerce_backend.configs.JwtProvider;
+import com.anhducdt.ecommerce_backend.configs.UserAuthProvider;
+import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
 import com.anhducdt.ecommerce_backend.services.IUserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
+    private final UserAuthProvider userAuthProvider;
 
-    public UserService(UserRepository userRepository, JwtProvider jwtProvider) {
+    public UserService(UserRepository userRepository, UserAuthProvider jwtProvider) {
         this.userRepository = userRepository;
-        this.jwtProvider = jwtProvider;
+        this.userAuthProvider = jwtProvider;
     }
 
     @Override
@@ -32,7 +37,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findUserByJwt(String jwt) throws UserException {
-        String email = jwtProvider.getEmailFormToken(jwt);
+        String email = userAuthProvider.getEmailFormToken(jwt);
         User user  = userRepository.findUserByEmail(email);
         if (user == null) {
             throw new UserException("User not found");
@@ -49,4 +54,23 @@ public class UserService implements IUserService {
         user.setNation(updateUserInfoRequest.getNation());
         return userRepository.save(user);
     }
+
+    @Override
+    public PaginationResponse findAllAccounts(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        List<User> userList = userPage.getContent();
+
+        return PaginationResponse.builder()
+            .totalElements(userPage.getTotalElements())
+            .totalPages(userPage.getTotalPages())
+            .currentPage(page)
+            .hasNextPage(userPage.hasNext())
+            .data(userList)
+            .build();
+    }
+
+
+
 }

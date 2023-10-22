@@ -1,9 +1,11 @@
 package com.anhducdt.ecommerce_backend.services.impl;
 
+import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.ProductRequest;
 import com.anhducdt.ecommerce_backend.exceptions.ProductException;
 import com.anhducdt.ecommerce_backend.models.Category;
 import com.anhducdt.ecommerce_backend.models.Product;
+import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.repositories.CategoryRepository;
 import com.anhducdt.ecommerce_backend.repositories.ProductRepository;
 import com.anhducdt.ecommerce_backend.services.IProductService;
@@ -195,5 +197,22 @@ public class ProductService implements IProductService {
     @Override
     public List<Product> getProductsByCategory(String category) {
         return productRepository.getProductByCategory(category);
+    }
+
+    @Override
+    public PaginationResponse findAllProducts(Integer page, Integer pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        List<Product> productList = productPage.getContent();
+
+        return PaginationResponse.builder()
+            .totalElements(productPage.getTotalElements())
+            .totalPages(productPage.getTotalPages())
+            .currentPage(page)
+            .hasNextPage(productPage.hasNext())
+            .data(productList)
+            .build();
+
     }
 }

@@ -1,6 +1,6 @@
 package com.anhducdt.ecommerce_backend.controllers;
 
-import com.anhducdt.ecommerce_backend.configs.JwtProvider;
+import com.anhducdt.ecommerce_backend.configs.UserAuthProvider;
 import com.anhducdt.ecommerce_backend.dtos.responses.AuthResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.AuthRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
@@ -26,13 +26,13 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final UserAuthProvider userAuthProvider;
     private final CustomerUserService customerUserService;
     private final CartService cartService;
 
-    public AuthController(UserRepository userRepository, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomerUserService customerUserService, CartService cartService) {
+    public AuthController(UserRepository userRepository, UserAuthProvider userAuthProvider, PasswordEncoder passwordEncoder, CustomerUserService customerUserService, CartService cartService) {
         this.userRepository = userRepository;
-        this.jwtProvider = jwtProvider;
+        this.userAuthProvider = userAuthProvider;
         this.passwordEncoder = passwordEncoder;
         this.customerUserService = customerUserService;
         this.cartService = cartService;
@@ -44,7 +44,6 @@ public class AuthController {
         String password = user.getPassword();
         String firstString = user.getFirstName();
         String lastString = user.getLastName();
-//        String role = String.valueOf(user.getRole());
         User isEmailExits = userRepository.findUserByEmail(email);
         if (isEmailExits != null) {
             throw new UserException("This Email is already use with another account");
@@ -54,15 +53,14 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(password));
         createUser.setFirstName(firstString);
         createUser.setLastName(lastString);
-//        createUser.setRole(Role.valueOf(role));
-        createUser.setRole(Role.Customer);
+        createUser.setRole(Role.valueOf("Customer"));
 
         User newUser = userRepository.save(createUser);
         Cart cart = cartService.createCart(newUser);
         Authentication  authentication = new UsernamePasswordAuthenticationToken(newUser.getEmail(), newUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token =jwtProvider.generatorToken(authentication);
+        String token =userAuthProvider.generatorToken(authentication);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Signup Success");
@@ -74,10 +72,10 @@ public class AuthController {
         String password = authRequest.getPassword();
         Authentication authentication = authenticate(username, password);
 
-        String token = jwtProvider.generatorToken(authentication);
-    AuthResponse authResponse = new AuthResponse();
-    authResponse.setJwt(token);
-    authResponse.setMessage("Sign in successfully");
+        String token = userAuthProvider.generatorToken(authentication);
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setJwt(token);
+        authResponse.setMessage("Sign in successfully");
     return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);    }
 
     @PostMapping("/admin/signin")
@@ -86,7 +84,7 @@ public class AuthController {
         String password = authRequest.getPassword();
         Authentication authentication = authenticate(username, password);
 
-        String token =jwtProvider.generatorToken(authentication);
+        String token =userAuthProvider.generatorToken(authentication);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Sign in successfully");

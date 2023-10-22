@@ -4,7 +4,7 @@ import { useEffect } from "react";
 type InputType = {
     value?: string;
     handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    label: string;
+    label?: string;
     leftIcon?: ReactNode;
 } & React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -20,9 +20,13 @@ function InputNormal(item: InputType) {
 
     return (
         <div>
-            <label className="text-[#232354] font-semibold">{item.label}</label>
-            <div className="flex items-center px-4 mt-2 bg-gray-100 rounded-lg gap-x-3">
-                <span className="leading-none text-purple-400">
+            {item.label && (
+                <label className="text-[#232354] font-semibold block mb-2">
+                    {item.label}
+                </label>
+            )}
+            <div className="flex items-center px-4 bg-gray-100 rounded-lg gap-x-4">
+                <span className="leading-none text-[#ff7506]">
                     {item.leftIcon}
                 </span>
                 <input ref={inpref} onChange={item.handleChange} {...item} />

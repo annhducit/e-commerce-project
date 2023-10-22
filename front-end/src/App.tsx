@@ -17,6 +17,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import ProductManagement from "./admin/pages/ProductManagement";
 import AccountManagement from "./admin/pages/AccountManagement";
 import Dashboard from "./admin/pages/Dashboard";
+import OrderManagement from "./admin/pages/OrderManagement";
 
 function App() {
     return (
@@ -43,13 +44,14 @@ function App() {
             <Route path="admin">
                 <Route path="signin" element={<AdminLogin />}></Route>
                 <Route element={<AdminLayout />}>
-                    <Route index element={<Dashboard />}></Route>
+                    <Route path="dashboard" element={<Dashboard />}></Route>
                     <Route
                         path="products"
                         element={<ProductManagement />}
                     ></Route>
+                    <Route path="orders" element={<OrderManagement />}></Route>
                     <Route
-                        path="accounts"
+                        path="customers"
                         element={<AccountManagement />}
                     ></Route>
                 </Route>

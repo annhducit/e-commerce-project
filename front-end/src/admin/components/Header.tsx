@@ -1,10 +1,30 @@
-const Header = () => {
+import { FaArrowLeft, FaBars } from "react-icons/fa";
+
+const Header = ({
+    controlSidebar,
+    visible,
+    title,
+}: {
+    controlSidebar: (state: boolean) => void;
+    visible: boolean | undefined;
+    title: string | undefined;
+}) => {
     return (
-        <header className="absolute z-50 flex items-center w-full h-20 px-4 bg-white shadow lg:px-8 hover:shadow-lg">
+        <header className="absolute z-50 flex items-center w-full h-[70px] px-4 bg-white shadow lg:px-6 hover:shadow-lg">
             <div className="flex items-center justify-between w-full">
-                <h1 className="text-2xl font-bold text-[#ff7506]">Dashboard</h1>
+                <div className="flex items-center gap-x-4 ">
+                    <span
+                        className="text-xl text-[#ff7506] rounded-lg opacity-70 p-3 hover:bg-slate-100 hover:cursor-pointer"
+                        onClick={() => controlSidebar(!visible)}
+                    >
+                        {visible ? <FaArrowLeft /> : <FaBars />}
+                    </span>
+                    <h1 className="text-xl font-bold text-[#ff7506]">
+                        {title}
+                    </h1>
+                </div>
                 <div className="flex items-center gap-x-2 lg:gap-x-4">
-                    <p className="font-semibold text-[#ff7506] text-md opacity-80">
+                    <p className="font-semibold text-slate-500 text-md opacity-80">
                         Anh Đức
                     </p>
                     <div className="w-10 h-10 rounded-full">

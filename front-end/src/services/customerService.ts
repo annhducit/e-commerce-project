@@ -8,6 +8,15 @@ class CustomerService extends BaseService {
         await this.checkResponseOk(res.data);
         return this.getResponse<UserType>(res.data);
     }
+
+    async getAllUsers() {
+        try {
+            const data = await api.get("/api/users/all");
+            return data.data;
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
 
 export default new CustomerService();
