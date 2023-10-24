@@ -1,6 +1,6 @@
 package com.anhducdt.ecommerce_backend.models.enums;
 
-public enum OrderStatus {
+public enum EOrderStatus {
   PENDING,
   PLACED,
   CONFIRMED,

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -85,10 +86,8 @@ public class ProductController {
   }
 
   @GetMapping("/all")
-  public PaginationResponse getAllUsers(
-      @RequestParam(defaultValue = "1") Integer page,
-      @RequestParam(defaultValue = "10") Integer pageSize) {
-    return productService.findAllProducts(page, pageSize);
+  public List<Product> getAllProducts() {
+    return productService.findAllProducts();
   }
 
   @GetMapping("/search")
@@ -97,7 +96,10 @@ public class ProductController {
       return new ResponseEntity<>(productList, HttpStatus.OK);
   }
 
-
-
+  @GetMapping("/sortByPrice")
+  public ResponseEntity<List<Product>> sortProductByDiscountedPrice(@RequestParam("sortBy") String sort) {
+    List<Product> productList = productService.sortProductByDiscountedPrice(sort);
+    return new ResponseEntity<>(productList, HttpStatus.OK);
+  }
 
 }

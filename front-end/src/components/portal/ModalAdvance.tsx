@@ -17,7 +17,7 @@ type SizeModal = "sm" | "md" | "lg";
 const distanceModal = (size: SizeModal) => {
     const distance = `${
         size === "sm"
-            ? "w-[200px] h-[150px]"
+            ? "w-[320px] h-[150px]"
             : size === "md"
             ? "w-[500px] h-[400px]"
             : size === "lg"

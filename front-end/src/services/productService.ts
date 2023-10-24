@@ -53,7 +53,7 @@ export const findProductById =
 export const searchProductByKeyword = async (keyword: string) => {
     try {
         const params = new URLSearchParams();
-        keyword && params.append("keyword", keyword.toString());
+        keyword && params.append("keyword", keyword);
         const data = await api.get(`/api/products/search?${params.toString()}`);
         return data.data;
     } catch (err) {
@@ -75,8 +75,34 @@ export const getProductsByCategory = async (type: string) => {
 export const getAllProducts = async () => {
     try {
         const data = await api.get(`/api/products/all`);
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const getProductById = async (id: number) => {
+    try {
+        const data = await api.get(`/api/products/${id}`);
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const sortByDiscountedPrice = async (type: string) => {
+    try {
+        const params = new URLSearchParams();
+        type && params.append("sortBy", type);
+        const data = await api.get(
+            `/api/products/sortByPrice?${params.toString()}`
+        );
         return data.data;
     } catch (err) {
         console.log(err);
     }
+};
+
+export const deleteProductById = async (id: string) => {
+    await api.delete(`/api/products/${id}`);
 };

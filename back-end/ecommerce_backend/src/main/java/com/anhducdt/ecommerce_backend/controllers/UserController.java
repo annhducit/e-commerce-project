@@ -4,7 +4,9 @@ import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.User;
+import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
 import com.anhducdt.ecommerce_backend.services.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +56,17 @@ public class UserController {
   public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
     try {
       User user = userService.updateUserInfo(id, updateUserInfoRequest);
+      return new ResponseEntity<>(user, HttpStatus.OK);
+    } catch (UserException e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @PutMapping("/{id}/accountStatus")
+  public ResponseEntity<User> approveAccountUser(@PathVariable Long id, @RequestParam EAccountStatus status) {
+    try {
+
+      User user = userService.updateAccountStatus(id, status);
       return new ResponseEntity<>(user, HttpStatus.OK);
     } catch (UserException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

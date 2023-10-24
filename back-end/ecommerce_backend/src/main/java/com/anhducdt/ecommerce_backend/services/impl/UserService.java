@@ -5,6 +5,7 @@ import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.User;
+import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
 import com.anhducdt.ecommerce_backend.services.IUserService;
 import org.springframework.data.domain.Page;
@@ -71,6 +72,10 @@ public class UserService implements IUserService {
             .build();
     }
 
-
-
+    @Override
+    public User updateAccountStatus(Long id, EAccountStatus status) throws UserException {
+        User user = findUserById(id);
+        user.setStatus(status);
+        return userRepository.save(user);
+    }
 }

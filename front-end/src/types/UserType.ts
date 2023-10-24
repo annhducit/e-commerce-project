@@ -4,7 +4,9 @@ export default interface UserType {
     lastName: string;
     password: string;
     email: string;
-    role: string | null;
+    role: ERole;
+    status: EAccountStatus;
+
     phoneNumber: string;
     nation: string;
     address: Address[];
@@ -22,3 +24,6 @@ interface Address {
     zipCode: string;
     phoneNumber: string;
 }
+
+type ERole = "CUSTOMER" | "ADMIN";
+export type EAccountStatus = "PENDING" | "NORMAL" | "LOCKED";

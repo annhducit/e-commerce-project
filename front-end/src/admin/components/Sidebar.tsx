@@ -69,7 +69,7 @@ function Sidebar({
             <aside
                 className={`${
                     visible ? "w-[320px]" : "w-[90px]"
-                } h-screen pt-4 px-4 bg-white transition-all`}
+                } h-screen pt-4 px-4 bg-white transition-all ease-in-out duration-500`}
             >
                 <div className="w-full h-[100px] rounded mb-6">
                     <img

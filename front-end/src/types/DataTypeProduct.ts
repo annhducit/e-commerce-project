@@ -1,7 +1,11 @@
+import { EAccountStatus } from "./UserType";
+
 export interface DataTypeProduct {
+    id: number;
     key: string;
     title: string;
     price: number;
+    discountedPrice: number;
     category: Category;
     size: Size[];
     color: string;
@@ -10,6 +14,7 @@ export interface DataTypeProduct {
     tags: string[];
 }
 export interface DataTypeAccount {
+    id: number;
     key: string;
     firstName: string;
     lastName: string;
@@ -17,6 +22,7 @@ export interface DataTypeAccount {
     phoneNumber: string;
     gender: string;
     nation: string;
+    status: EAccountStatus;
     createAt: string;
 }
 export interface DataTypeOrder {

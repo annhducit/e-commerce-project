@@ -1,6 +1,5 @@
 package com.anhducdt.ecommerce_backend.dtos.resquests;
 
-import com.anhducdt.ecommerce_backend.models.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 

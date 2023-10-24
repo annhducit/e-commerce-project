@@ -1,7 +1,7 @@
 import TableAdmin from "../components/Table";
 import { ColumnsType } from "antd/es/table";
 import { DataTypeProduct } from "../../types/DataTypeProduct";
-import { Space, Tag } from "antd";
+import { Space, Spin, Tag } from "antd";
 import Dropdown from "../../components/Dropdown";
 import { DropdownItemType } from "../../types/DropdownItemType";
 import Button from "../../components/Button";
@@ -15,8 +15,14 @@ import {
 import ModalAdvance from "../../components/portal/ModalAdvance";
 import { useEffect, useState } from "react";
 import InputNormal from "../../components/InputNormal";
-import { getAllProducts } from "../../services/productService";
+import {
+    getAllProducts,
+    getProductById,
+    searchProductByKeyword,
+    sortByDiscountedPrice,
+} from "../../services/productService";
 import ProductType from "../../types/ProductType";
+import useDebounce from "../../hooks/useDebounce";
 
 const ProductManagement = () => {
     const [openModalNewProduct, setOpenModalNewProduct] = useState<boolean>();
@@ -24,16 +30,53 @@ const ProductManagement = () => {
         useState<boolean>();
 
     const [products, setProducts] = useState<ProductType[]>();
+    const [product, setProduct] = useState<ProductType>();
+
+    // Search
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [searchValue, setSearchValue] = useState<string>("");
+
+    const debounce = useDebounce(searchValue, 500);
 
     useEffect(() => {
         void (async () => {
             const data = await getAllProducts();
-            setProducts(data.data);
-            console.log(data.data);
+            setProducts(data?.data);
         })();
     }, []);
 
+    useEffect(() => {
+        void (async () => {
+            setIsLoading(true);
+            const productResult = await searchProductByKeyword(debounce);
+            setProducts(productResult);
+            setIsLoading(false);
+        })();
+    }, [debounce]);
+
+    const handleSortProductByDiscountedPrice = (sortBy: string) => {
+        void (async () => {
+            setIsLoading(true);
+            const productResult = await sortByDiscountedPrice(sortBy);
+            setProducts(productResult);
+            setIsLoading(false);
+        })();
+    };
+
+    const handleClickProductDetail = (id: number) => {
+        setOpenModalProductDetails(true);
+        void (async () => {
+            const data = await getProductById(id);
+            setProduct(data?.data);
+        })();
+    };
+
     const columns: ColumnsType<DataTypeProduct> = [
+        {
+            title: "ID",
+            dataIndex: "id",
+            key: "id",
+        },
         {
             title: "Tên sản phẩm",
             dataIndex: "title",
@@ -41,9 +84,14 @@ const ProductManagement = () => {
             render: (text) => <a>{text}</a>,
         },
         {
-            title: "Giá",
+            title: "Giá gốc",
             dataIndex: "price",
             key: "price",
+        },
+        {
+            title: "Giá đã giảm",
+            dataIndex: "discountedPrice",
+            key: "discountedPrice",
         },
         {
             title: "Thể loại",
@@ -69,12 +117,12 @@ const ProductManagement = () => {
         {
             title: "Action",
             key: "action",
-            render: () => (
+            render: (_key, item) => (
                 <Space size="small">
                     <Tag
                         color="green-inverse"
                         className="py-1 font-semibold hover:cursor-pointer hover:bg-green-600"
-                        onClick={() => setOpenModalProductDetails(true)}
+                        onClick={() => handleClickProductDetail(item.id)}
                     >
                         Chi tiết
                     </Tag>
@@ -92,6 +140,24 @@ const ProductManagement = () => {
                     </Tag>
                 </Space>
             ),
+        },
+    ];
+
+    // Sort by discounted price
+    const filterProduct: DropdownItemType[] = [
+        {
+            id: 1,
+            title: "Giá tăng dần",
+            onClick: () => handleSortProductByDiscountedPrice("price_low"),
+        },
+        {
+            id: 2,
+            title: "Giá giảm dần",
+            onClick: () => handleSortProductByDiscountedPrice("price_high"),
+        },
+        {
+            id: 3,
+            title: "Mới nhất",
         },
     ];
 
@@ -114,6 +180,10 @@ const ProductManagement = () => {
                                     type="text"
                                     name="search"
                                     placeholder="Áo khoác..."
+                                    value={searchValue}
+                                    onChange={(e) =>
+                                        setSearchValue(e.target.value)
+                                    }
                                     id=""
                                     className="flex-1 pl-4 w-full px-2 py-1 h-[34px] rounded-tl rounded-bl outline-none"
                                 />
@@ -131,7 +201,9 @@ const ProductManagement = () => {
                         onClick={() => setOpenModalNewProduct(true)}
                     />
                 </div>
-                <TableAdmin data={products} columns={columns} />
+                <Spin spinning={isLoading}>
+                    <TableAdmin data={products} columns={columns} />
+                </Spin>
             </div>
             {/* Create new product */}
             <ModalAdvance
@@ -194,6 +266,7 @@ const ProductManagement = () => {
             {/* Product detail */}
             <ModalAdvance
                 header="Chi tiết sản phẩm"
+                size="lg"
                 props={{
                     visible: openModalProductDetails as boolean,
                     onClose: () => setOpenModalProductDetails(false),
@@ -209,25 +282,84 @@ const ProductManagement = () => {
                     </div>
                 }
             >
-                <div className="flex flex-col w-full gap-y-2"></div>
+                <div className="grid grid-cols-2 gap-x-6">
+                    <div className="flex flex-col col-span-1 gap-y-4">
+                        <div className="w-full rounded shadow-md h-96">
+                            <img
+                                src={product?.imageUrl}
+                                alt=""
+                                className="w-full h-full rounded"
+                            />
+                        </div>
+                        <div>
+                            <h2>
+                                <b>Mã sản phẩm</b>: {product?.id}
+                            </h2>
+                            <h2>
+                                <b>Ngày tạo</b>: {product?.dateCreate}
+                            </h2>
+                        </div>
+                    </div>
+                    <div className="col-span-1">
+                        <div>
+                            <h2 className="text-lg font-semibold">
+                                {product?.title}
+                            </h2>
+                            <span className="text-lg font-semibold opacity-60">
+                                {product?.brand}
+                            </span>
+                        </div>
+                        <hr className="my-4" />
+                        <div className="flex flex-col gap-y-2">
+                            <p>
+                                <b>Category</b>: {product?.category.name}
+                            </p>
+                            <div className="flex items-center gap-x-1">
+                                <b>Price: </b>
+                                <p>{product?.discountedPrice}$</p>
+                                <p className="line-through opacity-80">
+                                    {product?.price}$
+                                </p>
+                            </div>
+                            <p>
+                                <b>Discount percent</b>:{" "}
+                                {product?.discountPersent}%
+                            </p>
+                            <p>
+                                <b>Color: </b>
+                                {product?.color}
+                            </p>
+
+                            <div className="flex items-center gap-x-4">
+                                <b> Size:</b>{" "}
+                                {product?.size.map((item) => (
+                                    <li className="list-none">{item?.name}</li>
+                                ))}
+                            </div>
+                            <div className="flex flex-col gap-y-2">
+                                <b>Description</b>
+                                <p>{product?.description}</p>
+                            </div>
+                            <div className="flex items-center mt-4 ml-auto gap-x-2">
+                                <Tag
+                                    color="green"
+                                    className="px-4 py-2 font-semibold hover:cursor-pointer hover:bg-green-200"
+                                >
+                                    Sửa sản phẩm
+                                </Tag>
+                                <Tag
+                                    color="volcano"
+                                    className="px-4 py-2 font-semibold hover:cursor-pointer hover:bg-red-200"
+                                >
+                                    Xóa sản phẩm
+                                </Tag>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ModalAdvance>
         </>
     );
 };
 
 export default ProductManagement;
-
-const filterProduct: DropdownItemType[] = [
-    {
-        id: 1,
-        title: "Giá tăng dần",
-    },
-    {
-        id: 2,
-        title: "Giá giảm dần",
-    },
-    {
-        id: 3,
-        title: "Mới nhất",
-    },
-];

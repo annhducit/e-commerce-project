@@ -4,6 +4,9 @@ import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.User;
+import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
+
+import java.util.List;
 
 public interface IUserService {
     User findUserById(Long id) throws UserException;
@@ -13,4 +16,7 @@ public interface IUserService {
         Integer page,
         Integer pageSize
     );
+    User updateAccountStatus(Long id, EAccountStatus status) throws UserException;
+    List<User> searchAccountByKeyword(String keyword);
+
 }

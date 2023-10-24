@@ -2,7 +2,7 @@ package com.anhducdt.ecommerce_backend.services.impl;
 
 import com.anhducdt.ecommerce_backend.exceptions.OrderException;
 import com.anhducdt.ecommerce_backend.models.*;
-import com.anhducdt.ecommerce_backend.models.enums.OrderStatus;
+import com.anhducdt.ecommerce_backend.models.enums.EOrderStatus;
 import com.anhducdt.ecommerce_backend.repositories.*;
 import com.anhducdt.ecommerce_backend.services.ICartService;
 import com.anhducdt.ecommerce_backend.services.IOrderItemService;
@@ -11,7 +11,6 @@ import com.anhducdt.ecommerce_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +59,8 @@ public class OrderService implements IOrderService {
 
     order.setShippingAddress(address);
     order.setOrderDate(LocalDateTime.now());
-    order.setOrderStatus(String.valueOf(OrderStatus.PENDING));
-    order.getPaymentDetails().setPaymentStatus(String.valueOf(OrderStatus.PENDING));
+    order.setOrderStatus(String.valueOf(EOrderStatus.PENDING));
+    order.getPaymentDetails().setPaymentStatus(String.valueOf(EOrderStatus.PENDING));
     order.setCreatedAt(LocalDateTime.now());
     order.setTotalItems(cart.getTotalItem());
 
@@ -92,34 +91,34 @@ public class OrderService implements IOrderService {
   @Override
   public Order placedOrder(Long id) throws OrderException {
     Order order = getOrderById(id);
-    order.setOrderStatus(String.valueOf(OrderStatus.PLACED));
-    order.getPaymentDetails().setPaymentStatus(String.valueOf(OrderStatus.COMPLETED));
+    order.setOrderStatus(String.valueOf(EOrderStatus.PLACED));
+    order.getPaymentDetails().setPaymentStatus(String.valueOf(EOrderStatus.COMPLETED));
     return order;
   }
 
   @Override
   public Order confirmedOrder(Long id) throws OrderException {
     Order order = getOrderById(id);
-    order.setOrderStatus(String.valueOf(OrderStatus.CONFIRMED));
+    order.setOrderStatus(String.valueOf(EOrderStatus.CONFIRMED));
     return orderRepository.save(order);
   }
 
   @Override
   public Order shippedOrder(Long id) throws OrderException {
     Order order = getOrderById(id);
-    order.setOrderStatus(String.valueOf(OrderStatus.SHIPPED));
+    order.setOrderStatus(String.valueOf(EOrderStatus.SHIPPED));
     return orderRepository.save(order);  }
 
   @Override
   public Order diliveredOrder(Long id) throws OrderException {
     Order order = getOrderById(id);
-    order.setOrderStatus(String.valueOf(OrderStatus.DELIVERED));
+    order.setOrderStatus(String.valueOf(EOrderStatus.DELIVERED));
     return orderRepository.save(order);  }
 
   @Override
   public Order canceledOrder(Long id) throws OrderException {
     Order order = getOrderById(id);
-    order.setOrderStatus(String.valueOf(OrderStatus.CANCELED));
+    order.setOrderStatus(String.valueOf(EOrderStatus.CANCELED));
     return orderRepository.save(order);
   }
 

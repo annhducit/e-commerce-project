@@ -1,6 +1,7 @@
 package com.anhducdt.ecommerce_backend.models;
 
-import com.anhducdt.ecommerce_backend.models.enums.Role;
+import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
+import com.anhducdt.ecommerce_backend.models.enums.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,13 +20,14 @@ import java.util.List;
 @Setter
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
     private String password;
     private String email;
-    private Role role;
+    private ERole ERole;
+    private EAccountStatus status;
     private String phoneNumber;
     private String nation;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

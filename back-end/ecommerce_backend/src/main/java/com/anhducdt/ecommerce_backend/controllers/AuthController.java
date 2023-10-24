@@ -6,7 +6,8 @@ import com.anhducdt.ecommerce_backend.dtos.resquests.AuthRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.Cart;
 import com.anhducdt.ecommerce_backend.models.User;
-import com.anhducdt.ecommerce_backend.models.enums.Role;
+import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
+import com.anhducdt.ecommerce_backend.models.enums.ERole;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
 import com.anhducdt.ecommerce_backend.services.impl.CartService;
 import com.anhducdt.ecommerce_backend.services.impl.CustomerUserService;
@@ -53,7 +54,8 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(password));
         createUser.setFirstName(firstString);
         createUser.setLastName(lastString);
-        createUser.setRole(Role.valueOf("Customer"));
+        createUser.setERole(ERole.Customer);
+        createUser.setStatus(EAccountStatus.PENDING);
 
         User newUser = userRepository.save(createUser);
         Cart cart = cartService.createCart(newUser);
@@ -76,6 +78,7 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Sign in successfully");
+        authResponse.setERole(ERole.Customer);
     return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);    }
 
     @PostMapping("/admin/signin")
@@ -88,6 +91,7 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Sign in successfully");
+        authResponse.setERole(ERole.Admin);
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);    }
 
     private Authentication authenticate(String username, String password) {

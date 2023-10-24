@@ -45,7 +45,8 @@ const ItemDropdown = ({
                     <div
                         className="px-1 py-2 bg-white hover:cursor-pointer hover:text-white hover:bg-[#ff7506]"
                         onClick={() => {
-                            item.onClick, setValue(item.title);
+                            item.onClick && item.onClick(),
+                                setValue(item.title);
                         }}
                         key={item.id}
                     >
