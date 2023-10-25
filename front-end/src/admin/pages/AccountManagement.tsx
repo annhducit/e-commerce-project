@@ -2,19 +2,24 @@ import Button from "../../components/Button";
 import { FaExclamationTriangle, FaSearch } from "react-icons/fa";
 import TableAdmin from "../components/Table";
 import { DataTypeAccount } from "../../types/DataTypeProduct";
-import { Space, Tag } from "antd";
+import { Space, Spin, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import UserType, { EAccountStatus } from "../../types/UserType";
 import { useEffect, useState } from "react";
 import customerService from "../../services/customerService";
 import ModalAdvance from "../../components/portal/ModalAdvance";
 import { toast } from "react-toastify";
+import useDebounce from "../../hooks/useDebounce";
 
 const AccountManagement = () => {
     const [accounts, setAccounts] = useState<UserType[]>();
     const [idUSer, setIdUSer] = useState<number>(0);
+    const [value, setValue] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [openModalUpdateAccountStatus, setOpenModalUpdateAccountStatus] =
         useState<boolean>();
+
+    const debounce = useDebounce(value, 500);
 
     useEffect(() => {
         void (async () => {
@@ -23,6 +28,14 @@ const AccountManagement = () => {
         })();
     }, []);
 
+    useEffect(() => {
+        void (async () => {
+            setIsLoading(true);
+            const data = await customerService.searchAccountByKeyword(debounce);
+            setAccounts(data);
+            setIsLoading(false);
+        })();
+    }, [debounce]);
     const handleUpdateAccountStatus = (id: number, status: EAccountStatus) => {
         setOpenModalUpdateAccountStatus(false);
         void (async () => {
@@ -164,6 +177,8 @@ const AccountManagement = () => {
                             type="text"
                             name="search"
                             placeholder="Tên, số điện thoại ..."
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
                             id=""
                             className="flex-1 pl-4 w-full px-2 py-1 h-[34px] rounded-tl rounded-bl outline-none"
                         />
@@ -174,7 +189,9 @@ const AccountManagement = () => {
                         />
                     </div>
                 </div>
-                <TableAdmin columns={columns} data={accounts} />
+                <Spin spinning={isLoading}>
+                    <TableAdmin columns={columns} data={accounts} />
+                </Spin>
             </div>
             <ModalAdvance
                 header="Khóa tài khoản"

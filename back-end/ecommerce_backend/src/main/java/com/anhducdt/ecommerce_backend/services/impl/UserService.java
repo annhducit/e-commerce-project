@@ -4,6 +4,7 @@ import com.anhducdt.ecommerce_backend.configs.UserAuthProvider;
 import com.anhducdt.ecommerce_backend.dtos.responses.PaginationResponse;
 import com.anhducdt.ecommerce_backend.dtos.resquests.UpdateUserInfoRequest;
 import com.anhducdt.ecommerce_backend.exceptions.UserException;
+import com.anhducdt.ecommerce_backend.models.Product;
 import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.models.enums.EAccountStatus;
 import com.anhducdt.ecommerce_backend.repositories.UserRepository;
@@ -11,7 +12,11 @@ import com.anhducdt.ecommerce_backend.services.IUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,5 +82,10 @@ public class UserService implements IUserService {
         User user = findUserById(id);
         user.setStatus(status);
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> searchAccountByKeyword(String keyword) {
+            return userRepository.searchUserByKeyword(keyword);
     }
 }

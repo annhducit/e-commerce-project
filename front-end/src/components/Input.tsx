@@ -1,10 +1,12 @@
 import { useController, Control } from "react-hook-form";
 import AuthType from "../types/RegisterType";
+import { RoleType } from "../types/RoleType";
 
 type InputType = {
     label?: string;
     lefticon?: React.ReactElement;
     error?: string;
+    roleType?: RoleType;
     control?: Control<AuthType>;
     name: keyof AuthType;
 } & React.DetailedHTMLProps<
@@ -24,7 +26,13 @@ function Input(items: InputType) {
                 {items.label}
             </label>
             <div className="flex items-center px-4 mt-2 bg-gray-100 rounded-lg gap-x-3">
-                <span className="leading-none text-purple-400">
+                <span
+                    className={`leading-none ${
+                        items.roleType === "Admin"
+                            ? "text-[#ff7506]"
+                            : "text-[#64a1ff]"
+                    }`}
+                >
                     {items.lefticon}
                 </span>
                 <input

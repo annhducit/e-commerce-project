@@ -52,6 +52,7 @@ public class UserController {
     }
   }
 
+
   @PutMapping("/{id}/profile")
   public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
     try {
@@ -73,4 +74,9 @@ public class UserController {
     }
   }
 
+  @GetMapping("/search")
+  public ResponseEntity<List<User>> searchAccountByKeyword(@RequestParam("keyword") String keyword) {
+    List<User> userList = userService.searchAccountByKeyword(keyword);
+    return new ResponseEntity<>(userList, HttpStatus.OK);
+  }
 }

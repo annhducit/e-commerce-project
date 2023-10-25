@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { getCart } from "../../services/cartService";
 import { RootState } from "../../redux/globalStore";
 import { CartsType } from "../../types/CartsType";
-import { CartItemType } from "../../types/CartItemType";
 
 const Cart = ({ payment }: { payment?: boolean }) => {
     const navigate = useNavigate();
@@ -24,8 +23,8 @@ const Cart = ({ payment }: { payment?: boolean }) => {
     }, [cart.updateCartItem, cart.deleteCartItem, dispatch]);
 
     return (
-        <div className="grid grid-cols-3 px-20 py-5 my-2 gap-x-12">
-            <div className="col-span-2 overflow-y-scroll h-[800px]">
+        <div className="grid grid-cols-3 px-10 py-5 my-2 gap-x-6">
+            <div className="col-span-2 overflow-y-scroll h-[800px] pr-4 overflow-hidden">
                 {cartByUser?.cartItems.map((item, index) => (
                     <CartItem key={index} data={item} />
                 ))}
@@ -50,7 +49,7 @@ const Cart = ({ payment }: { payment?: boolean }) => {
                             <span className="font-semibold text-black text-md opacity-80">
                                 Discount
                             </span>
-                            <span className="font-semibold text-indigo-600 text-md opacity-80">
+                            <span className="font-semibold text-[#64a1ff] text-md opacity-80">
                                 -${cartByUser?.discount}
                             </span>
                         </div>
@@ -58,7 +57,7 @@ const Cart = ({ payment }: { payment?: boolean }) => {
                             <span className="font-semibold text-black text-md opacity-80">
                                 Delivery Charges
                             </span>
-                            <span className="font-semibold text-indigo-600 text-md opacity-80">
+                            <span className="font-semibold text-[#64a1ff] text-md opacity-80">
                                 Free
                             </span>
                         </div>
@@ -68,20 +67,20 @@ const Cart = ({ payment }: { payment?: boolean }) => {
                         <h1 className="text-lg font-bold text-black">
                             Total Amount
                         </h1>
-                        <h1 className="text-lg font-bold text-indigo-600">
+                        <h1 className="text-lg font-bold text-[#64a1ff]">
                             ${cartByUser?.totalDiscountPrice}
                         </h1>
                     </div>
                     {payment ? (
                         <Button
                             text="PAYMENT"
-                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
+                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-[#64a1ff] rounded hover:bg-[#5798fa]"
                         ></Button>
                     ) : (
                         <Button
                             onClick={handleCheckout}
                             text="CHECK OUT"
-                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
+                            className="w-full p-4 mt-8 font-semibold text-white transition-all bg-[#64a1ff] rounded hover:bg-[#5798fa]"
                         ></Button>
                     )}
                 </div>

@@ -23,4 +23,5 @@ public interface IProductService {
     List<Product> getProductsByCategory(String category);
     List<Product> findAllProducts();
     List<Product> sortProductByDiscountedPrice(String sortBy);
+    List<Product> sortProductByDiscountedPriceAndCategory(String sortBy, String category);
 }

@@ -55,7 +55,7 @@ const Account = () => {
                     <div className="flex items-center gap-x-2">
                         <p>Trạng thái cập nhật:</p>
 
-                        <span className="px-2 text-sm text-white bg-indigo-500 rounded">
+                        <span className="px-2 text-sm text-white bg-[#64a1ff] rounded">
                             Đã hoàn tất
                         </span>
                     </div>
@@ -68,7 +68,7 @@ const Account = () => {
                     </p>
 
                     <div
-                        className="px-2 py-1 text-sm text-center text-white transition-all bg-purple-500 rounded cursor-pointer lg:ml-auto hover:bg-purple-600"
+                        className="px-2 py-1 text-sm text-center text-white transition-all bg-[#64a1ff] rounded cursor-pointer lg:ml-auto hover:bg-purple-600"
                         onClick={() => setOpenModal(true)}
                     >
                         Cập nhật thông tin

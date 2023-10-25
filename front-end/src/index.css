@@ -22,3 +22,26 @@
     background-color: #ff7506 !important;
     color: white !important;
 }
+
+/* Custom scroll bar */
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #eaeced #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #eaeced;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+}

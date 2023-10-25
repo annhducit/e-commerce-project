@@ -4,9 +4,12 @@ import { Outlet } from "react-router-dom";
 
 const CustomerLayout = () => {
     return (
-        <div>
+        <div className="flex flex-col">
             <Navigation />
-            <Outlet />
+            <div className="">
+                {" "}
+                <Outlet />
+            </div>
             <Footer />
         </div>
     );

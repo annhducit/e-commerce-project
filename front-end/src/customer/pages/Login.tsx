@@ -57,7 +57,7 @@ const Login = () => {
                 header={
                     <div className="px-10 py-6">
                         <Button
-                            className="float-right px-6 py-2 text-white transition-all bg-purple-500 rounded-lg hover:bg-purple-600"
+                            className="float-right px-6 py-2 text-white transition-all bg-[#64a1ff] rounded hover:bg-[#538bdf]"
                             text="Register"
                             onClick={() => navigate("/signup")}
                         />
@@ -95,12 +95,12 @@ const Login = () => {
                                     Remember me!
                                 </span>
                             </div>
-                            <p className="font-semibold text-indigo-500">
+                            <p className="font-semibold text-[#64a1ff]">
                                 Forgot password?
                             </p>
                         </div>
                         <Button
-                            className="w-full py-3 font-semibold text-white transition-all bg-purple-500 rounded hover:bg-purple-600"
+                            className="w-full py-3 font-semibold text-white transition-all bg-[#64a1ff] rounded hover:bg-[#538bdf]"
                             color="emerald"
                             type="submit"
                             text="Login"
@@ -113,7 +113,7 @@ const Login = () => {
                             </span>{" "}
                             <Link
                                 to="/signup"
-                                className="font-semibold text-purple-500 cursor-pointer hover:text-purple-700"
+                                className="font-semibold text-[#64a1ff] cursor-pointer hover:text-purple-700"
                             >
                                 Sign up now{" "}
                             </Link>

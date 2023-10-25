@@ -102,4 +102,11 @@ public class ProductController {
     return new ResponseEntity<>(productList, HttpStatus.OK);
   }
 
+  @GetMapping("/sortByPriceAndCategory")
+  public ResponseEntity<List<Product>> sortProductByDiscountedPriceAndCategory(@RequestParam("sortBy") String sort,
+                                                                               @RequestParam("category") String category) {
+    List<Product> productList = productService.sortProductByDiscountedPriceAndCategory(sort, category);
+    return new ResponseEntity<>(productList, HttpStatus.OK);
+  }
+
 }

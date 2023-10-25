@@ -14,14 +14,12 @@ const Header = ({
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-x-4 ">
                     <span
-                        className="text-xl text-[#ff7506] rounded-lg opacity-70 p-3 hover:bg-slate-100 hover:cursor-pointer"
+                        className="text-xl text-black rounded-lg  p-3 hover:bg-[#ff7506] hover:text-white hover:cursor-pointer"
                         onClick={() => controlSidebar(!visible)}
                     >
                         {visible ? <FaArrowLeft /> : <FaBars />}
                     </span>
-                    <h1 className="text-xl font-bold text-[#ff7506]">
-                        {title}
-                    </h1>
+                    <h1 className="text-xl font-bold text-black">{title}</h1>
                 </div>
                 <div className="flex items-center gap-x-2 lg:gap-x-4">
                     <p className="font-semibold text-slate-500 text-md opacity-80">

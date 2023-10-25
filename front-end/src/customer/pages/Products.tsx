@@ -13,18 +13,48 @@ import { filter, singleFilter } from "../../data/filterData";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { findProducts } from "../../services/productService";
+import {
+    findProducts,
+    sortByDiscountedPriceAndCategory,
+} from "../../services/productService";
 import { MenClothes } from "../../types/MenClothes";
 import { RootState } from "../../redux/globalStore";
 import { Pagination } from "@mui/material";
 import { AnyAction } from "@reduxjs/toolkit";
+import ProductType from "../../types/ProductType";
+import { Spin } from "antd";
 
 const sortOptions = [
-    { name: "Most Popular", href: "#", current: true },
-    { name: "Best Rating", href: "#", current: false },
-    { name: "Newest", href: "#", current: false },
-    { name: "Price: Low to High", href: "#", current: false },
-    { name: "Price: High to Low", href: "#", current: false },
+    {
+        name: "Most Popular",
+        href: "#",
+        sortBy: "price_high",
+        current: true,
+    },
+    {
+        name: "Best Rating",
+        href: "#",
+        sortBy: "price_high",
+        current: false,
+    },
+    {
+        name: "Newest",
+        href: "#",
+        sortBy: "price_high",
+        current: false,
+    },
+    {
+        name: "Price: Low to High",
+        href: "#",
+        sortBy: "price_low",
+        current: false,
+    },
+    {
+        name: "Price: High to Low",
+        href: "#",
+        sortBy: "price_high",
+        current: false,
+    },
 ];
 
 export type FilterType = {
@@ -40,16 +70,29 @@ export type FilterType = {
     stock: string | null;
 };
 
+type TypeParams = {
+    labelOne: string;
+    labelTwo: string;
+    labelThree: string | undefined;
+};
+
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [products, setProducts] = useState<ProductType[]>();
+
     const navigate = useNavigate();
-    const param = useParams();
+    const param = useParams<TypeParams>();
     const dispatch = useDispatch();
+
     const { customerProduct } = useSelector((store: RootState) => store);
+    useEffect(() => {
+        setProducts(customerProduct.products?.content);
+    }, [customerProduct.products?.content]);
 
     const decodedQueryString = decodeURIComponent(location.search);
     const searchParams = new URLSearchParams(decodedQueryString);
@@ -135,6 +178,22 @@ export default function Example() {
         searchPanigation.set("page", pageNumber);
         const query = searchPanigation.toString();
         navigate({ search: `?${query}` });
+    };
+
+    // Filter products
+    const handleSortProductByDiscountedPriceAndCategory = (
+        sortBy: string,
+        category: string
+    ) => {
+        void (async () => {
+            setIsLoading(true);
+            const productResult = await sortByDiscountedPriceAndCategory(
+                sortBy,
+                category
+            );
+            setProducts(productResult);
+            setIsLoading(false);
+        })();
     };
     return (
         <div className="bg-white">
@@ -289,7 +348,7 @@ export default function Example() {
                             >
                                 <div>
                                     <Menu.Button className="inline-flex justify-center text-sm font-medium text-gray-700 group hover:text-gray-900">
-                                        Sort
+                                        Sort by
                                         <ChevronDownIcon
                                             className="flex-shrink-0 w-5 h-5 ml-1 -mr-1 text-gray-400 group-hover:text-gray-500"
                                             aria-hidden="true"
@@ -322,6 +381,13 @@ export default function Example() {
                                                                     : "",
                                                                 "block px-4 py-2 text-sm"
                                                             )}
+                                                            onClick={() =>
+                                                                param.labelThree &&
+                                                                handleSortProductByDiscountedPriceAndCategory(
+                                                                    option.sortBy,
+                                                                    param.labelThree
+                                                                )
+                                                            }
                                                         >
                                                             {option.name}
                                                         </a>
@@ -526,19 +592,18 @@ export default function Example() {
                             </form>
 
                             {/* Product grid */}
+
                             <div className="flex flex-col w-full p-3 border rounded-lg lg:col-span-4 border-slate-200 gap-y-6">
-                                <div className="grid grid-cols-4 gap-x-1">
-                                    {customerProduct?.products?.content
-                                        ? customerProduct.products.content.map(
-                                              (item: MenClothes) => (
-                                                  <ProductCard
-                                                      key={item.id}
-                                                      product={item}
-                                                  />
-                                              )
-                                          )
-                                        : ""}
-                                </div>
+                                <Spin spinning={isLoading}>
+                                    <div className="grid grid-cols-4 gap-x-1">
+                                        {products?.map((item: MenClothes) => (
+                                            <ProductCard
+                                                key={item.id}
+                                                product={item}
+                                            />
+                                        ))}
+                                    </div>
+                                </Spin>
                                 <div className="mx-auto">
                                     <Pagination
                                         count={

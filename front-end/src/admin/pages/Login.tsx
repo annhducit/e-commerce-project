@@ -53,10 +53,11 @@ const Signin = () => {
             welcome="Welcome back Admin!"
             introduction="Enter the information to manage your application"
             padding="px-10 flex flex-col gap-2 my-auto"
+            type="Admin"
             header={
                 <div className="px-10 py-6">
                     <Button
-                        className="float-right px-6 py-2 text-white transition-all bg-purple-500 rounded-lg hover:bg-purple-600"
+                        className="float-right px-6 py-2 text-white transition-all rounded-lg bg-[#ff7506]  hover:bg-[#ff6606]"
                         text="Register"
                         onClick={() => navigate("/signup")}
                     />
@@ -67,6 +68,7 @@ const Signin = () => {
                 <div className="flex flex-col gap-6 pt-8">
                     <Input
                         label="Email"
+                        roleType="Admin"
                         placeholder="Enter your email"
                         type="text"
                         color="emerald"
@@ -78,6 +80,7 @@ const Signin = () => {
                     />
                     <Input
                         label="Password"
+                        roleType="Admin"
                         placeholder="Enter your password"
                         type="password"
                         color="emerald"
@@ -92,12 +95,12 @@ const Signin = () => {
                             <input type="checkbox" name="remember" id="" />
                             <span className="font-semibold">Remember me!</span>
                         </div>
-                        <p className="font-semibold text-indigo-500">
+                        <p className="font-semibold text-[#ff6606]">
                             Forgot password?
                         </p>
                     </div>
                     <Button
-                        className="w-full py-3 font-semibold text-white transition-all bg-purple-500 rounded hover:bg-purple-600"
+                        className="w-full py-3 font-semibold text-white transition-all bg-[#ff7506] rounded hover:bg-[#ff6606]"
                         color="emerald"
                         type="submit"
                         text="Login"
@@ -110,7 +113,7 @@ const Signin = () => {
                         </span>{" "}
                         <Link
                             to="/signup"
-                            className="font-semibold text-purple-500 cursor-pointer hover:text-purple-700"
+                            className="font-semibold text-[#ff7506] cursor-pointer hover:text-[#ff6606]"
                         >
                             Sign up now{" "}
                         </Link>

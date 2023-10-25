@@ -35,6 +35,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         "CASE WHEN :sort = 'price_low' THEN p.discountedPrice END ASC, " +
         "CASE WHEN :sort = 'price_high' THEN p.discountedPrice END DESC")
     List<Product> sortProductByDiscountedPrice(@Param("sort") String sort);
+    @Query("SELECT p FROM Product p WHERE p.category.name = :category " +
+        "ORDER BY " +
+        "CASE WHEN :sort = 'price_low' THEN p.discountedPrice END ASC, " +
+        "CASE WHEN :sort = 'price_high' THEN p.discountedPrice END DESC")
+    List<Product> sortProductByDiscountedPriceAndCategory(@Param("sort") String sort, @Param("category") String category);
 
 
 }

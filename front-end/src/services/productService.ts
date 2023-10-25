@@ -103,6 +103,23 @@ export const sortByDiscountedPrice = async (type: string) => {
     }
 };
 
+export const sortByDiscountedPriceAndCategory = async (
+    type: string,
+    category: string
+) => {
+    try {
+        const params = new URLSearchParams();
+        type && params.append("sortBy", type);
+        category && params.append("category", category);
+        const data = await api.get(
+            `/api/products/sortByPriceAndCategory?${params.toString()}`
+        );
+        return data.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const deleteProductById = async (id: string) => {
     await api.delete(`/api/products/${id}`);
 };

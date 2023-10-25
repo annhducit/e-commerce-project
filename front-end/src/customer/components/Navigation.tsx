@@ -13,7 +13,6 @@ import user from "../../assets/images/admin.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getUserProfile, logoutAccount } from "../../services/authService";
-import Button from "../../components/Button";
 import {
     Category,
     CategorySection,
@@ -26,6 +25,8 @@ import Search from "./Search";
 import { FaBell } from "react-icons/fa";
 import { useAppSelector } from "../../hooks/dispatchHook";
 import { AnyAction } from "@reduxjs/toolkit";
+import Tippy from "@tippyjs/react";
+import { Tag } from "antd";
 
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
@@ -66,7 +67,7 @@ export default function Navigation() {
     }, [cart.handleAddItemToCart, dispatch]);
 
     return (
-        <div className="bg-white">
+        <div className="w-full bg-white">
             {/* Mobile menu */}
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -126,7 +127,7 @@ export default function Navigation() {
                                                         }) =>
                                                             classNames(
                                                                 selected
-                                                                    ? "border-indigo-600 text-indigo-600"
+                                                                    ? "border-[#64a1ff] text-[#64a1ff]"
                                                                     : "border-transparent text-gray-900",
                                                                 "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
                                                             )
@@ -301,25 +302,19 @@ export default function Navigation() {
                 </Dialog>
             </Transition.Root>
 
-            <header className="relative z-50 bg-white">
-                <nav
-                    aria-label="Top"
-                    className="max-w-full px-4 mx-auto sm:px-6 lg:px-20"
-                >
-                    <div className="border-b border-gray-200">
-                        <div className="flex items-center h-20">
-                            <button
-                                type="button"
-                                className="p-2 text-gray-400 bg-white rounded-md lg:hidden"
-                                onClick={() => setOpen(true)}
-                            >
-                                <span className="sr-only">Open menu</span>
-                                <Bars3Icon
-                                    className="w-6 h-6"
-                                    aria-hidden="true"
-                                />
-                            </button>
+            <header className="relative z-50 bg-[#FFFCFC]  justify-between w-full h-20 px-4  shadow sm:px-8 hover:shadow-lg">
+                <nav aria-label="Top" className="max-w-full">
+                    <div className="flex items-center justify-between h-20">
+                        <button
+                            type="button"
+                            className="p-2 text-gray-400 bg-white rounded-md lg:hidden"
+                            onClick={() => setOpen(true)}
+                        >
+                            <span className="sr-only">Open menu</span>
+                            <Bars3Icon className="w-6 h-6" aria-hidden="true" />
+                        </button>
 
+                        <div className="flex items-center">
                             {/* Logo */}
                             <div className="flex ml-4 lg:ml-0">
                                 <a href="#">
@@ -335,7 +330,6 @@ export default function Navigation() {
                                     </div>
                                 </a>
                             </div>
-
                             {/* Flyout menus */}
                             <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
                                 <div className="flex h-full space-x-8">
@@ -350,7 +344,7 @@ export default function Navigation() {
                                                         <Popover.Button
                                                             className={classNames(
                                                                 open
-                                                                    ? "border-indigo-600 text-indigo-600"
+                                                                    ? "border-[#64a1ff] text-[#64a1ff]"
                                                                     : "border-transparent text-gray-700 hover:text-gray-800",
                                                                 "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                                                             )}
@@ -502,80 +496,98 @@ export default function Navigation() {
                                     ))}
                                 </div>
                             </Popover.Group>
-                            {/* Search */}
-                            <div className="flex items-center ml-auto">
-                                <div className="relative flex lg:mx-auto">
-                                    <Search />
-                                </div>
-                                {auth.user ? (
-                                    <div className="hidden lg:ml-8 lg:flex">
-                                        <Link
-                                            to="../../account"
-                                            className="flex items-center text-gray-700 hover:text-gray-800"
-                                        >
-                                            <img
-                                                src={user}
-                                                alt=""
-                                                className="flex-shrink-0 block w-10 h-10 rounded-full"
-                                            />
-                                            <span className="block ml-3 text-sm font-medium">
-                                                {auth.user?.firstName}{" "}
-                                                {auth.user?.lastName}
-                                            </span>
-                                        </Link>
-                                    </div>
-                                ) : (
-                                    <div className="hidden ml-4 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                                        <Link
-                                            to={"signin"}
-                                            className="px-2 py-1 text-white transition-all bg-purple-500 rounded hover:bg-purple-600"
-                                        >
-                                            {" "}
-                                            Sign in
-                                        </Link>
-                                        <span
-                                            className="w-px h-6 bg-gray-200"
-                                            aria-hidden="true"
+                        </div>
+                        {/* Search */}
+                        <div className="flex items-center ">
+                            <div className="relative flex lg:mx-auto">
+                                <Search />
+                            </div>
+                            {auth.user ? (
+                                <div className="hidden lg:ml-8 lg:flex">
+                                    <Link
+                                        to="../../account"
+                                        className="flex items-center text-gray-700 hover:text-gray-800"
+                                    >
+                                        <img
+                                            src={user}
+                                            alt=""
+                                            className="flex-shrink-0 block w-10 h-10 rounded-full"
                                         />
-                                        <Link
-                                            to={"signup"}
-                                            className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                        <span className="block ml-3 text-sm font-medium">
+                                            {auth.user?.firstName}{" "}
+                                            {auth.user?.lastName}
+                                        </span>
+                                    </Link>
+                                </div>
+                            ) : (
+                                <div className="hidden ml-4 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-4">
+                                    <Link to={"signin"}>
+                                        <Tag
+                                            color="blue"
+                                            className="px-4 py-1 transition-all rounded"
                                         >
-                                            Create account
-                                        </Link>
-                                    </div>
-                                )}
+                                            Sign in
+                                        </Tag>
+                                    </Link>
+                                    <span
+                                        className="w-px h-6 bg-gray-200"
+                                        aria-hidden="true"
+                                    />
+                                    <Link
+                                        to={"signup"}
+                                        className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                                    >
+                                        Create account
+                                    </Link>
+                                </div>
+                            )}
 
-                                {/* Cart */}
-                                <div className="flex items-center ml-4 gap-x-4 lg:ml-6">
+                            {/* Cart */}
+                            <div className="flex items-center ml-4 gap-x-4 lg:ml-6">
+                                <Tippy
+                                    delay={[0, 100]}
+                                    content="Giỏ hàng"
+                                    className="px-2 text-white bg-[#88b6fa] rounded"
+                                    placement="bottom"
+                                >
                                     <Link
                                         to={"cart"}
                                         className="relative flex items-center p-2 -m-2 group"
                                     >
                                         <ShoppingBagIcon
-                                            className="flex-shrink-0 w-6 h-6 text-indigo-500 hover:text-indigo-600"
+                                            className="flex-shrink-0 w-6 h-6 text-[#64a1ff] hover:text-[#64a1ff]"
                                             aria-hidden="true"
                                         />
-                                        <span className="absolute top-0 px-[5px] text-[11px] text-white bg-indigo-500 rounded-full right-1">
+                                        <span className="absolute top-0 px-[5px] text-[11px] text-white bg-[#64a1ff] rounded-full right-1">
                                             {cart.cart?.totalItem}
                                         </span>
                                         <span className="sr-only">
                                             items in cart, view bag
                                         </span>
                                     </Link>
-                                    {auth.user && (
-                                        <>
+                                </Tippy>
+
+                                {auth.user && (
+                                    <>
+                                        <Tippy
+                                            delay={[0, 100]}
+                                            content="Tin nhắn"
+                                            className="px-2 text-white bg-[#88b6fa] rounded"
+                                            placement="bottom"
+                                        >
                                             <span>
-                                                <FaBell className="flex-shrink-0 w-6 h-6 text-indigo-500 hover:text-indigo-600" />
+                                                <FaBell className="flex-shrink-0 w-6 h-6 text-[#64a1ff] hover:text-[#64a1ff]" />
                                             </span>
-                                            <Button
-                                                onClick={handleLogout}
-                                                text="Sign out"
-                                                className="px-2 py-1 text-white bg-red-500 rounded"
-                                            />
-                                        </>
-                                    )}
-                                </div>
+                                        </Tippy>
+                                        <Tag
+                                            color="red"
+                                            onClick={handleLogout}
+                                            className="px-2 py-1 rounded hover:bg-red-200 hover:cursor-pointer"
+                                        >
+                                            Sign out
+                                        </Tag>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

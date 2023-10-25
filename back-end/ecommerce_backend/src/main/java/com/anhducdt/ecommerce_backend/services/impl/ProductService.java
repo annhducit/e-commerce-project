@@ -208,4 +208,9 @@ public class ProductService implements IProductService {
     public List<Product> sortProductByDiscountedPrice(String sortBy) {
         return productRepository.sortProductByDiscountedPrice(sortBy);
     }
+
+    @Override
+    public List<Product> sortProductByDiscountedPriceAndCategory(String sortBy, String category) {
+        return productRepository.sortProductByDiscountedPriceAndCategory(sortBy, category);
+    }
 }

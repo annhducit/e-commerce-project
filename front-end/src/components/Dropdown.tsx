@@ -21,7 +21,11 @@ const Dropdown = ({ data }: { data: DropdownItemType[] }) => {
             </div>
             {open && (
                 <div className="absolute z-50 w-full bg-white border rounded shadow-xl top-9">
-                    <ItemDropdown setValue={setValue} data={data} />
+                    <ItemDropdown
+                        visibleDropdown={setOpen}
+                        setValue={setValue}
+                        data={data}
+                    />
                 </div>
             )}
         </div>
@@ -33,9 +37,11 @@ export default Dropdown;
 const ItemDropdown = ({
     data,
     setValue,
+    visibleDropdown,
 }: {
     data: DropdownItemType[];
     setValue: (title: string) => void;
+    visibleDropdown: (state: boolean) => void;
 }): JSX.Element => {
     return (
         <>
@@ -47,6 +53,7 @@ const ItemDropdown = ({
                         onClick={() => {
                             item.onClick && item.onClick(),
                                 setValue(item.title);
+                            visibleDropdown(false);
                         }}
                         key={item.id}
                     >

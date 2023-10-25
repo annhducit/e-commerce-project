@@ -6,7 +6,8 @@ import Wrapper from "../../components/Wrapper";
 import ProductSearchItem from "./ProductSearchItem";
 import { searchProductByKeyword } from "../../services/productService";
 
-import { FaSearch, FaSpinner } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { Spin } from "antd";
 const Search = () => {
     // * For search
     const [result, setResult] = useState<ProductType[]>([]);
@@ -35,7 +36,7 @@ const Search = () => {
             setLoading(false);
         })();
     }, [debounce]);
-    
+
     return (
         <TippyHandless
             interactive
@@ -112,7 +113,7 @@ const Search = () => {
                     </button>
                 )}
 
-                {loading && <FaSpinner className="animate-spin" />}
+                {loading && <Spin className="animate-spin" />}
                 <button className="relative w-14 h-full text-xl opacity-70 py-3 px-4 hover:bg-slate-200 rounded-tr-[92px] rounded-br-[90px]">
                     <FaSearch />
                 </button>
