@@ -28,11 +28,9 @@ const MainSectionCard = ({
         1024: { items: 5.5 },
     };
 
-    const items = data
-        .slice(0, 10)
-        .map((item) => (
-            <ProductItem type={type} key={item.price} product={item} />
-        ));
+    const items = data.map((item) => (
+        <ProductItem type={type} key={item.price} product={item} />
+    ));
 
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -46,7 +44,7 @@ const MainSectionCard = ({
     return (
         <div className="px-4 mb-4">
             <h2 className="pl-3 text-2xl font-bold">{heading}</h2>
-            <div className="relative p-6 m-3 border border-slate-200">
+            <div className="relative p-6 m-3 border border-slate-100 rounded-lg">
                 <AliceCarousel
                     disableButtonsControls
                     mouseTracking

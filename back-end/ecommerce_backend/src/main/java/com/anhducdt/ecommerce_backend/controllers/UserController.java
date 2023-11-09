@@ -53,10 +53,10 @@ public class UserController {
   }
 
 
-  @PutMapping("/{id}/profile")
-  public ResponseEntity<User> updateUserProfile(@PathVariable Long id, @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
+  @PutMapping("/updateProfile")
+  public ResponseEntity<User> updateUserProfile(@RequestHeader("Authorization") String jwt, @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
     try {
-      User user = userService.updateUserInfo(id, updateUserInfoRequest);
+      User user = userService.updateUserInfo(jwt, updateUserInfoRequest);
       return new ResponseEntity<>(user, HttpStatus.OK);
     } catch (UserException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

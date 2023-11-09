@@ -231,6 +231,7 @@ const ProductManagement = () => {
                 <div className="flex flex-col w-full gap-y-2">
                     <InputNormal
                         label="Email"
+                        role="Admin"
                         name="fullname"
                         leftIcon={<FaEnvelope />}
                         type="text"
@@ -239,6 +240,7 @@ const ProductManagement = () => {
                     />
                     <InputNormal
                         label="Họ và tên"
+                        role="Admin"
                         name="fullname"
                         leftIcon={<FaUser />}
                         type="text"
@@ -247,6 +249,7 @@ const ProductManagement = () => {
                     />
                     <InputNormal
                         label="Số điện thoại"
+                        role="Admin"
                         name="fullname"
                         leftIcon={<FaPhone />}
                         type="text"
@@ -255,6 +258,7 @@ const ProductManagement = () => {
                     />
                     <InputNormal
                         label="Quốc gia"
+                        role="Admin"
                         name="fullname"
                         leftIcon={<FaGlobeAsia />}
                         type="text"

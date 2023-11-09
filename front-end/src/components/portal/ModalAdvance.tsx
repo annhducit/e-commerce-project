@@ -61,7 +61,7 @@ function HeaderModal({ header, props }: ModalAdvance) {
                     icon={faXmark}
                 />
             </span>
-            <h2 className="px-6 mb-2 text-2xl font-medium text-left text-black">
+            <h2 className="px-6 mb-2 text-xl font-medium text-left text-black">
                 {header}
             </h2>
         </div>

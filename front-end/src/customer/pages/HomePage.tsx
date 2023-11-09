@@ -5,9 +5,13 @@ import { menJean } from "../../data/dataMenJean";
 import { menShirt } from "../../data/dataMenShirt";
 import MainAdvertiment from "../components/MainAdvertiment";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { getProductsByCategory } from "../../services/productService";
+import { useEffect, useState } from "react";
+import {
+    getAllProducts,
+    getProductsByCategory,
+} from "../../services/productService";
 import { MenClothes } from "../../types/MenClothes";
+import LoadingSkeletonProduct from "../../components/Skeleton/LoadingSkeletonProduct";
 
 interface LinkItem {
     id: number;
@@ -16,29 +20,38 @@ interface LinkItem {
 }
 const LinkItems: LinkItem[] = [
     { id: 1, title: "All", category: "men_jeans" },
-    { id: 2, title: "Men", category: "men" },
-    { id: 3, title: "Women", category: "women" },
-    { id: 4, title: "T_Shirt", category: "t_shirt" },
+    { id: 2, title: "Men", category: "men_shirt" },
+    { id: 3, title: "Women", category: "Dress" },
+    { id: 4, title: "T_Shirt", category: "shirt" },
     { id: 5, title: "Sweater", category: "sweater" },
     { id: 6, title: "Jacket", category: "jacket" },
     { id: 7, title: "Top", category: "top" },
-    { id: 8, title: "Pants", category: "pants" },
+    { id: 8, title: "Pants", category: "Pant" },
     { id: 9, title: "Activewear", category: "activewear" },
 ];
 
 const HomePage = () => {
     const [active, setActive] = useState<number>(1);
-    const [productsByCategory, setProductsByCategory] = useState<MenClothes>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [productsByCategory, setProductsByCategory] =
+        useState<MenClothes[]>();
 
     const handleGetProducts = (id: number, category: string) => {
         setActive(id);
         void (async () => {
+            setIsLoading(true);
             const data = await getProductsByCategory(category);
             setProductsByCategory(data?.data);
+            setIsLoading(false);
         })();
     };
 
-    console.log(productsByCategory);
+    useEffect(() => {
+        void (async () => {
+            const data = await getAllProducts();
+            setProductsByCategory(data?.data);
+        })();
+    }, []);
 
     return (
         <div>
@@ -67,6 +80,13 @@ const HomePage = () => {
                     </Link>
                 ))}
             </div>
+            {productsByCategory && (
+                <MainSectionCard
+                    heading="Men Clothes"
+                    data={productsByCategory}
+                />
+            )}
+            {isLoading && <LoadingSkeletonProduct />}
             <MainSectionCard heading="Men Clothes" data={menClothes} />
             <MainSectionCard type={true} heading="Men Jeans" data={menJean} />
             <MainSectionCard type={true} heading="Men Shirts" data={menShirt} />

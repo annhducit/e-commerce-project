@@ -74,7 +74,7 @@ public class ProductService implements IProductService {
         product.setBrand(productRequest.getBrand());
         product.setSize(productRequest.getSize());
         product.setCategory(thirdLevel);
-        product.setDateCreate(LocalDateTime.now());
+        product.setDateCreate(LocalDate.parse(LocalDate.now().toString()));
         product.setQuantity(productRequest.getQuantity());
         product.setPrice(productRequest.getPrice());
 
@@ -125,7 +125,7 @@ public class ProductService implements IProductService {
             product.setBrand(productRequest.getBrand());
             product.setSize(productRequest.getSize());
             product.setCategory(thirdLevel);
-            product.setDateCreate(LocalDateTime.now());
+            product.setDateCreate(LocalDate.now());
             product.setQuantity(productRequest.getQuantity());
             product.setPrice(productRequest.getPrice());
 

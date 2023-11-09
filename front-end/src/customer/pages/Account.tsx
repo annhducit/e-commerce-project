@@ -6,12 +6,19 @@ import { getUserProfile } from "../../services/authService";
 import ModalAdvance from "../../components/portal/ModalAdvance";
 import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
 import { AnyAction } from "@reduxjs/toolkit";
-import Button from "../../components/Button";
 import InputNormal from "../../components/InputNormal";
-import { FaEnvelope, FaGlobeAsia, FaPhone, FaUser } from "react-icons/fa";
+import { FaGlobeAsia, FaPhone, FaUser } from "react-icons/fa";
+import { Tag } from "antd";
+import { toast } from "react-toastify";
+import TypeUpdateInformation from "../../types/AccountInformation";
+import customerService from "../../services/customerService";
 
 const Account = () => {
     const [openModal, setOpenModal] = useState<boolean>();
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [phoneNumber, setPhoneNumber] = useState<string>("");
+    const [nation, setNation] = useState<string>("");
 
     const dispatch = useAppDispatch();
     const token = localStorage.getItem("token");
@@ -24,6 +31,21 @@ const Account = () => {
         }
     }, [token, auth.jwt, dispatch]);
 
+    const handleUpdateProfile = () => {
+        const updatedUserInfo: TypeUpdateInformation = {
+            firstName,
+            lastName,
+            nation,
+            phoneNumber,
+        };
+        const data = JSON.stringify(updatedUserInfo);
+        void (async () => {
+            customerService.updateCustomerProfile(data);
+            token && dispatch(getUserProfile(token) as unknown as AnyAction);
+            setOpenModal(false);
+            toast.success("Thực hiện thành công");
+        })();
+    };
     return (
         <div className="">
             {" "}
@@ -49,15 +71,15 @@ const Account = () => {
             </div>
             <div className="flex flex-col px-20 -translate-y-10 gap-y-4">
                 <div className="flex lg:items-center lg:gap-y-0 gap-y-4 lg:flex-row  flex-col gap-x-[155px]">
-                    <h2 className="font-semibold text-md text-emerald-500">
+                    <h2 className="font-semibold text-md text-[#64a1ff]">
                         Thông tin cá nhân
                     </h2>
                     <div className="flex items-center gap-x-2">
                         <p>Trạng thái cập nhật:</p>
 
-                        <span className="px-2 text-sm text-white bg-[#64a1ff] rounded">
+                        <Tag color="green" className="px-2 text-sm">
                             Đã hoàn tất
-                        </span>
+                        </Tag>
                     </div>
 
                     <p className="lg:-mt-10 lg:hidden">
@@ -67,12 +89,13 @@ const Account = () => {
                         </span>
                     </p>
 
-                    <div
-                        className="px-2 py-1 text-sm text-center text-white transition-all bg-[#64a1ff] rounded cursor-pointer lg:ml-auto hover:bg-purple-600"
+                    <Tag
+                        color="blue"
+                        className="px-2 py-1 ml-auto transition-all cursor-pointer hover:bg-[#5d9dfd]"
                         onClick={() => setOpenModal(true)}
                     >
                         Cập nhật thông tin
-                    </div>
+                    </Tag>
                 </div>
                 <div className="flex flex-col gap-y-2">
                     <hr className=" border-slate-200" />
@@ -97,7 +120,7 @@ const Account = () => {
                                 <tr>
                                     <th className="py-2">Số điện thoại: </th>
                                     <td className="py-2 lg:pl-44">
-                                        {auth.user?.phone || "Không có"}
+                                        {auth.user?.phoneNumber}
                                     </td>
                                 </tr>
                                 <tr>
@@ -121,54 +144,61 @@ const Account = () => {
                 }}
                 footer={
                     <div className="flex items-center float-right gap-x-2">
-                        <Button
-                            text="Hủy"
-                            className="px-2 py-1 text-white bg-red-500 rounded"
-                        />
+                        <Tag
+                            color="red-inverse"
+                            className="px-4 py-1 text-md font-semibold"
+                        >
+                            Hủy
+                        </Tag>
 
-                        <Button
-                            text="Cập nhật"
-                            className="px-2 py-1 text-white bg-purple-500 rounded"
-                        />
+                        <Tag
+                            color="blue-inverse"
+                            className="px-4 py-1 text-md font-semibold cursor-pointer"
+                            onClick={handleUpdateProfile}
+                        >
+                            Cập nhật
+                        </Tag>
                     </div>
                 }
             >
                 <div className="flex flex-col w-full gap-y-2">
                     <InputNormal
-                        label="Email"
-                        name="fullname"
-                        leftIcon={<FaEnvelope />}
-                        type="text"
-                        placeholder="Enter your content"
-                        className="flex-1 py-3 bg-transparent outline-none"
-                        defaultValue={auth.user?.email}
-                    />
-                    <InputNormal
-                        label="Họ và tên"
-                        name="fullname"
+                        label="Tên"
                         leftIcon={<FaUser />}
                         type="text"
-                        placeholder="Enter your content"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder={auth.user?.firstName}
                         className="flex-1 py-3 bg-transparent outline-none"
-                        defaultValue={`${auth.user?.firstName} ${auth.user?.lastName}`}
+                    />
+                    <InputNormal
+                        label="Họ"
+                        leftIcon={<FaUser />}
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder={auth.user?.lastName}
+                        className="flex-1 py-3 bg-transparent outline-none"
                     />
                     <InputNormal
                         label="Số điện thoại"
                         name="fullname"
                         leftIcon={<FaPhone />}
                         type="text"
-                        placeholder="Enter your content"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder={auth.user?.phoneNumber}
                         className="flex-1 py-3 bg-transparent outline-none"
-                        defaultValue={auth.user?.phone}
                     />
                     <InputNormal
                         label="Quốc gia"
                         name="fullname"
                         leftIcon={<FaGlobeAsia />}
                         type="text"
-                        placeholder="Enter your content"
+                        value={nation}
+                        onChange={(e) => setNation(e.target.value)}
+                        placeholder={auth.user?.nation}
                         className="flex-1 py-3 bg-transparent outline-none"
-                        defaultValue={auth.user?.nation}
                     />
                 </div>
             </ModalAdvance>

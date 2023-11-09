@@ -31,7 +31,7 @@ const ProductItem = ({
                     <div className="flex items-center flex-col w-[15rem] h-[330px] hover:bg-slate-50 transition-all gap-y-2 cursor-pointer rounded-lg bg-white shadow-lg overflow-hidden mx-3">
                         <div className="w-[10rem] h-[13rem] rounded-lg">
                             <img
-                                className="object-top w-full h-full"
+                                className="object-top w-full h-full rounded-lg"
                                 src={product.imageUrl}
                                 alt=""
                             />

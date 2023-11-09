@@ -22,7 +22,4 @@ public class ProductRequest {
     private String topLevelCategory;
     private String secondLevelCategory;
     private String thirdLevelCategory;
-
-
-
 }

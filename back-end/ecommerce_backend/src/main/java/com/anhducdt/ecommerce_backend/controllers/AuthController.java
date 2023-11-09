@@ -21,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -56,6 +58,7 @@ public class AuthController {
         createUser.setLastName(lastString);
         createUser.setERole(ERole.Customer);
         createUser.setStatus(EAccountStatus.PENDING);
+        createUser.setCreateAt(LocalDate.now());
 
         User newUser = userRepository.save(createUser);
         Cart cart = cartService.createCart(newUser);

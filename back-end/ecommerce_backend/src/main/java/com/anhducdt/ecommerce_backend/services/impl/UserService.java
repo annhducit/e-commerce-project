@@ -52,8 +52,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUserInfo(Long id, UpdateUserInfoRequest updateUserInfoRequest) throws UserException {
-        User user = findUserById(id);
+    public User updateUserInfo(String jwt, UpdateUserInfoRequest updateUserInfoRequest) throws UserException {
+        User user  = findUserByJwt(jwt);
         user.setFirstName(updateUserInfoRequest.getFirstName());
         user.setLastName(updateUserInfoRequest.getLastName());
         user.setPhoneNumber(updateUserInfoRequest.getPhoneNumber());

@@ -32,33 +32,34 @@ public class SecurityConfig {
             .securityMatchers((matchers) -> matchers
                 .requestMatchers("/api/**")
             )
-            .addFilterBefore(new JwtAuthFilter(), BasicAuthenticationFilter.class);
-//            .authorizeHttpRequests((authorize) -> authorize
-//                .requestMatchers("/api/auth/**").permitAll()
-//                .requestMatchers("/api/products/**").permitAll()
-//                .requestMatchers("/api/order/**").hasAuthority("Customer")
-//                .requestMatchers("/api/users/**").hasAuthority("Customer")
-//                .requestMatchers("/api/cart/**").hasAnyAuthority("Customer", "Admin")
-//                .requestMatchers("/api/checkout/**").hasAuthority("Customer")
-//                .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("Customer", "Admin")
-//
-//
-//                .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
-//                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-//
-//                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-//                .requestMatchers(HttpMethod.POST, "/api/products/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasAuthority("Admin")
-//
-//                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
-//
-//                .requestMatchers("/api/admin/**").hasAuthority("Admin")
-//            );
+            .addFilterBefore(new JwtAuthFilter(), BasicAuthenticationFilter.class)
+            .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/products/**").permitAll()
+                .requestMatchers("/api/order/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/carts/**").permitAll()
+                .requestMatchers("/api/cart_items/**").permitAll()
+                .requestMatchers("/api/checkout/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("Customer", "Admin")
+
+
+                .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/products/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasAuthority("Admin")
+
+                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
+
+                .requestMatchers("/api/admin/**").hasAuthority("Admin")
+            );
 
         return httpSecurity.build();
     }

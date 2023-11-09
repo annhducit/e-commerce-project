@@ -11,7 +11,7 @@ import java.util.List;
 public interface IUserService {
     User findUserById(Long id) throws UserException;
     User findUserByJwt(String jwt) throws UserException;
-    User updateUserInfo(Long id, UpdateUserInfoRequest updateUserInfoRequest) throws UserException;
+    User updateUserInfo(String jwt, UpdateUserInfoRequest updateUserInfoRequest) throws UserException;
     PaginationResponse findAllAccounts(
         Integer page,
         Integer pageSize

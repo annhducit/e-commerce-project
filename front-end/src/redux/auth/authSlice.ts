@@ -4,7 +4,7 @@ type UserType = {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
+    phoneNumber: string;
     nation: string;
 };
 export type AuthState = {

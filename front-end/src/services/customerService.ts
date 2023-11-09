@@ -1,10 +1,11 @@
 import { api } from "../configs/config";
+// import TypeUpdateInformation from "../types/AccountInformation";
 import UserType, { EAccountStatus } from "../types/UserType";
 import BaseService from "./baseService";
 
 class CustomerService extends BaseService {
-    async updateCustomerProfile(id: string, req: FormData) {
-        const res = await api.put(`/api/users/${id}/profile`, req);
+    async updateCustomerProfile(req: string) {
+        const res = await api.put(`/api/users/updateProfile`, req);
         await this.checkResponseOk(res.data);
         return this.getResponse<UserType>(res.data);
     }
@@ -28,6 +29,17 @@ class CustomerService extends BaseService {
             console.log(err);
         }
     }
+
+    // async updateInformationAccount(
+    //     id: number,
+    //     information: TypeUpdateInformation
+    // ) {
+    //     try {
+    //         await api.put(`/api/users/${id}/profile`, information);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }
 
     async searchAccountByKeyword(keyword: string) {
         try {

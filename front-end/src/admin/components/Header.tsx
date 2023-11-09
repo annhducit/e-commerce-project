@@ -1,5 +1,7 @@
 import { FaArrowLeft, FaBars } from "react-icons/fa";
 
+import adminImage from "../../assets/images/admin.png";
+
 const Header = ({
     controlSidebar,
     visible,
@@ -14,20 +16,20 @@ const Header = ({
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-x-4 ">
                     <span
-                        className="text-xl text-black rounded-lg  p-3 hover:bg-[#ff7506] hover:text-white hover:cursor-pointer"
+                        className="text-lg opacity-70 text-black rounded-lg  p-3 hover:bg-[#ff7506] hover:text-white hover:cursor-pointer"
                         onClick={() => controlSidebar(!visible)}
                     >
                         {visible ? <FaArrowLeft /> : <FaBars />}
                     </span>
-                    <h1 className="text-xl font-bold text-black">{title}</h1>
+                    <h1 className="text-lg font-bold text-black">{title}</h1>
                 </div>
                 <div className="flex items-center gap-x-2 lg:gap-x-4">
                     <p className="font-semibold text-slate-500 text-md opacity-80">
                         Anh Đức
                     </p>
-                    <div className="w-10 h-10 rounded-full">
+                    <div className="w-8 h-8 rounded-full">
                         <img
-                            src="https://www.w3schools.com/bootstrap4/img_avatar3.png"
+                            src={adminImage}
                             alt=""
                             className="w-full h-full rounded-full"
                         />
