@@ -17,6 +17,7 @@ import java.util.List;
 public class AdminOrderController {
   private final IOrderService orderService;
 
+
   @PutMapping("/{id}/placed")
   public ResponseEntity<Order> placeOrder(@PathVariable Long id, @RequestHeader("Authorization") String jwt) throws OrderException {
       Order order = orderService.placedOrder(id);
@@ -50,6 +51,13 @@ public class AdminOrderController {
       return new ResponseEntity<>(order, HttpStatus.OK);
 
   }
+
+    @PutMapping("/{id}/completed")
+    public ResponseEntity<Order> completeOrder(@PathVariable Long id, @RequestHeader("Authorization") String jwt) throws OrderException {
+        Order order = orderService.completedOrder(id);
+        return new ResponseEntity<>(order, HttpStatus.OK);
+
+    }
 
   @GetMapping
   public ResponseEntity<List<Order>> getAllOrders() throws OrderException {

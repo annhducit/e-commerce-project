@@ -3,7 +3,7 @@ import { ReviewType } from "../../types/ProductType";
 
 const ProductReviewCard = ({ data }: { data: ReviewType }) => {
     return (
-        <div className="flex items-center gap-x-6 w-full p-6 border-b border-slate-200 rounded-lg">
+        <div className="flex items-center w-full p-6 border-b rounded-lg gap-x-6 border-slate-200">
             <div className="w-10 h-10 rounded-full">
                 <img
                     className="w-full h-full border rounded-full"

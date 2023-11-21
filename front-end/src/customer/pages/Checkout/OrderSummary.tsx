@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getOrderById } from "../../../services/orderService";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../../redux/globalStore";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const OrderSummary = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const OrderSummary = () => {
 
     console.log(order?.order);
     useEffect(() => {
-        dispatch(getOrderById(orderId));
+        orderId && dispatch(getOrderById(orderId) as unknown as AnyAction);
     }, [dispatch, orderId]);
     return (
         <div className="p-5 border rounded-md shadow-lg border-slate-300">

@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,5 +28,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private LocalDateTime createAt;
+
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private LocalDate createAt;
 }

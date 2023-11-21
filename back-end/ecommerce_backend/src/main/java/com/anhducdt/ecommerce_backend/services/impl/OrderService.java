@@ -84,6 +84,17 @@ public class OrderService implements IOrderService {
   }
 
   @Override
+  public List<Order> getOrderByStatus(EOrderStatus orderStatus) {
+
+    return orderRepository.getOrderByOrderStatus(String.valueOf(orderStatus));
+  }
+
+  @Override
+  public List<Order> getOrderByStatusAndUserID(Long id, EOrderStatus orderStatus) {
+    return orderRepository.getOrderByOrderStatusAndUser(id, String.valueOf(orderStatus));
+  }
+
+  @Override
   public List<Order> userOrderHistory(Long userId) throws OrderException {
     return orderRepository.getUsersOrders(userId);
   }
@@ -93,7 +104,7 @@ public class OrderService implements IOrderService {
     Order order = getOrderById(id);
     order.setOrderStatus(String.valueOf(EOrderStatus.PLACED));
     order.getPaymentDetails().setPaymentStatus(String.valueOf(EOrderStatus.COMPLETED));
-    return order;
+    return orderRepository.save(order);
   }
 
   @Override
@@ -120,6 +131,18 @@ public class OrderService implements IOrderService {
     Order order = getOrderById(id);
     order.setOrderStatus(String.valueOf(EOrderStatus.CANCELED));
     return orderRepository.save(order);
+  }
+
+  @Override
+  public Order completedOrder(Long id) throws OrderException {
+    Order order = getOrderById(id);
+    order.setOrderStatus(String.valueOf(EOrderStatus.COMPLETED));
+    return orderRepository.save(order);
+  }
+
+  @Override
+  public List<Order> searchOrderByUser(String keyword) throws OrderException {
+    return orderRepository.searchOrderByKeyword(keyword);
   }
 
   @Override

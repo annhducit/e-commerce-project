@@ -29,7 +29,7 @@ export interface ReviewType {
     createAt: string;
 }
 
-interface SizeType {
+export interface SizeType {
     name: string;
     quantity: number;
 }
@@ -47,7 +47,7 @@ export default interface ProductType {
     description: string;
     price: number;
     discountedPrice: number;
-    discountPersent: number;
+    discountPercent: number;
     quantity: number;
     brand: string;
     color: string;

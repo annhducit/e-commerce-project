@@ -13,6 +13,7 @@ import com.anhducdt.ecommerce_backend.services.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 @Service
@@ -28,7 +29,7 @@ public class ReviewService implements IReviewService {
     Review review = new Review();
     review.setUser(user);
     review.setProduct(product);
-    review.setCreateAt(LocalDateTime.now());
+    review.setCreateAt(LocalDate.now());
     review.setReview(reviewRequest.getReview());
     return reviewRepository.save(review);
   }

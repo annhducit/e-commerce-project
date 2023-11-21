@@ -12,7 +12,7 @@ type ModalAdvance = {
     size?: SizeModal;
 };
 
-type SizeModal = "sm" | "md" | "lg";
+type SizeModal = "sm" | "md" | "lg" | "xl";
 
 const distanceModal = (size: SizeModal) => {
     const distance = `${
@@ -22,6 +22,8 @@ const distanceModal = (size: SizeModal) => {
             ? "w-[500px] h-[400px]"
             : size === "lg"
             ? "w-[700px] h-[500px]"
+            : size === "xl"
+            ? "w-[900px] h-[700px]"
             : ""
     }`;
     return distance;

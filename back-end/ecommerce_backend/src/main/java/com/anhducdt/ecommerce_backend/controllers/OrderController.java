@@ -5,6 +5,7 @@ import com.anhducdt.ecommerce_backend.exceptions.UserException;
 import com.anhducdt.ecommerce_backend.models.Address;
 import com.anhducdt.ecommerce_backend.models.Order;
 import com.anhducdt.ecommerce_backend.models.User;
+import com.anhducdt.ecommerce_backend.models.enums.EOrderStatus;
 import com.anhducdt.ecommerce_backend.services.IOrderService;
 import com.anhducdt.ecommerce_backend.services.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,14 @@ public class OrderController {
       return new ResponseEntity<>(order, HttpStatus.CREATED);
   }
 
-  @GetMapping("/{id}")
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrder() throws OrderException {
+        List<Order> order = orderService.getAllOrder();
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{id}")
   public ResponseEntity<Order> getOrderById(@PathVariable("id") Long id, @RequestHeader("Authorization") String jwt) throws UserException, OrderException {
     User user = userService.findUserByJwt(jwt);
     Order order = orderService.getOrderById(id);
@@ -44,8 +52,29 @@ public class OrderController {
 
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteOrder(@PathVariable Long id) {
+    @GetMapping("/userAndOrderStatus")
+    public ResponseEntity<List<Order>> getUserOrderByStatus(@RequestHeader("Authorization") String jwt, @RequestParam EOrderStatus status) throws UserException, OrderException {
+        User user = userService.findUserByJwt(jwt);
+        List<Order> userOrders = orderService.getOrderByStatusAndUserID(user.getId(), status);
+        return new ResponseEntity<>(userOrders, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<List<Order>> getOrderByStatus(@RequestParam EOrderStatus status) throws UserException, OrderException {
+        List<Order> userOrders = orderService.getOrderByStatus(status);
+        return new ResponseEntity<>(userOrders, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Order>> searchOrderByKeyword(@RequestParam("keyword") String keyword) throws  OrderException {
+        List<Order> results = orderService.searchOrderByUser(keyword);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Long id) {
     try {
       orderService.deleteOrder(id);
       return new ResponseEntity<>("Order deleted successfully", HttpStatus.OK);

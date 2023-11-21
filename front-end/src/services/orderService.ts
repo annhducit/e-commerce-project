@@ -13,6 +13,7 @@ import {
     GET_ORDER_HISTORY_SUCCESS,
     GET_ORDER_HISTORY_FAILURE,
 } from "../redux/order/ActionType";
+import { OrderStatus } from "../types/OrderType";
 
 export const createOrder =
     (reqData: any) => async (dispatch: Dispatch<AnyAction>) => {
@@ -21,7 +22,7 @@ export const createOrder =
 
             const { data } = await api.post(`/api/orders`, reqData.address);
             if (data.id) {
-                reqData.navigate({ search: `step=3&order_id=${data.id}` });
+                reqData.navigate({ search: `step=4&order_id=${data.id}` });
                 dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
             }
         } catch (err: any) {
@@ -36,7 +37,7 @@ export const createOrder =
     };
 
 export const getOrderById =
-    (orderId: number) => async (dispatch: Dispatch<AnyAction>) => {
+    (orderId: number | string) => async (dispatch: Dispatch<AnyAction>) => {
         dispatch({ type: GET_ORDER_BY_ID_REQUEST });
         try {
             const { data } = await api.get(`api/orders/${orderId}`);
@@ -47,12 +48,49 @@ export const getOrderById =
         }
     };
 
-export const getOrderHistory = () => async (dispatch: Dispatch<AnyAction>) => {
-    try {
-        dispatch({ type: GET_ORDER_HISTORY_REQUEST });
-        const { data } = await api.get(`/api/orders/user`);
-        dispatch({ type: GET_ORDER_HISTORY_SUCCESS, payload: data });
-    } catch (err: any) {
-        dispatch({ type: GET_ORDER_HISTORY_FAILURE, payload: err.message });
-    }
+export const getOrderHistoryRedux =
+    () => async (dispatch: Dispatch<AnyAction>) => {
+        try {
+            dispatch({ type: GET_ORDER_HISTORY_REQUEST });
+            const { data } = await api.get(`/api/orders/user`);
+            dispatch({ type: GET_ORDER_HISTORY_SUCCESS, payload: data });
+        } catch (err: any) {
+            dispatch({ type: GET_ORDER_HISTORY_FAILURE, payload: err.message });
+        }
+    };
+
+export const getAllOrders = async () => {
+    const data = await api.get(`/api/orders`);
+    return data.data;
+};
+
+export const getorderByIdAdmin = async (id: number) => {
+    const data = await api.get(`/api/orders/${id}`);
+    return data.data;
+};
+
+export const getOrderHistoryByAuth = async () => {
+    const data = await api.get(`/api/orders/user`);
+    return data.data;
+};
+
+export const getOrderByStatus = async (status: OrderStatus) => {
+    const params = new URLSearchParams();
+    params.append("status", status);
+    const data = await api.get(`/api/orders/status?${params.toString()}`);
+    return data.data;
+};
+
+export const searchOrderByKeyword = async (keyword: string) => {
+    const params = new URLSearchParams();
+    params.append("keyword", keyword);
+    const data = await api.get(`/api/orders/search?${params.toString()}`);
+    return data.data;
+};
+
+export const updateOrderStatus = async (
+    id: string | undefined,
+    type: OrderStatus
+) => {
+    await api.put(`/api/admin/orders/${id}/${type}`);
 };

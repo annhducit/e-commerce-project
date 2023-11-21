@@ -198,7 +198,7 @@ export default function ProductDetail() {
                                     {productItem?.price}$
                                 </span>
                                 <span className="text-lg font-semibold text-indigo-600 ">
-                                    {productItem?.discountPersent}% Off
+                                    {productItem?.discountPercent}% Off
                                 </span>
                             </div>
                         </div>

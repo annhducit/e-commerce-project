@@ -4,6 +4,7 @@ import AddressItem from "../../components/AddressItem";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createOrder } from "../../../services/orderService";
+import { toast } from "react-toastify";
 
 const DeliveryAddressForm = () => {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const DeliveryAddressForm = () => {
 
         const orderData = { address, navigate };
         dispatch(createOrder(orderData));
+        toast.success("Order successfully!");
     };
     return (
         <div className="container">

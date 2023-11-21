@@ -69,7 +69,7 @@ public class ProductService implements IProductService {
         product.setColor(productRequest.getColor());
         product.setDescription(productRequest.getDescription());
         product.setDiscountedPrice(productRequest.getDiscountedPrice());
-        product.setDiscountPersent(productRequest.getDiscountPersent());
+        product.setDiscountPercent(productRequest.getDiscountPercent());
         product.setImageUrl(productRequest.getImageUrl());
         product.setBrand(productRequest.getBrand());
         product.setSize(productRequest.getSize());
@@ -120,7 +120,7 @@ public class ProductService implements IProductService {
             product.setColor(productRequest.getColor());
             product.setDescription(productRequest.getDescription());
             product.setDiscountedPrice(productRequest.getDiscountedPrice());
-            product.setDiscountPersent(productRequest.getDiscountPersent());
+            product.setDiscountPercent(productRequest.getDiscountPercent());
             product.setImageUrl(productRequest.getImageUrl());
             product.setBrand(productRequest.getBrand());
             product.setSize(productRequest.getSize());
@@ -148,8 +148,46 @@ public class ProductService implements IProductService {
     @Override
     public Product updateProduct(Long id, ProductRequest productRequest) throws ProductException {
         Product product = getProductById(id);
-        if (productRequest.getQuantity() != 0)
-            product.setQuantity(productRequest.getQuantity());
+        Category topLevel = categoryRepository.findByName(productRequest.getTopLevelCategory());
+
+        if (topLevel == null) {
+            Category topLevelCategory = new Category();
+            topLevelCategory.setName(productRequest.getTopLevelCategory());
+            topLevelCategory.setLevel(1);
+            topLevel = categoryRepository.save(topLevelCategory);
+        }
+        Category secondLevel = categoryRepository.findByNameAndParent(productRequest.getSecondLevelCategory(), topLevel.getName());
+
+        if (secondLevel == null) {
+            Category secondLevelCategory = new Category();
+            secondLevelCategory.setName(productRequest.getSecondLevelCategory());
+            secondLevelCategory.setParentCategory(topLevel);
+            secondLevelCategory.setLevel(2);
+            secondLevel = categoryRepository.save(secondLevelCategory);
+        }
+        Category thirdLevel = categoryRepository.findByNameAndParent(productRequest.getThirdLevelCategory(), secondLevel.getName());
+
+        if (thirdLevel == null) {
+            Category thirdLevelCategory = new Category();
+            thirdLevelCategory.setName(productRequest.getThirdLevelCategory());
+            thirdLevelCategory.setParentCategory(secondLevel);
+            thirdLevelCategory.setLevel(3);
+            thirdLevel = categoryRepository.save(thirdLevelCategory);
+        }
+
+        product.setTitle(productRequest.getTitle());
+        product.setColor(productRequest.getColor());
+        product.setDescription(productRequest.getDescription());
+        product.setDiscountedPrice(productRequest.getDiscountedPrice());
+        product.setDiscountPercent(productRequest.getDiscountPercent());
+        product.setImageUrl(productRequest.getImageUrl());
+        product.setBrand(productRequest.getBrand());
+        product.setSize(productRequest.getSize());
+        product.setCategory(thirdLevel);
+        product.setDateCreate(LocalDate.parse(LocalDate.now().toString()));
+        product.setQuantity(productRequest.getQuantity());
+        product.setPrice(productRequest.getPrice());
+
         return productRepository.save(product);
     }
 

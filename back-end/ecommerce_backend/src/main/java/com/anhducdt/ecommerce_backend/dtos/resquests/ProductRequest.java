@@ -13,7 +13,7 @@ public class ProductRequest {
     private String description;
     private int price;
     private int discountedPrice;
-    private int discountPersent;
+    private int discountPercent;
     private int quantity;
     private String brand;
     private String color;

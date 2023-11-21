@@ -7,6 +7,7 @@ import { DropdownItemType } from "../../types/DropdownItemType";
 import Button from "../../components/Button";
 import {
     FaEnvelope,
+    FaExclamationTriangle,
     FaGlobeAsia,
     FaPhone,
     FaSearch,
@@ -16,6 +17,7 @@ import ModalAdvance from "../../components/portal/ModalAdvance";
 import { useEffect, useState } from "react";
 import InputNormal from "../../components/InputNormal";
 import {
+    deleteProductById,
     getAllProducts,
     getProductById,
     searchProductByKeyword,
@@ -23,6 +25,8 @@ import {
 } from "../../services/productService";
 import ProductType from "../../types/ProductType";
 import useDebounce from "../../hooks/useDebounce";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ProductManagement = () => {
     const [openModalNewProduct, setOpenModalNewProduct] = useState<boolean>();
@@ -36,7 +40,13 @@ const ProductManagement = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<string>("");
 
+    // Delete product
+    const [modalDeleteProduct, setOpenModalDeleteProduct] = useState<boolean>();
+    const [idProduct, setIdProduct] = useState<number>();
+
     const debounce = useDebounce(searchValue, 500);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         void (async () => {
@@ -48,8 +58,15 @@ const ProductManagement = () => {
     useEffect(() => {
         void (async () => {
             setIsLoading(true);
-            const productResult = await searchProductByKeyword(debounce);
-            setProducts(productResult);
+
+            if (debounce) {
+                const productResult = await searchProductByKeyword(debounce);
+                setProducts(productResult);
+            } else {
+                const data = await getAllProducts();
+                setProducts(data?.data);
+            }
+
             setIsLoading(false);
         })();
     }, [debounce]);
@@ -68,6 +85,15 @@ const ProductManagement = () => {
         void (async () => {
             const data = await getProductById(id);
             setProduct(data?.data);
+        })();
+    };
+
+    const handleDeleteProduct = (id: number) => {
+        void (async () => {
+            await deleteProductById(id);
+            toast.success(`Deleted Product Successfully`);
+            const data = await getAllProducts();
+            setProducts(data?.data);
         })();
     };
 
@@ -129,12 +155,19 @@ const ProductManagement = () => {
                     <Tag
                         color="green"
                         className="py-1 font-semibold hover:cursor-pointer hover:bg-green-200"
+                        onClick={() =>
+                            navigate(`/admin/update-product/${item.id}`)
+                        }
                     >
                         Sửa sản phẩm
                     </Tag>
                     <Tag
                         color="volcano"
                         className="py-1 font-semibold hover:cursor-pointer hover:bg-red-200"
+                        onClick={() => {
+                            setOpenModalDeleteProduct(true),
+                                setIdProduct(item.id);
+                        }}
                     >
                         Xóa sản phẩm
                     </Tag>
@@ -185,11 +218,11 @@ const ProductManagement = () => {
                                         setSearchValue(e.target.value)
                                     }
                                     id=""
-                                    className="flex-1 pl-4 w-full px-2 py-1 h-[34px] rounded-tl rounded-bl outline-none"
+                                    className="flex-1 pl-4 w-full px-2 py-1 h-[30px] rounded-tl rounded-bl outline-none"
                                 />
                                 <Button
                                     text="Tìm kiếm"
-                                    className="text-white flex h-[34px] items-center gap-x-2 px-1 pr-1 py-1 hover:bg-[#c77028] bg-[#ff7506] rounded-tr rounded-br"
+                                    className="text-white flex h-[30px] items-center gap-x-2 px-1 pr-1 py-1 hover:bg-[#c77028] bg-[#ff7506] rounded-tr rounded-br"
                                     iconRight={<FaSearch />}
                                 />
                             </div>
@@ -198,7 +231,7 @@ const ProductManagement = () => {
                     <Button
                         text="Tạo sản phẩm mới"
                         className="bg-[#ff7506] rounded text-white px-3 py-1"
-                        onClick={() => setOpenModalNewProduct(true)}
+                        onClick={() => navigate("/admin/add-new")}
                     />
                 </div>
                 <Spin spinning={isLoading}>
@@ -327,7 +360,7 @@ const ProductManagement = () => {
                             </div>
                             <p>
                                 <b>Discount percent</b>:{" "}
-                                {product?.discountPersent}%
+                                {product?.discountPercent}%
                             </p>
                             <p>
                                 <b>Color: </b>
@@ -348,17 +381,66 @@ const ProductManagement = () => {
                                 <Tag
                                     color="green"
                                     className="px-4 py-2 font-semibold hover:cursor-pointer hover:bg-green-200"
+                                    onClick={() =>
+                                        navigate(
+                                            `/admin/update-product/${product?.id}`
+                                        )
+                                    }
                                 >
                                     Sửa sản phẩm
                                 </Tag>
                                 <Tag
                                     color="volcano"
                                     className="px-4 py-2 font-semibold hover:cursor-pointer hover:bg-red-200"
+                                    onClick={() => {
+                                        setOpenModalDeleteProduct(true);
+                                        setIdProduct(product?.id);
+                                    }}
                                 >
                                     Xóa sản phẩm
                                 </Tag>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </ModalAdvance>
+
+            {/* Delete product modal */}
+            <ModalAdvance
+                header="Xóa sản phẩm"
+                size="sm"
+                props={{
+                    visible: modalDeleteProduct as boolean,
+                    onClose: () => setOpenModalDeleteProduct(false),
+                    children: undefined,
+                    contentClassName: "bg-white",
+                }}
+                footer={
+                    <Space className="gap-x-2">
+                        <Tag
+                            color="red-inverse"
+                            onClick={() => {
+                                idProduct && handleDeleteProduct(idProduct);
+                                setOpenModalDeleteProduct(false);
+                            }}
+                            className="px-2 py-1 hover:cursor-pointer hover:bg-red-600"
+                        >
+                            Xóa sản phẩm
+                        </Tag>
+                        <Tag
+                            color="red"
+                            onClick={() => setOpenModalDeleteProduct(false)}
+                            className="px-2 py-1 hover:cursor-pointer hover:bg-red-200"
+                        >
+                            Huỷ bỏ
+                        </Tag>
+                    </Space>
+                }
+            >
+                <div className="flex flex-col gap-y-4">
+                    <h2>Bạn có chắc muốn xóa sản phẩm này!</h2>
+                    <div className="mx-auto">
+                        <FaExclamationTriangle className="text-6xl text-red-500" />
                     </div>
                 </div>
             </ModalAdvance>

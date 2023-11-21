@@ -36,11 +36,13 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/products/**").permitAll()
-                .requestMatchers("/api/order/**").permitAll()
+                .requestMatchers("/api/orders/**").permitAll()
                 .requestMatchers("/api/users/**").permitAll()
                 .requestMatchers("/api/carts/**").permitAll()
                 .requestMatchers("/api/cart_items/**").permitAll()
                 .requestMatchers("/api/checkout/**").permitAll()
+                .requestMatchers("/api/reviews/**").permitAll()
+                    .requestMatchers("/api/admin/orders/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("Customer", "Admin")
 
 
@@ -52,13 +54,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAuthority("Admin")
                 .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasAuthority("Admin")
 
-                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
-                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
-                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
-                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
-                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
-
-                .requestMatchers("/api/admin/**").hasAuthority("Admin")
+//                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
+//                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
+//                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
+//                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
+//                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
+//
+//                .requestMatchers("/api/admin/**").hasAuthority("Admin")
             );
 
         return httpSecurity.build();

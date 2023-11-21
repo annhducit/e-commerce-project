@@ -12,9 +12,11 @@ const Dropdown = ({ data }: { data: DropdownItemType[] }) => {
         <div className="relative" ref={nodeRef}>
             <div
                 onClick={() => setOpen(!open)}
-                className="relative flex items-center bg-white px-2 justify-between gap-x-10 w-[180px] h-[35px] border border-[#ff7506] rounded hover:cursor-pointer"
+                className="relative flex items-center bg-white px-2 justify-between gap-x-10 w-[180px] h-[30px] border border-[#ff7506] rounded hover:cursor-pointer"
             >
-                <div className="pl-2">{value}</div>
+                <div className="pl-2 text-sm font-semibold opacity-40">
+                    {value}
+                </div>
                 <span className="float-right text-[#ff7506]">
                     {open ? <FaCaretUp /> : <FaCaretDown />}
                 </span>

@@ -81,7 +81,7 @@ export const getAllProducts = async () => {
     }
 };
 
-export const getProductById = async (id: number) => {
+export const getProductById = async (id: number | string) => {
     try {
         const data = await api.get(`/api/products/${id}`);
         return data;
@@ -120,6 +120,14 @@ export const sortByDiscountedPriceAndCategory = async (
     }
 };
 
-export const deleteProductById = async (id: string) => {
+export const createProduct = async (data: string) => {
+    await api.post("/api/products", data);
+};
+
+export const updateProduct = async (id: string, data: string) => {
+    await api.put(`/api/products/${id}`, data);
+};
+
+export const deleteProductById = async (id: number | undefined) => {
     await api.delete(`/api/products/${id}`);
 };

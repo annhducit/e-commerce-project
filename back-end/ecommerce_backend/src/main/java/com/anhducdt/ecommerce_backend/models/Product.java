@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class Product {
     @Column(name = "discounted_price")
     private int discountedPrice;
     @Column(name = "discount_persent")
-    private int discountPersent;
+    private int discountPercent;
     @Column(name = "quantity")
     private int quantity;
 
@@ -58,6 +59,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate dateCreate;
 
 }

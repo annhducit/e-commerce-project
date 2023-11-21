@@ -18,6 +18,8 @@ import ProductManagement from "./admin/pages/ProductManagement";
 import AccountManagement from "./admin/pages/AccountManagement";
 import Dashboard from "./admin/pages/Dashboard";
 import OrderManagement from "./admin/pages/OrderManagement";
+import CreateNewProduct from "./admin/pages/CreateNewProduct";
+import UpdateProduct from "./admin/pages/UpdateProduct";
 
 function App() {
     return (
@@ -49,6 +51,11 @@ function App() {
                         path="products"
                         element={<ProductManagement />}
                     ></Route>
+                    <Route path="add-new" element={<CreateNewProduct />} />
+                    <Route
+                        path="update-product/:id"
+                        element={<UpdateProduct />}
+                    />
                     <Route path="orders" element={<OrderManagement />}></Route>
                     <Route
                         path="customers"

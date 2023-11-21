@@ -2,7 +2,7 @@ import Button from "../../components/Button";
 import { FaExclamationTriangle, FaSearch } from "react-icons/fa";
 import TableAdmin from "../components/Table";
 import { DataTypeAccount } from "../../types/DataTypeProduct";
-import { Space, Spin, Tag } from "antd";
+import { DatePicker, Space, Spin, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import UserType, { EAccountStatus } from "../../types/UserType";
 import { useEffect, useState } from "react";
@@ -158,18 +158,16 @@ const AccountManagement = () => {
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-x-6">
                         <div className="flex items-center gap-x-2">
-                            <span>Từ ngày:</span>
-                            <input
-                                type="date"
-                                className=" pl-4 border border-[#ff7506] px-2 py-1 h-[34px] rounded outline-none"
-                            />
+                            <span className="text-sm font-semibold opacity-60">
+                                Từ ngày:
+                            </span>
+                            <DatePicker placeholder="18/11/2023" />
                         </div>
                         <div className="flex items-center gap-x-2">
-                            <span>Đến ngày:</span>
-                            <input
-                                type="date"
-                                className=" pl-4 border border-[#ff7506] px-2 py-1 h-[34px] rounded outline-none"
-                            />
+                            <span className="text-sm font-semibold opacity-60">
+                                Đến ngày:
+                            </span>
+                            <DatePicker placeholder="20/11/2023" />
                         </div>
                     </div>
                     <div className="flex items-center w-[350px] border border-[#ff7506] rounded">
