@@ -1,25 +1,29 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AnyAction } from "@reduxjs/toolkit";
+
 import Button from "../../components/Button";
 import CartItem from "../components/CartItem";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+
 import { getCart } from "../../services/cartService";
-import { RootState } from "../../redux/globalStore";
+
 import { CartsType } from "../../types/CartsType";
+
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
 
 const Cart = ({ payment }: { payment?: boolean }) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleCheckout = () => {
         navigate(`/checkout?step=2`);
     };
-    const { cart } = useSelector((store: RootState) => store);
+    const { cart } = useAppSelector((store) => store);
 
     const cartByUser: CartsType = cart?.cart;
 
     useEffect(() => {
-        dispatch(getCart());
+        dispatch(getCart() as unknown as AnyAction);
     }, [cart.updateCartItem, cart.deleteCartItem, dispatch]);
 
     return (

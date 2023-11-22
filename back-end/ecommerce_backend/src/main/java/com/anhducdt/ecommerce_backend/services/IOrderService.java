@@ -6,6 +6,7 @@ import com.anhducdt.ecommerce_backend.models.Order;
 import com.anhducdt.ecommerce_backend.models.User;
 import com.anhducdt.ecommerce_backend.models.enums.EOrderStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IOrderService {
@@ -21,6 +22,7 @@ public interface IOrderService {
    Order canceledOrder(Long id) throws OrderException;
    Order completedOrder(Long id) throws OrderException;
    List<Order> searchOrderByUser(String keyword) throws OrderException;
+   List<Order> filterOrderByDateCreated(LocalDate startDate, LocalDate endDate) throws OrderException;
    List<Order> getAllOrder() throws OrderException;
    void deleteOrder(Long id) throws OrderException;
 

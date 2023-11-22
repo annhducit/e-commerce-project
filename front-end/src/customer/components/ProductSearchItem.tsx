@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+
 import ProductType from "../../types/ProductType";
 
 const ProductSearchItem = ({

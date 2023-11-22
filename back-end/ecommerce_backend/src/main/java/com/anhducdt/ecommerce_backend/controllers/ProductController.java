@@ -109,4 +109,11 @@ public class ProductController {
     return new ResponseEntity<>(productList, HttpStatus.OK);
   }
 
+  @GetMapping("/dateCreate")
+  public ResponseEntity<List<Product>> getProductByDateCreated(@RequestParam("startDate") LocalDate stateDate,
+                                                               @RequestParam("endDate") LocalDate endDate) {
+    List<Product> productList = productService.getProductByDateCreated(stateDate, endDate);
+    return new ResponseEntity<>(productList, HttpStatus.OK);
+  }
+
 }

@@ -26,7 +26,7 @@ import { FaBell } from "react-icons/fa";
 import { useAppSelector } from "../../hooks/dispatchHook";
 import { AnyAction } from "@reduxjs/toolkit";
 import Tippy from "@tippyjs/react";
-import { Tag } from "antd";
+import { Dropdown, MenuProps, Tag } from "antd";
 
 function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(" ");
@@ -47,6 +47,7 @@ export default function Navigation() {
     };
 
     const dispatch = useDispatch();
+
     const token = localStorage.getItem("token");
 
     const { auth } = useAppSelector((store) => store);
@@ -65,6 +66,10 @@ export default function Navigation() {
     useEffect(() => {
         dispatch(getCart() as unknown as AnyAction);
     }, [cart.handleAddItemToCart, dispatch]);
+
+    const onClick: MenuProps["onClick"] = ({ key }) => {
+        navigate(`/${key}`);
+    };
 
     return (
         <div className="w-full bg-white">
@@ -284,12 +289,13 @@ export default function Navigation() {
                                         className="flex items-center p-2 -m-2"
                                     >
                                         <img
-                                            src="https://tailwindui.com/img/flags/flag-canada.svg"
+                                            src={user}
                                             alt=""
-                                            className="flex-shrink-0 block w-5 h-auto"
+                                            className="flex-shrink-0 block w-10 rounded-full h-10"
                                         />
                                         <span className="block ml-3 text-base font-medium text-gray-900">
-                                            CAD
+                                            {auth.user?.lastName}{" "}
+                                            {auth.user?.firstName}
                                         </span>
                                         <span className="sr-only">
                                             , change currency
@@ -319,15 +325,18 @@ export default function Navigation() {
                             <div className="flex ml-4 lg:ml-0">
                                 <a href="#">
                                     <span className="sr-only">
-                                        Your Company
+                                        Anh Duc Style
                                     </span>
-                                    <div className="h-14 w-[120px]">
+                                    <Link
+                                        to="/"
+                                        className="h-14 w-[120px] block"
+                                    >
                                         <img
                                             className="object-cover w-full h-full"
                                             src={logo}
                                             alt=""
                                         />
-                                    </div>
+                                    </Link>
                                 </a>
                             </div>
                             {/* Flyout menus */}
@@ -363,7 +372,6 @@ export default function Navigation() {
                                                         leaveTo="opacity-0"
                                                     >
                                                         <Popover.Panel className="absolute inset-x-0 text-sm text-gray-500 top-full">
-                                                            {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                                                             <div
                                                                 className="absolute inset-0 bg-white shadow top-1/2"
                                                                 aria-hidden="true"
@@ -504,20 +512,19 @@ export default function Navigation() {
                             </div>
                             {auth.user ? (
                                 <div className="hidden lg:ml-8 lg:flex">
-                                    <Link
-                                        to="../../account"
-                                        className="flex items-center text-gray-700 hover:text-gray-800"
-                                    >
-                                        <img
-                                            src={user}
-                                            alt=""
-                                            className="flex-shrink-0 block w-10 h-10 rounded-full"
-                                        />
+                                    <div className="flex items-center text-gray-700 hover:text-gray-800">
+                                        <Dropdown menu={{ items, onClick }}>
+                                            <img
+                                                src={user}
+                                                alt=""
+                                                className="flex-shrink-0 block w-10 h-10 rounded-full hover:border cursor-pointer transition-all"
+                                            />
+                                        </Dropdown>
                                         <span className="block ml-3 text-sm font-medium">
                                             {auth.user?.firstName}{" "}
                                             {auth.user?.lastName}
                                         </span>
-                                    </Link>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="hidden ml-4 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-4">
@@ -596,3 +603,18 @@ export default function Navigation() {
         </div>
     );
 }
+
+const items: MenuProps["items"] = [
+    {
+        label: "Thông tin cá nhân",
+        key: "account",
+    },
+    {
+        label: "Lịch sử đặt hàng",
+        key: "order",
+    },
+    {
+        label: "Cài đặt",
+        key: "3",
+    },
+];

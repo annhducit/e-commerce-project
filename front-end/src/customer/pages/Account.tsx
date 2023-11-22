@@ -1,17 +1,22 @@
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { FaGlobeAsia, FaPhone, FaUser } from "react-icons/fa";
+
+import { AnyAction } from "@reduxjs/toolkit";
+
+import { Tag } from "antd";
+
 import background from "../../assets/images/background1.jpg";
 import user from "../../assets/images/admin.png";
 
-import { useEffect, useState } from "react";
 import { getUserProfile } from "../../services/authService";
-import ModalAdvance from "../../components/portal/ModalAdvance";
-import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
-import { AnyAction } from "@reduxjs/toolkit";
-import InputNormal from "../../components/InputNormal";
-import { FaGlobeAsia, FaPhone, FaUser } from "react-icons/fa";
-import { Tag } from "antd";
-import { toast } from "react-toastify";
-import TypeUpdateInformation from "../../types/AccountInformation";
 import customerService from "../../services/customerService";
+
+import ModalAdvance from "../../components/portal/ModalAdvance";
+import InputNormal from "../../components/InputNormal";
+
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
+import TypeUpdateInformation from "../../types/AccountInformation";
 
 const Account = () => {
     const [openModal, setOpenModal] = useState<boolean>();
@@ -140,20 +145,21 @@ const Account = () => {
                     visible: openModal as boolean,
                     onClose: () => setOpenModal(false),
                     children: undefined,
-                    contentClassName: "bg-white",
+                    contentClassName: "bg-white rounded-lg",
                 }}
                 footer={
                     <div className="flex items-center float-right gap-x-2">
                         <Tag
                             color="red-inverse"
-                            className="px-4 py-1 text-md font-semibold"
+                            className="px-4 py-1 font-semibold cursor-pointer text-md"
+                            onClick={() => setOpenModal(false)}
                         >
                             Hủy
                         </Tag>
 
                         <Tag
                             color="blue-inverse"
-                            className="px-4 py-1 text-md font-semibold cursor-pointer"
+                            className="px-4 py-1 font-semibold cursor-pointer text-md"
                             onClick={handleUpdateProfile}
                         >
                             Cập nhật

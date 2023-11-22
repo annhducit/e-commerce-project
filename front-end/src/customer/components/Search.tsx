@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import useDebounce from "../../hooks/useDebounce";
-import ProductType from "../../types/ProductType";
-import TippyHandless from "@tippyjs/react/headless";
-import Wrapper from "../../components/Wrapper";
-import ProductSearchItem from "./ProductSearchItem";
-import { searchProductByKeyword } from "../../services/productService";
-
 import { FaSearch } from "react-icons/fa";
 import { Spin } from "antd";
+
+import TippyHandless from "@tippyjs/react/headless";
+import useDebounce from "../../hooks/useDebounce";
+import ProductType from "../../types/ProductType";
+import Wrapper from "../../components/Wrapper";
+import ProductSearchItem from "./ProductSearchItem";
+
+import { searchProductByKeyword } from "../../services/productService";
+
 const Search = () => {
     // * For search
     const [result, setResult] = useState<ProductType[]>([]);

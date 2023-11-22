@@ -62,7 +62,7 @@ const OrderCard = ({ type, data }: { type: typeof Type; data: OrderItem }) => {
                                 </Tag>
                                 <Tag
                                     color="blue"
-                                    className="px-2 py-1"
+                                    className="px-2 py-1 cursor-pointer"
                                     onClick={() =>
                                         navigate(
                                             `../product/${data.product.id}`
@@ -154,7 +154,7 @@ const OrderCard = ({ type, data }: { type: typeof Type; data: OrderItem }) => {
                                     className="px-2 py-1 cursor-pointer"
                                     onClick={() =>
                                         navigate(
-                                            `../product/${data.product.id}`
+                                            `../../product/${data.product.id}`
                                         )
                                     }
                                 >

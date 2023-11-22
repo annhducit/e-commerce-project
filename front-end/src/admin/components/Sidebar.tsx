@@ -1,19 +1,24 @@
+import { FaSignOutAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
+
+import { AnyAction } from "@reduxjs/toolkit";
+
+import { Space, Tag } from "antd";
+
+import { useAppDispatch } from "../../hooks/dispatchHook";
+
+import ModalAdvance from "../../components/portal/ModalAdvance";
+import { logoutAccount } from "../../services/authService";
+
 import logo from "../../assets/images/logo.png";
+import adminImage from "../../assets/images/admin.png";
 import orderImage from "../../assets/icons/order.png";
 import setting from "../../assets/icons/setting.png";
 import dashboardImage from "../../assets/icons/dashboard.png";
 import account from "../../assets/icons/customers.png";
 import logout from "../../assets/icons/logout.png";
 import clothesImage from "../../assets/icons/clothes.png";
-import adminImage from "../../assets/images/admin.png";
-import { logoutAccount } from "../../services/authService";
-import { AnyAction } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import ModalAdvance from "../../components/portal/ModalAdvance";
-import { useState } from "react";
-import { Space, Tag } from "antd";
-import { FaSignOutAlt } from "react-icons/fa";
 
 interface ItemSideBar {
     icon?: React.ReactElement;
@@ -88,7 +93,7 @@ function Sidebar({
     titleHeading: (title: string) => void;
 }) {
     const [openModalLogout, setOpenModalLogout] = useState<boolean>(false);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const handleLogout = () => {
         setOpenModalLogout(false);
         dispatch(logoutAccount() as unknown as AnyAction);
@@ -149,7 +154,7 @@ function Sidebar({
                 </div>
                 <div>
                     <div
-                        className="w-full flex items-center px-5 gap-x-4 py-3 my-2 hover:bg-slate-200 p-4 cursor-pointer transition-all"
+                        className="flex items-center w-full p-4 px-5 py-3 my-2 transition-all cursor-pointer gap-x-4 hover:bg-slate-200"
                         onClick={() => setOpenModalLogout(true)}
                     >
                         <div className={`${visible ? "h-6 w-6" : "h-7 w-7"}`}>
@@ -162,7 +167,7 @@ function Sidebar({
                         {visible && <p>Đăng xuất</p>}
                     </div>
                     <hr className="py-1" />
-                    <div className="flex items-center gap-x-4 px-4 pb-4">
+                    <div className="flex items-center px-4 pb-4 gap-x-4">
                         <div className="w-10 h-10 rounded-full">
                             <img
                                 src={adminImage}

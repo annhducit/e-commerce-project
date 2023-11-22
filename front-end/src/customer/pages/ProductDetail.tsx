@@ -1,20 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { LinearProgress, Rating } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { RadioGroup } from "@headlessui/react";
+
+import { AnyAction } from "@reduxjs/toolkit";
+
+import { LinearProgress, Rating } from "@mui/material";
+
 import Button from "../../components/Button";
 import ProductReviewCard from "../components/ProductReviewCard";
-import { menShirt } from "../../data/dataMenShirt";
 import ProductItem from "../components/ProductSectionCard/ProductItem";
-import { useDispatch } from "react-redux";
-import { findProductById } from "../../services/productService";
+
+import { findProductById, getAllProducts } from "../../services/productService";
 import { addItemToCart } from "../../services/cartService";
-import { useParams } from "react-router-dom";
 import { createReview } from "../../services/reviewService";
-import { toast } from "react-toastify";
+
 import ReviewType from "../../types/ReviewType";
 import ProductType from "../../types/ProductType";
-import { useAppSelector } from "../../hooks/dispatchHook";
-import { AnyAction } from "@reduxjs/toolkit";
+
+import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
 
 const product = {
     name: "Basic Tee 6-Pack",
@@ -71,9 +75,11 @@ function classNames(...classes: string[]): string {
 export default function ProductDetail() {
     const [selectedColor, setSelectedColor] = useState(product.colors[0]);
     const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+    const [products, setProducts] = useState<ProductType[]>();
+
     const [reload, setReload] = useState<number>(0);
     const reviewRef = useRef<HTMLInputElement>(null);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { customerProduct } = useAppSelector((store) => store);
 
     const productItem: ProductType = customerProduct.product;
@@ -82,6 +88,13 @@ export default function ProductDetail() {
     useEffect(() => {
         dispatch(findProductById(id) as unknown as AnyAction);
     }, [dispatch, id, reload]);
+
+    useEffect(() => {
+        void (async () => {
+            const data = await getAllProducts();
+            setProducts(data?.data);
+        })();
+    }, []);
 
     type Size = {
         name: string;
@@ -535,7 +548,7 @@ export default function ProductDetail() {
                 <section className="px-20 py-10">
                     <h1 className="text-xl font-bold">Similar Products</h1>
                     <div className="grid grid-cols-5 gap-6 pt-6">
-                        {menShirt.map((item, index) => (
+                        {products?.map((item, index) => (
                             <ProductItem key={index} product={item} />
                         ))}
                     </div>

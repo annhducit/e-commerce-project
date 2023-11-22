@@ -1,10 +1,15 @@
 /* eslint-disable prefer-const */
 import React, { useState } from "react";
-import { Button, Input, Select, Tag } from "antd";
-import CreateProductType from "../../types/CreateProductType";
-import TextArea from "antd/es/input/TextArea";
-import { createProduct } from "../../services/productService";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { Button, Input, Select, Tag } from "antd";
+import TextArea from "antd/es/input/TextArea";
+
+import CreateProductType from "../../types/CreateProductType";
+
+import { createProduct } from "../../services/productService";
+
 import defaultImg from "../../assets/images/no-image.png";
 
 const initialSizeQuantity = [
@@ -37,6 +42,8 @@ const CreateNewProduct = () => {
         secondLevelCategory: "",
         thirdLevelCategory: "",
     });
+
+    const navigate = useNavigate();
 
     const filterOption = (
         input: string,
@@ -425,6 +432,7 @@ const CreateNewProduct = () => {
                         <Tag
                             color="error"
                             className="px-4 py-1 cursor-pointer hover:bg-red-100"
+                            onClick={() => navigate("../products")}
                         >
                             Trở về
                         </Tag>

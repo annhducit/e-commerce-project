@@ -1,21 +1,28 @@
+import { AnyAction } from "@reduxjs/toolkit";
 import { FaMinus, FaPlus } from "react-icons/fa";
+
 import Button from "../../components/Button";
+
 import { CartItemType } from "../../types/CartItemType";
+
 import { removeItemToCart, updateItemToCart } from "../../services/cartService";
-import { useDispatch } from "react-redux";
+
+import { useAppDispatch } from "../../hooks/dispatchHook";
 
 const CartItem = ({ data }: { data: CartItemType }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const handleUpdateCartItem = (value: number) => {
         const dataValue = {
             quantity: data.quantity + value,
         };
         const cartItemId = data.id;
-        dispatch(updateItemToCart(dataValue, cartItemId));
+        dispatch(
+            updateItemToCart(dataValue, cartItemId) as unknown as AnyAction
+        );
     };
 
     const handleRemoveCartItem = () => {
-        dispatch(removeItemToCart(data.id));
+        dispatch(removeItemToCart(data.id) as unknown as AnyAction);
     };
 
     return (

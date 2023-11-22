@@ -1,4 +1,5 @@
 import { Rating } from "@mui/material";
+
 import { ReviewType } from "../../types/ProductType";
 
 const ProductReviewCard = ({ data }: { data: ReviewType }) => {

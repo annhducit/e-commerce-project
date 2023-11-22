@@ -1,5 +1,6 @@
 package com.anhducdt.ecommerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,7 +60,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dateCreate;
 
 }

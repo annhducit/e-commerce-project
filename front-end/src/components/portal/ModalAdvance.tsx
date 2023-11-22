@@ -56,10 +56,10 @@ function HeaderModal({ header, props }: ModalAdvance) {
         <div className="py-2 header">
             <span
                 onClick={props.onClose}
-                className="absolute w-10 h-10 p-1 text-black transition-all bg-transparent rounded cursor-pointer right-7 top-7 hover:bg-slate-200 -translate-y-2/4 translate-x-2/4"
+                className="absolute w-8 h-8 p-1 text-black transition-all bg-transparent rounded cursor-pointer right-7 top-7 hover:bg-slate-200 -translate-y-2/4 translate-x-2/4"
             >
                 <FontAwesomeIcon
-                    className="absolute w-6 h-6 opacity-40 right-2 top-2"
+                    className="absolute w-4 h-4 opacity-40 right-2 top-2"
                     icon={faXmark}
                 />
             </span>

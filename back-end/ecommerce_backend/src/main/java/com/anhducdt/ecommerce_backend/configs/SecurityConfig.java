@@ -42,25 +42,30 @@ public class SecurityConfig {
                 .requestMatchers("/api/cart_items/**").permitAll()
                 .requestMatchers("/api/checkout/**").permitAll()
                 .requestMatchers("/api/reviews/**").permitAll()
-                    .requestMatchers("/api/admin/orders/**").permitAll()
+                
                 .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("Customer", "Admin")
 
 
                 .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/auth/**").permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/products/**").hasAuthority("Admin")
                 .requestMatchers(HttpMethod.PUT, "/api/products/**").hasAuthority("Admin")
                 .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasAuthority("Admin")
 
-//                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
-//                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
-//
-//                .requestMatchers("/api/admin/**").hasAuthority("Admin")
+                .requestMatchers("/api/admin/orders").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.GET,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.POST,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.PUT,"/api/admin/orders/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.DELETE,"/api/admin/orders/**").hasAuthority("Admin")
+
+                .requestMatchers("/api/admin/customers").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.GET,"/api/admin/customers/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.POST,"/api/admin/customers/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.PUT,"/api/admin/customers/**").hasAuthority("Admin")
+                .requestMatchers(HttpMethod.DELETE,"/api/admin/customers/**").hasAuthority("Admin")
             );
 
         return httpSecurity.build();

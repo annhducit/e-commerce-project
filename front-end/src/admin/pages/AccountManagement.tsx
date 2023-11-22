@@ -1,15 +1,20 @@
-import Button from "../../components/Button";
-import { FaExclamationTriangle, FaSearch } from "react-icons/fa";
-import TableAdmin from "../components/Table";
-import { DataTypeAccount } from "../../types/DataTypeProduct";
-import { DatePicker, Space, Spin, Tag } from "antd";
-import { ColumnsType } from "antd/es/table";
-import UserType, { EAccountStatus } from "../../types/UserType";
 import { useEffect, useState } from "react";
-import customerService from "../../services/customerService";
-import ModalAdvance from "../../components/portal/ModalAdvance";
+import { FaExclamationTriangle, FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
+
+import { ColumnsType } from "antd/es/table";
+import { DatePicker, Space, Spin, Tag } from "antd";
+
+import Button from "../../components/Button";
+import TableAdmin from "../components/Table";
+import ModalAdvance from "../../components/portal/ModalAdvance";
+
 import useDebounce from "../../hooks/useDebounce";
+
+import customerService from "../../services/customerService";
+
+import { DataTypeAccount } from "../../types/DataTypeProduct";
+import UserType, { EAccountStatus } from "../../types/UserType";
 
 const AccountManagement = () => {
     const [accounts, setAccounts] = useState<UserType[]>();

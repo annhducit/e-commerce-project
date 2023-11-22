@@ -1,20 +1,10 @@
-// import Button from "../../components/Button";
-type Shipping = {
-    city: string;
-    firstName: string | null;
-    id: number;
-    lastName: string;
-    phoneNumber: string;
-    state: string;
-    streetAddress: string;
-    zipCode: string;
-};
+import { ShippingAddress } from "../../types/OrderType";
 
-const AddressItem = ({ data }: { data: Shipping }) => {
+const AddressItem = ({ data }: { data: ShippingAddress }) => {
     return (
         <div className="flex flex-col w-full p-4 border-b gap-y-1 border-slate-200">
             <h2 className="font-bold text-md">
-                {data?.lastName} {data?.firstName}
+                {data?.lastName} {data?.fistName}
             </h2>
             <div className="flex items-center gap-x-2">
                 <h2 className="font-semibold text-md">Địa chỉ:</h2>
@@ -30,12 +20,6 @@ const AddressItem = ({ data }: { data: Shipping }) => {
                 <h2 className="font-semibold text-md">Điện thoại:</h2>
                 <span>{data?.phoneNumber}</span>
             </div>
-            {/* <div className="ml-auto">
-                <Button
-                    text="Delivery Here"
-                    className="p-2 text-white transition-all bg-indigo-500 rounded hover:bg-indigo-600"
-                />
-            </div> */}
         </div>
     );
 };

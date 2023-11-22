@@ -64,7 +64,7 @@ export const getAllOrders = async () => {
     return data.data;
 };
 
-export const getorderByIdAdmin = async (id: number) => {
+export const getorderByIdAdmin = async (id: number | string) => {
     const data = await api.get(`/api/orders/${id}`);
     return data.data;
 };
@@ -93,4 +93,21 @@ export const updateOrderStatus = async (
     type: OrderStatus
 ) => {
     await api.put(`/api/admin/orders/${id}/${type}`);
+};
+
+export const filterOrderByDateCreate = async (
+    startDate: string | undefined,
+    endDate: string | undefined
+) => {
+    try {
+        const params = new URLSearchParams();
+        startDate && params.append("startDate", startDate);
+        endDate && params.append("endDate", endDate);
+        const data = await api.get(
+            `/api/orders/dateCreate?${params.toString()}`
+        );
+        return data.data;
+    } catch (err) {
+        console.log(err);
+    }
 };

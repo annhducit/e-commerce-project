@@ -1,17 +1,22 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
-import * as Yub from "yup";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 
+import { AnyAction } from "@reduxjs/toolkit";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yub from "yup";
+
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
+
 import { login } from "../../services/authService";
 import LoginType from "../../types/LoginType";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
-import { AnyAction } from "@reduxjs/toolkit";
 
 const Login = () => {
     const schema = Yub.object({

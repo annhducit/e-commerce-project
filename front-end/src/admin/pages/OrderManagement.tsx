@@ -1,4 +1,6 @@
-import TableAdmin from "../components/Table";
+import { useEffect, useState } from "react";
+import { FaCaretDown, FaSearch } from "react-icons/fa";
+
 import { ColumnsType } from "antd/es/table";
 import {
     DatePicker,
@@ -10,20 +12,23 @@ import {
     Tag,
     message,
 } from "antd";
+
+import OrderCard from "../../customer/components/OrderCard";
+import DropdownCustom from "../../components/Dropdown";
 import Button from "../../components/Button";
-import { FaCaretDown, FaSearch } from "react-icons/fa";
+import TableAdmin from "../components/Table";
+
 import OrderType, { OrderStatus } from "../../types/OrderType";
-import { useEffect, useState } from "react";
+import useDebounce from "../../hooks/useDebounce";
+
 import {
+    filterOrderByDateCreate,
     getAllOrders,
     getOrderByStatus,
     getorderByIdAdmin,
     searchOrderByKeyword,
     updateOrderStatus,
 } from "../../services/orderService";
-import DropdownCustom from "../../components/Dropdown";
-import useDebounce from "../../hooks/useDebounce";
-import OrderCard from "../../customer/components/OrderCard";
 
 const OrderManagement = () => {
     const [orders, setOrders] = useState<OrderType[]>();
@@ -35,6 +40,10 @@ const OrderManagement = () => {
     // Search
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<string>("");
+
+    // Filter
+    const [startDate, setStartDate] = useState<string>();
+    const [endDate, setEndDate] = useState<string>();
 
     const debounce = useDebounce(searchValue, 500);
 
@@ -266,6 +275,12 @@ const OrderManagement = () => {
         })();
     }, [debounce]);
 
+    const handClickFilter = () => {
+        void (async () => {
+            const data = await filterOrderByDateCreate(startDate, endDate);
+            setOrders(data);
+        })();
+    };
     return (
         <>
             <div className="flex flex-col gap-y-2">
@@ -278,13 +293,21 @@ const OrderManagement = () => {
                             <span className="text-sm font-semibold opacity-60">
                                 Từ ngày:
                             </span>
-                            <DatePicker placeholder="18/11/2023" />
+                            <DatePicker
+                                placeholder="18/11/2023"
+                                onChange={(_item, date) => setStartDate(date)}
+                                format={dateFormat}
+                            />
                         </div>
                         <div className="flex items-center gap-x-2">
                             <span className="text-sm font-semibold opacity-60">
                                 Đến ngày:
                             </span>
-                            <DatePicker placeholder="20/11/2023" />
+                            <DatePicker
+                                placeholder="20/11/2023"
+                                onChange={(_item, date) => setEndDate(date)}
+                                format={dateFormat}
+                            />
                         </div>
                         <div className="flex items-center gap-x-2">
                             <span className="text-sm font-semibold opacity-60">
@@ -305,6 +328,7 @@ const OrderManagement = () => {
                         />
                         <Button
                             text="Tìm kiếm"
+                            onClick={handClickFilter}
                             className="text-white flex h-[30px] items-center gap-x-2 px-1 pr-1 py-1 hover:bg-[#c77028] bg-[#ff7506] rounded-tr rounded-br"
                             iconRight={<FaSearch />}
                         />
@@ -328,10 +352,10 @@ const OrderManagement = () => {
                     <hr />
                     <div className="flex items-center justify-between mt-2">
                         <h4>Order No: 1</h4>
-                        <h4>Order Date: 12/12/2023</h4>
+                        <h4>Order Date: {order?.createdAt}</h4>
                     </div>
                     <div className="flex flex-col gap-y-6">
-                        <div className="flex flex-col  mt-4 gap-y-4 h-[290px] pr-6 overflow-y-scroll">
+                        <div className="flex flex-col  mt-4 gap-y-4 max-h-[290px] pr-6 overflow-y-scroll">
                             {order?.orderItems.map((item, index) => (
                                 <OrderCard
                                     key={index}
@@ -397,6 +421,8 @@ const OrderManagement = () => {
 };
 
 export default OrderManagement;
+
+const dateFormat = "YYYY-MM-DD";
 
 const items: MenuProps["items"] = [
     {

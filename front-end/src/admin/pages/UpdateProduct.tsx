@@ -1,11 +1,14 @@
 /* eslint-disable prefer-const */
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Button, Input, Select } from "antd";
-import CreateProductType from "../../types/CreateProductType";
-import TextArea from "antd/es/input/TextArea";
-import { getProductById, updateProduct } from "../../services/productService";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+
+import { Button, Input, Select } from "antd";
+import TextArea from "antd/es/input/TextArea";
+
+import { getProductById, updateProduct } from "../../services/productService";
+
+import CreateProductType from "../../types/CreateProductType";
 import ProductType from "../../types/ProductType";
 
 const initialSizeQuantity = [
@@ -40,6 +43,8 @@ const UpdateProduct = () => {
         secondLevelCategory: "",
         thirdLevelCategory: "",
     });
+
+    const navigate = useNavigate();
 
     const params = useParams();
     const { id } = params;
@@ -78,7 +83,10 @@ const UpdateProduct = () => {
         name: string;
         quantity: number;
     }
-    const handleSizeChange = (e: React.ChangeEvent<any>, index: number) => {
+    const handleSizeChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        index: number
+    ) => {
         let { name, value } = e.target;
 
         name === "size_quantity" ? (name = "quantity") : (name = e.target.name);
@@ -443,6 +451,7 @@ const UpdateProduct = () => {
                         <Button
                             htmlType="submit"
                             className="hover:text-[#ff7506]"
+                            onClick={() => navigate("../products")}
                         >
                             Cập nhật sản phẩm
                         </Button>

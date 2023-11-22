@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -24,5 +25,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
   @Query("SELECT o FROM Order o WHERE o.user.phoneNumber LIKE %:keyword% OR o.user.email LIKE %:keyword%")
   List<Order> searchOrderByKeyword(@Param("keyword") String keyword);
+
+  @Query("SELECT o FROM Order o WHERE o.createdAt BETWEEN  :startDate AND :endDate")
+  List<Order> filterOrderByCreateAt(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 }

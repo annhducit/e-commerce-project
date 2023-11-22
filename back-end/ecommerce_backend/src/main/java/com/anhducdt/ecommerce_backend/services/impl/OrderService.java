@@ -11,6 +11,7 @@ import com.anhducdt.ecommerce_backend.services.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +59,10 @@ public class OrderService implements IOrderService {
     order.setTotalItems(cart.getTotalItem());
 
     order.setShippingAddress(address);
-    order.setOrderDate(LocalDateTime.now());
+    order.setOrderDate(LocalDate.now());
     order.setOrderStatus(String.valueOf(EOrderStatus.PENDING));
     order.getPaymentDetails().setPaymentStatus(String.valueOf(EOrderStatus.PENDING));
-    order.setCreatedAt(LocalDateTime.now());
+    order.setCreatedAt(LocalDate.now());
     order.setTotalItems(cart.getTotalItem());
 
   Order savedOrder = orderRepository.save(order);
@@ -143,6 +144,11 @@ public class OrderService implements IOrderService {
   @Override
   public List<Order> searchOrderByUser(String keyword) throws OrderException {
     return orderRepository.searchOrderByKeyword(keyword);
+  }
+
+  @Override
+  public List<Order> filterOrderByDateCreated(LocalDate startDate, LocalDate endDate) throws OrderException {
+    return orderRepository.filterOrderByCreateAt(startDate, endDate);
   }
 
   @Override

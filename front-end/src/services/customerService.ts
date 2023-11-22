@@ -1,5 +1,4 @@
 import { api } from "../configs/config";
-// import TypeUpdateInformation from "../types/AccountInformation";
 import UserType, { EAccountStatus } from "../types/UserType";
 import BaseService from "./baseService";
 
@@ -29,17 +28,6 @@ class CustomerService extends BaseService {
             console.log(err);
         }
     }
-
-    // async updateInformationAccount(
-    //     id: number,
-    //     information: TypeUpdateInformation
-    // ) {
-    //     try {
-    //         await api.put(`/api/users/${id}/profile`, information);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
 
     async searchAccountByKeyword(keyword: string) {
         try {

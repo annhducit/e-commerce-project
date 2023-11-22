@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useClickOutSide from "../hooks/useClickOutSide";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+
+import useClickOutSide from "../hooks/useClickOutSide";
+
 import { DropdownItemType } from "../types/DropdownItemType";
 
 const Dropdown = ({ data }: { data: DropdownItemType[] }) => {

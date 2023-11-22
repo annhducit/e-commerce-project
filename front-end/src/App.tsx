@@ -20,6 +20,7 @@ import Dashboard from "./admin/pages/Dashboard";
 import OrderManagement from "./admin/pages/OrderManagement";
 import CreateNewProduct from "./admin/pages/CreateNewProduct";
 import UpdateProduct from "./admin/pages/UpdateProduct";
+import NotFound from "./customer/pages/NotFound";
 
 function App() {
     return (
@@ -63,6 +64,7 @@ function App() {
                     ></Route>
                 </Route>
             </Route>
+            <Route path="*" element={<NotFound />}></Route>
         </Routes>
     );
 }

@@ -1,17 +1,23 @@
-import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEnvelope, FaKey, FaUser } from "react-icons/fa";
 import { Resolver, useForm } from "react-hook-form";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yub from "yup";
 
+import { AnyAction } from "@reduxjs/toolkit";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
+
 import AuthenticateLayout from "../../layouts/AuthenticateLayout";
+
 import AuthType from "../../types/RegisterType";
+
 import { register } from "../../services/authService";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/dispatchHook";
-import { AnyAction } from "@reduxjs/toolkit";
 
 const Register = () => {
     const schema = Yub.object({

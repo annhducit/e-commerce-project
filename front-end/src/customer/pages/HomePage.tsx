@@ -1,17 +1,22 @@
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import MainCarousel from "../components/MainCarousel";
 import MainSectionCard from "../components/ProductSectionCard/MainSectionCard";
+
 import { menClothes } from "../../data/dataMenClothes";
 import { menJean } from "../../data/dataMenJean";
 import { menShirt } from "../../data/dataMenShirt";
+
 import MainAdvertiment from "../components/MainAdvertiment";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import LoadingSkeletonProduct from "../../components/Skeleton/LoadingSkeletonProduct";
+
 import {
     getAllProducts,
     getProductsByCategory,
 } from "../../services/productService";
+
 import { MenClothes } from "../../types/MenClothes";
-import LoadingSkeletonProduct from "../../components/Skeleton/LoadingSkeletonProduct";
 
 interface LinkItem {
     id: number;

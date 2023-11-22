@@ -21,7 +21,9 @@ public interface IProductService {
     ,Integer minDiscount, String sort, String stock, Integer pageNumber, Integer pageSize);
     List<Product> searchProductByKeyWord(String keyword);
     List<Product> getProductsByCategory(String category);
+    List<Product> getProductByDateCreated(LocalDate startDate, LocalDate endDate);
     List<Product> findAllProducts();
     List<Product> sortProductByDiscountedPrice(String sortBy);
     List<Product> sortProductByDiscountedPriceAndCategory(String sortBy, String category);
+
 }

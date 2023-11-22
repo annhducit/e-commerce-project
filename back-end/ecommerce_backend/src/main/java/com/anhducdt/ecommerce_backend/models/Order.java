@@ -1,11 +1,13 @@
 package com.anhducdt.ecommerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +28,10 @@ public class Order {
   private User user;
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private List<OrderItem> orderItems = new ArrayList<>();
-  private LocalDateTime orderDate;
-  private LocalDateTime deliveryDate;
+  @JsonFormat(pattern="dd-MM-yyyy")
+  private LocalDate orderDate;
+  @JsonFormat(pattern="dd-MM-yyyy")
+  private LocalDate deliveryDate;
   @OneToOne
   private Address shippingAddress;
   @Embedded
@@ -36,7 +40,8 @@ public class Order {
   private Integer totalDiscountPrice;
   private Integer discount;
   private String orderStatus;
-  private LocalDateTime createdAt;
+  @JsonFormat(pattern="dd-MM-yyyy")
+  private LocalDate createdAt;
   private Integer totalItems;
 
 

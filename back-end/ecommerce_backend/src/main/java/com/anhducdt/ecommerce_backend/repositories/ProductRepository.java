@@ -40,6 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         "CASE WHEN :sort = 'price_low' THEN p.discountedPrice END ASC, " +
         "CASE WHEN :sort = 'price_high' THEN p.discountedPrice END DESC")
     List<Product> sortProductByDiscountedPriceAndCategory(@Param("sort") String sort, @Param("category") String category);
-
+    @Query("SELECT p FROM Product p WHERE p.dateCreate between :startDate AND :endDate")
+    List<Product> sortProductByDateCreated(@Param("startDate") LocalDate startDate,@Param("endDate") LocalDate endDate);
 
 }

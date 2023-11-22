@@ -1,26 +1,41 @@
 import { useEffect, useState } from "react";
-import OrderCard from "../components/OrderCard";
-import { getOrderHistoryByAuth } from "../../services/orderService";
-import { Tag } from "antd";
-import OrderType from "../../types/OrderType";
 import { useNavigate } from "react-router-dom";
+
+import { Tag, message } from "antd";
+
+import OrderCard from "../components/OrderCard";
+
+import {
+    getOrderByStatus,
+    getOrderHistoryByAuth,
+} from "../../services/orderService";
+
+import OrderType, { OrderStatus } from "../../types/OrderType";
 
 const filterItem = [
     {
-        value: "on_the_way",
-        label: "On The Way",
+        label: "Placed",
+        value: "PLACED",
     },
     {
-        value: "delivered",
+        label: "Confirmed",
+        value: "CONFIRMED",
+    },
+    {
+        label: "Shipped",
+        value: "SHIPPED",
+    },
+    {
         label: "Delivered",
+        value: "DELIVERED",
     },
     {
-        value: "cancelled",
-        label: "Cancelled",
+        label: "Completed",
+        value: "COMPLETED",
     },
     {
-        value: "returned",
-        label: "Returned",
+        label: "Canceled",
+        value: "CANCELED",
     },
 ];
 
@@ -37,9 +52,16 @@ const Order = () => {
         })();
     }, []);
 
+    const handleFilterByStatus = (status: OrderStatus) => {
+        void (async () => {
+            const data = await getOrderByStatus(status);
+            setOrderHistories(data);
+        })();
+        message.info(`List order ${status}`);
+    };
     return (
         <div className="grid grid-cols-4 px-20 py-10 gap-x-10">
-            <div className="col-span-1 w-full border h-[300px] border-slate-200 rounded p-4 shadow-lg">
+            <div className="col-span-1 w-full border h-[350px] border-slate-200 rounded p-4 shadow-lg">
                 <div className="flex flex-col gap-y-3">
                     <h1 className="text-lg font-bold">Filters</h1>
                     <hr className="mt-1" />
@@ -51,7 +73,15 @@ const Order = () => {
                     {filterItem.map((item, index) => (
                         <div className="flex items-center gap-x-3" key={index}>
                             {" "}
-                            <input type="checkbox" defaultValue={item.value} />
+                            <input
+                                type="radio"
+                                name="status"
+                                onChange={() =>
+                                    handleFilterByStatus(
+                                        item.value as OrderStatus
+                                    )
+                                }
+                            />
                             <label className="opacity-80" htmlFor={item.value}>
                                 {item.label}
                             </label>
@@ -91,17 +121,81 @@ const Order = () => {
                                         {item.totalPrice}$
                                     </p>
                                 </div>
+                                <div className="flex flex-col text-center gap-y-2">
+                                    <p className="font-semibold text-black">
+                                        Trạng thái
+                                    </p>
+                                    {item.orderStatus === "PENDING" && (
+                                        <Tag
+                                            color="blue"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Pending
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "PLACED" && (
+                                        <Tag
+                                            color="green"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Placed
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "SHIPPED" && (
+                                        <Tag
+                                            color="geekblue"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Shipped
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "DELIVERED" && (
+                                        <Tag
+                                            color="magenta"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Delivered
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "CONFIRMED" && (
+                                        <Tag
+                                            color="pink"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Confirmed
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "COMPLETED" && (
+                                        <Tag
+                                            color="gold"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Completed
+                                        </Tag>
+                                    )}
+                                    {item.orderStatus === "CANCELED" && (
+                                        <Tag
+                                            color="error"
+                                            className="py-1 font-semibold text-center hover:cursor-pointer hover:bg-blue-200"
+                                        >
+                                            Canceled
+                                        </Tag>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex items-center gap-x-2">
                                 <Tag
                                     color="blue"
-                                    className="px-2 py-1"
-                                    onClick={() => navigate(`${item.id}`)}
+                                    className="px-2 py-1 cursor-pointer"
+                                    onClick={() => {
+                                        navigate(`${item.id}`);
+                                        window.scrollTo({
+                                            top: 0,
+                                            behavior: "smooth",
+                                        });
+                                    }}
                                 >
                                     View order
-                                </Tag>
-                                <Tag color="green" className="px-2 py-1">
-                                    View involce
                                 </Tag>
                             </div>
                         </div>
@@ -117,6 +211,9 @@ const Order = () => {
                         </div>
                     </div>
                 ))}
+                {orderHistories?.length === 0 && (
+                    <div className="grid mx-auto">Không có đơn hàng nào</div>
+                )}
             </div>
         </div>
     );

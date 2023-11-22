@@ -237,6 +237,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<Product> getProductByDateCreated(LocalDate startDate, LocalDate endDate) {
+        return productRepository.sortProductByDateCreated(startDate, endDate);
+    }
+
+    @Override
     public List<Product> findAllProducts() {
         return productRepository.findAll();
 

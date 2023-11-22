@@ -1,5 +1,6 @@
 package com.anhducdt.ecommerce_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,6 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate createAt;
 }

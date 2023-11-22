@@ -1,10 +1,3 @@
-import TableAdmin from "../components/Table";
-import { ColumnsType } from "antd/es/table";
-import { DataTypeProduct } from "../../types/DataTypeProduct";
-import { Space, Spin, Tag } from "antd";
-import Dropdown from "../../components/Dropdown";
-import { DropdownItemType } from "../../types/DropdownItemType";
-import Button from "../../components/Button";
 import {
     FaEnvelope,
     FaExclamationTriangle,
@@ -13,9 +6,19 @@ import {
     FaSearch,
     FaUser,
 } from "react-icons/fa";
-import ModalAdvance from "../../components/portal/ModalAdvance";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+import { ColumnsType } from "antd/es/table";
+import { Space, Spin, Tag } from "antd";
+
+import TableAdmin from "../components/Table";
+import Dropdown from "../../components/Dropdown";
+import Button from "../../components/Button";
+import ModalAdvance from "../../components/portal/ModalAdvance";
 import InputNormal from "../../components/InputNormal";
+
 import {
     deleteProductById,
     getAllProducts,
@@ -23,10 +26,12 @@ import {
     searchProductByKeyword,
     sortByDiscountedPrice,
 } from "../../services/productService";
+
+import { DropdownItemType } from "../../types/DropdownItemType";
+import { DataTypeProduct } from "../../types/DataTypeProduct";
 import ProductType from "../../types/ProductType";
+
 import useDebounce from "../../hooks/useDebounce";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const ProductManagement = () => {
     const [openModalNewProduct, setOpenModalNewProduct] = useState<boolean>();

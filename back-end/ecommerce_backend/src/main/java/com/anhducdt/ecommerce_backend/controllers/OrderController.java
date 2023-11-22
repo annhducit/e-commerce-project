@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -70,6 +71,15 @@ public class OrderController {
     @GetMapping("/search")
     public ResponseEntity<List<Order>> searchOrderByKeyword(@RequestParam("keyword") String keyword) throws  OrderException {
         List<Order> results = orderService.searchOrderByUser(keyword);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/dateCreate")
+    public ResponseEntity<List<Order>> searchOrderByKeyword(@RequestParam("startDate") LocalDate createDate,
+                                                            @RequestParam("endDate") LocalDate endDate
+    ) throws  OrderException {
+        List<Order> results = orderService.filterOrderByDateCreated(createDate, endDate);
         return new ResponseEntity<>(results, HttpStatus.OK);
 
     }

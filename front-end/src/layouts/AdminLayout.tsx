@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 
 const AdminLayout = () => {
-    const [isOpenSide, setOpenSidebar] = useState<boolean>();
+    const [isOpenSide, setOpenSidebar] = useState<boolean>(true);
     const [titleHeading, setTitleHeading] = useState<string>();
 
     return (

@@ -103,6 +103,23 @@ export const sortByDiscountedPrice = async (type: string) => {
     }
 };
 
+export const filterByDateCreate = async (
+    startDate: string,
+    endDate: string
+) => {
+    try {
+        const params = new URLSearchParams();
+        startDate && params.append("startDate", startDate);
+        endDate && params.append("endDate", endDate);
+        const data = await api.get(
+            `/api/products/dateCreate?${params.toString()}`
+        );
+        return data.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 export const sortByDiscountedPriceAndCategory = async (
     type: string,
     category: string
